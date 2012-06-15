@@ -26,8 +26,8 @@
 
 Text sú poznámky k oficiálnym \href{štátnicovým otázkam}{http://new.dcs.fmph.uniba.sk/index.php/Studium/Bakalarske/StatneSkusky} a boli spísané počas učenia sa na ne.
 Poznámky sa nesnažia ísť do hĺbky (na to je Tanenbaum, Wikipédia a RFC), naopak, snažia sa priniesť intuitívnu predstavu o technológiách a dávať jednotlivé pojmy do súvisu. 
-Autor neabsolvoval prednášky ani test z predmetu Počítačové siete. Pán RNDr. Jaroslav Janáček PhD. ohodnotil znalosti počítačových autora pred písaním na D+\footnote{
-Čo ho motivuje naučiť sa to poriadne. 
+Autor neabsolvoval prednášky ani test z predmetu Počítačové siete. Pán RNDr. Jaroslav Janáček PhD. ohodnotil znalosti počítačových sietí autora pred písaním na D+\footnote{
+Čo autora motivovalo naučiť sa to poriadne. 
 }, takže autor preto neručí za korektnosť textu.
 Poznamenajme, že autor sa snažil písať pravdu a len pravdu, keďže jeho odpoveď na štátniciach vychádza z tototo materiálu. V skratke, čitateľ informácie z tohoto textu vstrebáva na vlastné riziko :).
 
@@ -134,7 +134,7 @@ Pozri \ref{OSI}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Virtuálna a fyzická komunikácia}      
 ???
-Buď ju pozvem na večeru, alebo si chatujem na fejsbúčiku. 
+Buď ju pozvem na večeru (fyzická), alebo si chatujem na fejsbúčiku (virtuálna - využíva viaceré spojenia na dosiahnutie point-to-point). 
                             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Všeobecné závery z oblasti počítačových sietí, ktoré musia byť zakomponované do vrstvovej sieťovej architektúry}   
@@ -218,36 +218,74 @@ Algoritmy na vypĺňanie routovaích tabuliek:
               
                                                          
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Rozhrania a služby}                     
+\section{Rozhrania a služby}                
+Sieťová služba (network service) - služby dostupné na sieti pre počítače pripojené na sieť. Často poskytujú zdielané zdroje a nazývajú sa aj port, daemon alebo listener.  K službe sa pristupuje transportnými protokolmi. 
+Sieťové rozhranie (network interface controller) - používa sa na pripojenie k sieti. Napr. sieťová karta. Používajú aktívne čakanie na prijímanie paketov (Plachetka approved polling). 
+     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Vzťah medzi vrstvami a rozhraniami}  
+???
+Asi na akých vrstvách sieťové rozhrania komunikujú. Na najnižšej, zabezpečujú prenos dát na fyzickej vrstve.  
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Service Access Points (SAP's)}     
+\subsection{Service Access Points (SAP's)} 
+Koncové body v sieti, ktoré majú svoj identifikátor (asi).   
+NSAP adresy v OSI sú podobné IP adresám. Identifikujú koncové body v sieti, ku ktorým sa pristupuje protokolom ATM (Asynchronous Transfer Mode, unifikuje prenos v dátovoých a telekomunikačných sieťach). ATM prenáša celly, ktoré majú fixnú veľkosť (narozdiel od rámcov a paketov v IP).  
+  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Interface Data Unit}             
+\subsection{Interface Data Unit (IDU)}       
+Pod týmto menom som to poriadne nenašiel. 
+Tvári sa to ako gateway (z IP), ktorý premosťuje viaceré protokoly (konverzia dát) a 
+umožňuje prístup k iným sieťam. 
+      
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Spojované a nespojované služby}  
+???
+Nechápem. 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Kvalita služby a službové primitíva}            
+\subsection{Kvalita služby a službové primitíva}   
+???
+Náhodný generátor kľúčových atribútov kvality:
+\begin{itemize}
+\item Spoľahlivosť.
+\item Bezpečnosť.
+\item Rýchlosť.
+\item Jednoduchosť.
+\item Užitočnosť.
+\end{itemize}
+         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Referenčné modely}           
+\section{Referenčné modely}   
+\label{reference_model}   
+Všeobecná definícia \emph{referenčných modelov} v technickom svete: An abstract framework or domain-specific ontology consisting of an interlinked set of clearly defined concepts produced by an expert or body of experts in order to encourage clear communication. 
+Laicky ide o všeobecné pravidlá architektúry systémov. Napr. \href{http://en.wikipedia.org/wiki/Von_Neumann_architecture}{von Neumannova architektúra} počítača (CPU, Pamäť, ...). Alebo napr. taký \emph{feng-shui} je referenčným modelom pre zariadenie domu. Pre každú miestnosť špecifikuje, ako by mala vyzerať (a hlavne ako nie) a tieto koncepty prepája medzi sebou (napr. záchod a kuchyňa by nemali susedieť). 
+     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Ciele a nebezpečenstvá}   
+Náhodný generátor kľúčových atribútov cieľov a nebezpečenstiev (sú to protiklady):
+\begin{itemize}
+\item Jednoduchosť - ako v matematickej logike, chceme mať čo najmenej pravidiel. Ak budú globálne uznávané a používané, tak nie je problém systémy navrhnuté podľa referenčného modelu kombinovať, resp. je jednoduchšie pochopiť a navrhnúť nové systémy. 
+\item Transparentnosť - aj fyzik, ktorý sa chce uživiť programovaním, by tomu mal pochopiť.
+\item Užitočnosť - špecifikuje niečo reálne a väčšinou už používané.
+\item Nebezpečenstvo - nedodržať ciele (napr. navrhnút tutti-frutti referenčný model, ktorý bude takým molochom, že sa tým nikto nebude riadiť). 
+\end{itemize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Open Systems Architecture} 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Norma ISO 7498}                      
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{TCP/IP}    
-\label{OSI}              
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Referenčný model}     
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Porovnanie a kritika OSI a TCP/IP referenčných modelov}    
-OSI - Open systems interconnection. IP - Internet\footnote{Nie ten konkrétny} Protocol suite. Oba modely delia komunikáciu na abstraktné vrstvy. 
-Každá vrstva má pdoobné funkcie a využíva funkcie susedných vrstiev. 
+Nemýliť si s OAS (Open Architecture Systems), používané Microsoftom, Citrix a VMware. 
+Vrstvový referenčný model pre telekomunikácie. \href{www.acq.osd.mil/osjtf/pdf/boeing.pdf}{Jedna z implementácií} spoločnosťou Boeing. 
+Presn/ špecifikáciu som nenašiel, zakladá sa na OSI. 
 
-OSI:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Norma ISO 7498 (jedna z generácií OSI)}    
+\label{OSI}
+
+Určený pre všetky telekomunikačné siete a protokoly. 
+
+Daná vrstva zahŕňa protokoly s podobnými funkcionalitami a cieľmi. Každá vrstva využíva len funkcie susedných vrstiev. 
+
 \begin{itemize}
 \item Aplikačná. Komunikácia medzi procesmi, majú špecializovanú úlohu (OSI definuje striktnejšie, IP zahŕňa aj Presentation a Session). DNS, FTP, HTTP, SMTP, DHCP. 
 \item Prezentačná (občas nazývaná aj Syntax layer). Odbremeňuje koncové aplikácie od rôznych reprezentácií posielaných dát (znakových reťazcov),
@@ -262,8 +300,17 @@ Extended Binary Coded Decimal Interchange Code (EBCDIC) is an 8-bit character en
 \end{itemize}
 
 Poznamenajme, že v skutočnosti je prvou hlavičkou hlavička fyzickej vrstvy. 
+                  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{TCP/IP}    
+\label{OSI}              
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Referenčný model}        
+Pozri \ref{reference_model}.
 
-TCP/IP. Okrem vrstiev špecifikuje aj konkrétne protokoly. Internet tu neznamená konkrétny Internet, ale medzi-sieť.   
+TCP/IP. Okrem vrstiev špecifikuje aj konkrétne protokoly. \emph{Internet} tu neznamená konkrétny Internet, ale medzi-sieť. Je špecializovaný na prenos binárnych dát. 
+Daná vrstva zahŕňa protokoly s podobnými funkcionalitami a cieľmi. Každá vrstva využíva len funkcie susedných vrstiev. 
+ 
 \begin{itemize}
 \item Aplikačná. OSI + IMAP, POP, SOCKS, SSH.            
 \item Transportná. Prenos dát medzi koncovými zariadeniami. Rovnaké ako OSI.     
@@ -271,14 +318,41 @@ TCP/IP. Okrem vrstiev špecifikuje aj konkrétne protokoly. Internet tu neznamen
 \item Linková. Kábeláž pre lokálne siete. MAC (6bytové adresy zariadení (sieťových kariet)). ARP (kto má MAC adresu s danou IP?), Ethernet, DSL, ISDN.      
 \end{itemize}
 
+Poznamenajme, že v skutočnosti je prvou hlavičkou hlavička linkovej vrstvy. 
+
+Patrí sa porozprávať o jednotlivých protokoloch. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Porovnanie a kritika OSI a TCP/IP referenčných modelov}    
+
+OSI - Open systems interconnection. IP - Internet\footnote{Nie ten konkrétny} Protocol suite. Oba modely delia komunikáciu na abstraktné vrstvy. 
+
+IP je novší, špecializovaný na prenos digitálnych dát a používa sa prakticky vo všetkých počítačových sieťach (asi).
+IP možnosť interpertovať ako inštanciu OSI.  
+
 Kritika: niečo pohaluzím. 
         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Teoretické základy pre dátovú komunikáciu} 
+
+Asi netreba vedieť, stačí tušiť. Ide o výsledky teórie informácie, ktorými sa zaoberá aj predmet \href{http://www.dcs.fmph.uniba.sk/texty/codebook.pdf}{Teória kódovania}. Ide o širokú tému. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Nyquistovo tvrdenie}               
+\subsection{Nyquistovo tvrdenie (Nyquist–Shannon sampling theorem)}             
+
+\paragraph{Veta (Shannova verzia).} Nech $x(t)$ je vlnová funkcia\footnote{
+Poskladaná z konečného počtu sínusov a kosínusov. Záujemcovia nech si prečítajú \href{http://en.wikipedia.org/wiki/Fourier_transform}{Fourier transform}.
+} frekvencie v čase. Ak $(\forall t)x(t)\leq B$, tak je kompletne určená pomocou hodnôt vzdialených $\frac{1}{2B}$.
+
+Ľudsky povedané, ak zachytávame vlnové signály, ktoré majú maximálnu frekvenciu $B$, tak nám stačí merať aktuálnu frekvenciu signálu každých $\frac{1}{2B}$. Naše merania potom jednoznačne určujú vlnovú funkciu $x(t)$.
+
+V praxi vieme namerať diskrétne hodnoty spojitého signálu, ktoré podľa spomínanej vety vieme rekonštruovať naspäť na spojitú funkciu (niečo ako interpolačné polynómy - pre tých, čo mali numeriku). 
+  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Shannonove odhady a ich dôsledky}  
+Odhady mám pass. 
+Tipol by som, že frekvencie signálov v sieťových spojeniach sú nastavené tak, aby sa stíhali čítať. Alebo z druhej strany, cielená prenosová rýchlosť určuje frekvenciu priameho spojenia. 
+Používa sa napr. aj v digitálnych fotoaparátoch. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
