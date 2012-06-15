@@ -507,6 +507,8 @@ Dosť komplikovaná implementácia.
 Dôležitá otázka. Dobre popísané v \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko3/}{praktikách zo sietí}. Je ekvivalentná internet layer v IP. 
 Cieľom vrstvy je, aby vedeli počítače medzi sebou komunikovať bez ohľadu na použitie konkrétnej linkovej vrstvy (ethernet, WiFi, dial-up, ISDN, ADSL, ...). 
                  
+Odporúčam pozrieť si niečo o \href{http://en.wikipedia.org/wiki/Ipsec}{IPsec} (AH a ESP).                  
+                 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Interná organizácia sieťovej vrstvy} 
 
@@ -613,19 +615,161 @@ VPN sú populárne, nemôže chýbať v každej modernej firme.
 Jednou z implementácií je OpenVPN. 
                                                            
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Transportná vrstva}       
-Dôležitá otázka. 
+\section{Transportná vrstva (IP, OSI)}       
+Dôležitá otázka. Pozri \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko4/}{praktiká z počítačových sietí}. 
+   
+Cieľom transportnej vrstvy je zabezpečiť transparentný prenos dát medzi ľubovoľnými dvoma používateľmi (procesmi) v sieti. Keďže na jednom počítači môže bežať viac procesov, úlohou transportnej vrstvy je aj umožniť paralelný prenos viacerých prúdov dát. Protokoly to riešia tak, že rozšíria sieťové adresy o ďalší prvok - čislo portu. Adresa na transportnej vrstve je potom tvaru (sieťová adresa, číslo portu) a jednoznačne identifikuje tzv. socket cez ktorý komunikuje nejaký proces.
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Protokoly TCP a UDP}   
+\subsection{UDP (User Datagram Protocol)}   
+Najjednoduchší. Nezabezpečuje pratkicky nič, len sa snaží správu doručiť (aspoň raz). 
+Rozširuje IP hlavičku iba o čísla portov a checksum. 
+Používa sa, keď nie je spoľahlivosť doručenia požiadavkou. Napr. streamovanie porna, keď nám až tak nevadí, keď sa niektoré pakety stratia. 
+Používa sa aj pri tunelovaní. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Vytváranie, riadenie a ukončovanie spojenia v TCP} 
+\subsection{TCP (Transmission Control Protocol)}   
+Pozri \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko5/}{praktiká z počítačových sietí} \footnote{Väčšina textu tejto sekcie (TCP) je skopírovaná z danej stránky, dúfame, že sa tým neporušili žiadne copyrighty.}.
+
+Transmission control protocol (TCP) je najpoužívanejším protokolom transportnej vrstvy na Internete. Služby ako World Wide Web (HTTP protokol), e-mail (protokoly SMTP, POP3, IMAP) a mnohé iné používajú TCP na prenos údajov.
+Vytvára virtuálne okruhy pre prenos prúdu dát a zaručuje spoľahlivosť prenosu (preposielanie stratených a preusporiadanie doručených). Príjemca potvrdzuje príjem.  
+
+\paragraph{Hlavička}
+\begin{center}
+\begin{tabular}{ r | l }       
+  Offset (bajt) & Popis\\
+\hline              
+  0-1 & Číslo zdrojového portu (Source port)\\
+  2-3 & Číslo cieľového portu (Destination port)\\
+  4-7 & Poradové číslo (Sequence number)\\
+  8-11 & Potvrdzujúce číslo (Acknowledgment number (if ACK set))\\
+  12-13 & Príznaky\\
+  14-15 & Veľkosť okna (Window Size)\\
+  16-17 & Kontrolný súčet (Checksum)\\
+  18-19 & Smerník na urgentné dáta (nepoužívané) (Urgent pointer (if URG set))\\
+  20-... & Voliteľné rozšírenia (Options)\\
+\end{tabular}
+\end{center}
+
+Poradové číslo určuje do ktorej časti prúdu patria dáta, ktoré sa prenášajú v danom segmente. Na základe tohto poľa vie príjemca poskladať segmenty prijaté v nesprávnom poradí, prípadne zistiť, že niektoré dáta neprijal resp. prijal viackrát. Na začiatku spojenia sa toto pole určí ľubovoľne (nezávisle pre každý smer komunikácie) a následne sa zväčšuje s každým preneseným bajtom.
+
+\begin{center}
+\includegraphics[scale=0.5]{tcp_window.png}
+\end{center}
+
+Príjemca oboznamuje odosielateľa, že úspešne prijal dáta tým, že vyšle vlastný TCP segment v ktorom nastaví potvrdzujúce číslo na hodnotu o jeden väčšiu ako poradové číslo posledného prijatého bajtu (t.j. potvrdzujúce číslo má hodnotu poradového čísla, ktorú príjemca očakáva ako nasledovnú).
+
+\paragraph{Vytváranie, riadenie a ukončovanie spojenia.} 
+
+\begin{center}
+\begin{tabular}{ r | l }       
+  Bit & Popis\\
+\hline              
+  0-3 & Smerník na dáta\\              
+  4-7 & Rezervované\\              
+  8 & Congestion Window Reduced (CWR)\\              
+  9 & ECN-Echo (ECE)\\              
+  10 & Smerník na urgentné dáta je platný (URG)\\              
+  11 & Potvrdzujúce číslo je platné (ACK)\\              
+  12 & Push (PSH)\\           
+  13 & Resetovanie spojenia (RST)\\           
+  14 & Synchronizovanie poradových čísel (SYN)\\           
+  15 & Žiadne ďaľšie údaje od odosielateľa (FIN)\\
+\end{tabular}
+\end{center}
+
+PSH - vykonaj ihneď a nebufruj správy na príjemcovej strane. RST - ukončenie spojenia. 
+SYN - inicializuje TCP spojenie (three way handshake) a SYNchronizuje poradové čísla,
+príjemca odpovedá SYN a ACK. Spojenie sa ukončuje FIN. 
+
+Nečaká sa na potvrdenie (ACK) každého paketu (veľmi veľmi pomalé), posiela sa aj viacero paketov naraz (sliding window). 
+
+\paragraph{Kontrola zahltenia (Congestion control)}
+
+TCP obsahuje viacero mechanizmov, ktorými sa snaží zabrániť zahlteniu siete. Každá strana si udržuje tzv. "congestion window", čo je odhad maximálneho množstva dát, ktoré sa môžu poslať súčasne (bez čakania na potvrdenie) bez výpadkov.
+
+Okno sa na začiatku exponenciálne zväčšuje, kým nepríde k výpadku, vtedy sa resetuje. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{SSL}                             
+\subsection{SSL/TLS}                 
+Šifrovanie určené pre transportnú vrstvu (SSL je staršia verzia). 
+Asymetrické šifrovanie pre výmenu kľúčov (štandardne Diffie-Hellman), 
+symetrické šifrovanie pre nečitateľnosť a
+MAC na integritu a autenticitu\footnote{
+Istota, že správu vytvoril naozaj užívateľ s danou IP adresou. 
+} (napr. podpisovaním hashu správy). 
+Rozširuje štandardné protokoly ako HTTP, IMAP, ... na HTTPS, IMAPS, ... .
+
+Zjednodušený priebeh protokolu:
+\begin{itemize}
+\item Odosielateľ (klient) a príjemca (server) si vymenia informácie o nastaveniach. 
+\item Klient overí autenticitu servra (môže aj servert klienta). Ak nemá zapamätaný jeho verejný kľúč, tak konzultuje certifikačné autority. 
+\item Klient sa dohodne so serverom na spoločnom tajomstve pre túto komunikáciu (pomocou DH protokolu). Šifruje verejným kľúčom servra. 
+\item Zo spoločného tajomstva sa vygenerujú session keys, ktorými sa správy ďalej šifrujú. 
+\item Potvrdí sa session key. 
+\item Môže sa bezpečne komunikovať.
+\end{itemize} 
+
+\paragraph{Certifikačné autority.}
+Aby klient vedel overiť autenticitu, musí veriť spojeniu verejný kľúč - IPadresa. 
+Viera (trust) týchto dvojíc je outsourcovaná na \emph{certifikačné} autority,
+ktoré podpisujú takéto certifikáty. Certifikačné autority tvoria stromovú štruktúru. Koreňu stromu sa implicitne verí. 
+Certifikát, ktorý nie je registrovaný CA je neplatný a všetky prehliadače na to upzorňujú. 
+            
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Aplikačná vrstva a podporné protokoly}            
+\section{Aplikačná vrstva a podporné protokoly}     
+Dôležitá otázka.   
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{DHCP (Dynamic Host Configuration Protocol)} 
+Pozri \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko4/}{praktiká z počítačových sietí}. 
+  
+Protokol slúži na získanie IP adresy v lokálnej sieti. 
+Pri úvodnom pripojení klient nemá IP adresu a potrebuje nejakú získať. Kontaktuje preto DHCP server UDP paketom na adresu 255.255.255.255 (a port 67) so zdrojovou adresou 0.0.0.0\footnote{
+Je to trocha hack, posielať IP pakety, keď ešte IP stack nebol inicializovaný.
+} s obsahom DHCPDISCOVER, v ktorej uvádza svoju MAC adresu a zoznam nastavení. 
+
+Vo všeobecnosti server odpovedá broadcastom\footnote{
+Keďže klient ešte nemá nakonfigurovaný IP stack. 
+} DHCPOFFER (na port 68) a navrhuje aspoň jednu IP adresu, z ktorej si klient vyberie a oznámi broadcastom DHCPREQUEST a nastaví si IP stack. Server odpovie unicastom DHCPACK.
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{DNS (Domain Name System)}   
+Pozri \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko4/}{praktiká z počítačových sietí}. 
+
+Distribuovaná databáza bijektívneho zobrazenia znakových reťazcov (dómen) a IP adries. Jedny sa ľahko pamätajú ľudom, druhé počítačom. Priestor doménových mien je strom, pričom každý vrchol toho stromu môže mať priradené rôzne typy záznamy. Koreň stromu sa označuje bodkou. Každému vrcholu stromu (okrem koreňa) je priradené meno pozostávajúce z písmen, číslic a pomlčky.
+
+DNS servre (nameservre) tvoria hierarchickú stromovú štruktúru. Každý z nameservrov má na starosti svoju zónu. Pre každú zónu existuje aspoň jeden hlavný (master) NS a podriadený (slave) si záznamy kopírujú (kvôli distribuovanému prístupu). 
+
+Položky DNS záznamu: 
+\begin{itemize}
+\item Meno. Plné meno vrcholu ku ktorému sa viaže daný záznam, získané zreťazením mien všetkých vrcholov na ceste ku koreňu, pričom jednotlivé mená oddeľujeme bodkou.
+\item Trieda. Najzaujímavejšia trieda je IN (internet), ešte sú definované aj triedy CN (chaos) a HS (hesiod). 
+\item Typ:
+\begin{itemize}
+\item A,AAAA - autoritatívne záznamy. Tento nameserver je za ne zodpovedný. 
+\item PTR - opačný preklad (ip na name). 
+\item NS - delegovanie autority na iný nameserver (presmerovanie). 
+\item MX - mail exchange - mailový server. 
+\item SOA - start of authority - popisuje údaje o samotnej zóne. 
+\end{itemize}
+\item TTL - dokedy je záznam platný a môže sa cacheovať. 
+\item Ďalšie dáta. 
+\end{itemize}
+
+Dva režimy pracovania DNS servra: 
+\begin{itemize}
+\item Nerekurzívny. DNS server vracia len autoritatívne záznamy (A), ak nemá záznam, tak vráti čiastočný výsledok: NS záznam ukazujúci na nameserver, ktorý má viac informácií (klient sa potom rekurzívne pýta). 
+\item Rekurzívny. DNS server sa sám rekurzívne pýta ostatných nameserverov na odpoveď.
+\end{itemize}
+
+Odpovede sa môžu cacheovať, maximálne ale TTL čas. DNS je na porte 53, pristupuje sa UDP alebo TCP. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Telefónny systém}    
+\section{Telefónny systém}  
+Naozaj len v krátkosti. 
+  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Modemy}      
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -638,8 +782,13 @@ Dôležitá otázka.
 \subsection{ISDN - systém pre domáce a firemné využitie}  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{xDSL, B-ISDN}       
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Diaľkové vedenia a multiplexovanie, optické siete}
+Tiež len v krátkosti. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{FDMA/TDMA/CDMA}                           
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
