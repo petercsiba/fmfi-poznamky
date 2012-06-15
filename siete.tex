@@ -357,13 +357,39 @@ Používa sa napr. aj v digitálnych fotoaparátoch.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Dátové prenosy}     
+\begin{itemize}
+\item \emph{Sériová komunikácia}. Po komunikačnom kanály sa naraz posiela iba jeden bit informácie. Jeden kábel, jeden bit. Výhodou je jednoduchosť a cena. 
+\item \emph{Paralelná komunikácia}. 
+Po komunikačnom kanály sa naraz posiela viacero bitov informácie. 
+Kanál pozostáva z viacerych prenosových médií (káblov). 
+Nevýhodou sú problémy so synchronizáciou, napr. kvôli zachovania poradia dát je nutné čakať na všetky bity v jednej dávke (\href{http://en.wikipedia.org/wiki/Clock_skew}{Clock skew}) 
+alebo \href{http://en.wikipedia.org/wiki/Crosstalk}{Crosstalak}, keď signál v jednom kábli ovplyvňuje signály v okolitých kábloch (nedostatočné tienenie). 
+Výhodou je teoreticky vyššia prenosová rýchlosť. 
+\end{itemize}
+
+V minulosti sa sériová komunikácia používala hlavne na veľké vzdialenosti (cost-effective oproti paralelej) 
+a paralelná na menšie (high-throughput). 
+Sériové sa kvôli jednoduchosti (a dnešným prenosovým rýchlostiam) používajú aj na krátke vzdialenosti, napr serial bus (zbernica), alebo PCI (paralel) na PCI Express (serial). 
+Sériové spojenia je možné pretaktovať na rádovo vyššie rýchlosti ako paralelné.  
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{UART}        
+\subsection{UART (Universal asynchronous receiver/transmitter)} 
+
+Konverzia medzi sériovým a paralelným prenosom.
+Asynchrónne sériovo - každý bit je prenášaný v 8bitovom bloku, ktoré sú rozdelené start (nasleduje 8 butov) a stop (poslaných 8 bitov) signálmi.
+Dáta zo sériových prenosov sa buffrujú, aby sa potom mohli poslať paralelne. 
+Používa sa v integrovaných obvodoch, materských doskách, sériových portoch, modemoch... .       
+       
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{USRT}     
+\subsection{USRT (Universal Synchronous Receiver-Transmitter)}   
+
+Nepotrebuje start / stop signály, hodiny (clock) sú synchronizované rovnakou časovou jednotkou.
+UART podporujúci USRT sa nazýva USART (universal synchronous/asynchronous receiver/transmitter).
+Moderné UART majú podporu pre synchrónny mód. 
+  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Synchronizácia}   
-
+In synchronous transmission, the clock data is recovered separately from the data stream and no start/stop bits are used. This improves the efficiency of transmission on suitable channels since more of the bits sent are usable data and not character framing. An asynchronous transmission sends no characters over the interconnection when the transmitting device has nothing to send; but a synchronous interface must send "pad" characters to maintain synchronization between the receiver and transmitter. The usual filler is the ASCII "SYN" character. This may be done automatically by the transmitting device.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Elektromagnetické spektrum a bezdrôtové prenosy}  
