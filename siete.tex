@@ -31,6 +31,8 @@ Autor neabsolvoval prednášky ani test z predmetu Počítačové siete. Pán RN
 }, takže autor preto neručí za korektnosť textu.
 Poznamenajme, že autor sa snažil písať pravdu a len pravdu, keďže jeho odpoveď na štátniciach vychádza z tototo materiálu. V skratke, čitateľ informácie z tohoto textu vstrebáva na vlastné riziko :).
 
+Autor odporúča si pozrieť detaily hlavných protokolov, ako IP, UDP, TCP, SSL/TLS alebo DNS. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Telekomunikácie}           
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -182,40 +184,9 @@ V dnešnej dobe, keď sa jeden klik klávesy pri SSH prenáša pomocou HTTP pake
 Pozri \ref{multiplexing}. Demultiplexovanie je inverznou operáciou. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Smerovanie (routing)}     
-\label{routing}
+\subsection{Smerovanie (routing)}   
 Široká téma \href{http://en.wikipedia.org/wiki/Routing}{Routing}. 
-Ide o to doručiť správy v prípade, že medzi komunikujúcimi zariadeniami neexistuje priame spojenie. 
-
-\paragraph{Spôsoby doručenia.}
-\begin{itemize}
-\item Unicast - správa je určená jednému konkrétnemu.         
-\item Broadcast - správa je určená všetkým v sieti (neposiela sa ďalej medzi siete - internetwork).
-\item Multicat - správa sa posiela množine vrcholov. 
-\item Anycast - správa sa doručuje práve jednému z množiny vrcholov (najčastejšie najbližšiemu).
-\end{itemize}                               
-                
-\paragraph{Používané zariadenia.}
-\begin{itemize}
-\item Router. Pomocou \emph{routovacej tabuľky} $adresa_prijemcu \mapsto preposlat_na$ smeruje správy ďalej, resp. určenému príjemcovi.         
-\item Bridge. Príjemcu hľadá pomocou floodingu - opýta sa každého v sieti (napr. protokol ARP \ref{ARP}, resp Neighbor Discovery v IPv6). Keď našiel, tak si ho zapamätá. Používa sa v malých sieťach, ako najnižší router.  
-\item Gateway (nazývané aj protocol converters). Ich hlavným účelom je konverzia dát medzi dvoma protokolmi, resp. sú vstupnými bránami do iných \{$\epsilon$,pod,nad\}sietí. Využívajú sa na ľubovoľnej vrstve. 
-\item Firewall. Preposiela, Zahadzuje (ničí) alebo Blokuje (pošle echo prečo) správy na základe jednoduchých pravidiel (port, protokol, IP adresa). Pracuje na sieťovej vrstve. Viac o firewalloch v \ref{firewall}. 
-\item Switch. Narozdiel od hubu (kotrý preposiela správy všetkým ostatným), posiela správu len jej príjemcovi. 
-\end{itemize}  
-
-\paragraph{Routovacie tabuľky.} 
-\begin{itemize}
-\item Statické. Administrátor siete natvrdo zadá, kadiaľ sa majú preposielať dáta určené pre danú adresu.           
-\item Adaptívne. Vo veľkých dynamických sieťach (napr. Internet) nie je možné konfigurovať staticky, preto si routre medzi sebou pravidelne vymieňajú informácie (každý router pozná zopár iných, napr. štandardný domáci router pozná router ISP). 
-\end{itemize} 
-
-Algoritmy na vypĺňanie routovaích tabuliek:
-\begin{itemize}
-\item Distance vector algorithms - Bellman-Ford ($O(n^3)$). Každej hrane sa priradí cena, potom zbehne algoritmus na výpočet vzdialeností (násobenie matice susednosti), správy od routra $R$ pre $A$ sa smerujú po najkratšej ceste. Tento prístup sa využíva v malých (lokálnych) sieťach. Môže sa použiť aj zložitejší Dijsktrou algoritmus, ale pre niektoré zariadenia môže byť príliš zložiťý.           
-\item OLSR - Optimised Link State Routing - prehľadáva sa len do hĺbky 2, používa sa v ad-hoc sieťach (netreba vedieť). 
-\item Path vector protocol - vytvorí sa hierarchická štruktúra, každý vrchol je zodpovedný za svojich priamych potomkov, použije sa hierarchická adresácia. Táto hierarchická štruktúra je updateovaná pomocou špecializovaných protokolov (\href{http://tools.ietf.org/html/rfc1322}{RFC-1322}). Používa s v medzisieťovom smerovaní.  
-\end{itemize}
+Popísané v \ref{routing}.
               
                                                          
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -438,7 +409,12 @@ Bond, James Bond.
 \item Repeater - zosilňuje signály a porušené signály znovu posiela. Prvá vrstva OSI. 
 \item Proxy server - prostredník komunikácie (man in the middle). Cieľom je uľahčiť komunikáciu pre odosielateľa správy. Najvyššia vrstva.  
 \label{firewall} 
-\item Firewall - monitoruje hlavičky paketov a na základe ich adries a portov sa rozhoduje, či komunikáciu prepošle ďalej, blokuje (a pošle dôvod prečo, napr. ICMP) alebo zahodí (a má pass zdôvodnenie). \emph{Bezstavový} firewall má len takéto pravidlá. \emph{Stavový} firewall si vie pamätať vytvorené virtuálne spojenia (ako napr. TCP). To je nutné v prípade, že klient vytvára virtuálny okruh a očakáva odpoveď, ktorú by bezstavový firewall odmietol (stavový si pamätá vytvorený virtuálny okruh a dovolí spätnú správu). Sieťová vrstva.
+\item Firewall - monitoruje hlavičky paketov na sieťovej vrstve a na základe ich adries a portov sa rozhoduje, či komunikáciu prepošle ďalej, blokuje (a pošle dôvod prečo, napr. ICMP) alebo zahodí (a má pass zdôvodnenie). 
+
+\emph{Bezstavový} firewall má len takéto pravidlá. \emph{Stavový} firewall si vie pamätať vytvorené virtuálne spojenia (ako napr. TCP). To je nutné v prípade, že klient vytvára virtuálny okruh a očakáva odpoveď, ktorú by bezstavový firewall odmietol (stavový si pamätá vytvorený virtuálny okruh a dovolí spätnú správu). Stavový firewall sa používa čo najbližšie ku koncovému užívateľovi (keď počet TCP spojení môže byť obrovský a pamäť je konečná - je nutné premazávať). 
+
+Blacklist - niektorým zakáže, whitelist - len niektorým povolí. 
+
 \label{NAT}
 \item Network address translsator (NAT) - pozri \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko8/}{praktiká zo sietí}. Prepisuje adresy a porty v hlavičkách paketov. Účelom môže byť skrytie privátnych adries\footnote{
 Privátne adresy sa nemôžu vyskytnúť na Internete (konkrétny). 
@@ -448,7 +424,7 @@ Privátne adresy sa nemôžu vyskytnúť na Internete (konkrétny).
 \end{itemize}
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Linková vrstva}        
+\section{Linková vrstva (IP)}        
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{MAC adresa (Media Access Control address)}     
 Unikátny identifikátor pre sieťové zariadenia (sieťové karty napr.),
@@ -527,21 +503,119 @@ Výmena dát na krátku vzdialenosť. Každý pozná.
 Dosť komplikovaná implementácia. 
                                                  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Sieťová vrstva}                      
+\section{Sieťová vrstva (OSI)}     
+Dôležitá otázka. Dobre popísané v \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko3/}{praktikách zo sietí}. Je ekvivalentná internet layer v IP. 
+Cieľom vrstvy je, aby vedeli počítače medzi sebou komunikovať bez ohľadu na použitie konkrétnej linkovej vrstvy (ethernet, WiFi, dial-up, ISDN, ADSL, ...). 
+                 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Interná organizácia sieťovej vrstvy} 
+
+Hlavnými cieľmi sú: 
+\begin{itemize}
+\item Nevytvárať virtuálne okruhy. Zaručuje iba end-to-end komunikáciu. 
+\item Adresný priestor. Každý užívateľ siete má unikátnu adresu (nemusí byť pravda v prípade použitia NATu).  
+\item Smerovanie správy. Nie každý vie priamo posielať správy hocikomu po linkovej vrstve, keďže nemusia byť spojení káblom. Preto sa správa musí posielať cez viacero vrstiev - smerovanie (niečo ako GPS). 
+\end{itemize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Príklad prenosu packetov cez sieť} 
+
+Routre s routovacími tabuľkami. Dve prepojené siete. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Uzly a smerovacie tabuľky}     
+Uzly ???. Asi sa myslia sieťové zariadenia, ktoré sú spojené s viacerymi sieťovými zariadeniami (hub, switch, router, NAT, ...). 
+Smerovacie tabuľky v \ref{routing_tables}. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{IP protokol}               
+\subsection{IP protokol}    
+Suverénne najpoužívanejší protokol. Aktuálne sa prechádza na IPv6 (128bitové adresy), kvôli vyčerpaniu adresného priestoru IPv4 (32bitové adresy). 
+
+\paragraph{Fragmentácia.}
+IP definuje pohyblivú veľkosť packetu (po $2^16$). Použité linkové vrstvy môže mať rôzne obmedzenia na veľkosť paketu. Preto IPv4\footnote{
+IPv6 fragmentáciu zakazuje, je nutné dopredu zistiť MTU (resp. použiť minimálnu). 
+} umožňuje packety v uzloch \emph{fragmentovať} - rozdeliť. Ďalší uzol potom tieto pakety spojí naspäť. \emph{MTU} - Maximum transport unit - označuje maximálnu veľkosť paketu prenositeľného cez vytvorený virtuálny okruh (alebo spojenie). 
+
+\paragraph{Adresácia.}
+IPv4 adresy sú 4 bajtové, zapisujú sa $123.45.67.255$. Spolu s ňou sa posiela \emph{sieťová maska} (subnet mask), ktorá rozdeľuje adresu na \emph{adresu siete} (network identifier) a \emph{adresu zariadenia} (host identifier). Maska je niekoľko jednotiek nasledovaných nulami (32 možností), píše sa ako číslo udávajce počet jednotiek za IP adresu: $123.45.67.255/24$. 
+
+IP vyhradzuje špeciálne adresy. 127.0.0.1 je loopback (localhost) a pre lokálne použitie $10.0.0.0/8$, $172.16.0.0/12$ a $192.168.0.0/16$. Broadcastová adresa vznikne ako adresa siete vyplnená jednotkami: $123.0.0.1/8 \mapsto 123.255.255.255$ alebo 
+$158.195.213.69/8 \mapsto 158.195.213.255$.
+Adresy môžu byť staticky nastavené (administrátorom), alebo získané dynamicky (pomocou DHCP, pozri \ref{DHCP}) (dá sa určite nastaviť vo vašom obľúbenom operačnom systéme). 
+
+\paragraph{ARP.}
+IP adresy musia byť v konečnom dôsledku preložené na MAC adresy. Na tento účel slúži protokol \emph{ARP - \href{http://en.wikipedia.org/wiki/Address\_Resolution\_Protocol}{Address Resolution Protocol}}. Prebieha v dvoch fázach. Najprv uzol pošle broadcast všetkým na sieti s otázkou "Who has IPadresa?". Dotyčné zariadenie odpovedá svojou MAC adresou. Uzol si zobrazenie $IPaddress \mapsto MACaddress$ môže istý čas pamätať.  
+
+\paragraph{ICMP (Internet Control Message Protocol).}
+Kontrolná správa. Prenáša len jeden flag - status. Napr. firewall môže poslať ICMP v prípade, že správu blokoval. 
+
+\paragraph{Time to live.}
+Môže sa stať, že routovacie tabuľky môžu tvoriť cykli (resp. nevedia doručiť daný paket).
+Preto IP definuje TTL položku, ktorá určuje maximálny počet skokov, ktorý môže paket v sieti urobiť. 
+           
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Smerovanie}             
+\subsection{Smerovanie}         
+\label{routing}
+
+Ide o to doručiť správy v prípade, že medzi komunikujúcimi zariadeniami neexistuje priame spojenie. 
+
+\paragraph{Spôsoby doručenia.}
+\begin{itemize}
+\item Unicast - správa je určená jednému konkrétnemu.         
+\item Broadcast - správa je určená všetkým v sieti (neposiela sa ďalej medzi siete - internetwork).
+\item Multicat - správa sa posiela množine vrcholov. 
+\item Anycast - správa sa doručuje práve jednému z množiny vrcholov (najčastejšie najbližšiemu).
+\end{itemize}                               
+                
+\paragraph{Používané zariadenia.}
+\begin{itemize}
+\item Router. Pomocou \emph{routovacej tabuľky} $adresa_prijemcu \mapsto preposlat_na$ smeruje správy ďalej, resp. určenému príjemcovi.         
+\item Bridge. Príjemcu hľadá pomocou floodingu - opýta sa každého v sieti (napr. protokol ARP \ref{ARP}, resp Neighbor Discovery v IPv6). Keď našiel, tak si ho zapamätá. Používa sa v malých sieťach, ako najnižší router.  
+\item Gateway (nazývané aj protocol converters). Ich hlavným účelom je konverzia dát medzi dvoma protokolmi, resp. sú vstupnými bránami do iných \{$\epsilon$,pod,nad\}sietí. Využívajú sa na ľubovoľnej vrstve. 
+\item Firewall. Preposiela, Zahadzuje (ničí) alebo Blokuje (pošle echo prečo) správy na základe jednoduchých pravidiel (port, protokol, IP adresa). Pracuje na sieťovej vrstve. Viac o firewalloch v \ref{firewall}. 
+\item Switch. Narozdiel od hubu (kotrý preposiela správy všetkým ostatným), posiela správu len jej príjemcovi. 
+\end{itemize}  
+
+\label{routing_tables}
+\paragraph{Routovacie tabuľky.} 
+\begin{itemize}
+\item Statické. Administrátor siete natvrdo zadá, kadiaľ sa majú preposielať dáta určené pre danú adresu.           
+\item Adaptívne. Vo veľkých dynamických sieťach (napr. Internet) nie je možné konfigurovať staticky, preto si routre medzi sebou pravidelne vymieňajú informácie (každý router pozná zopár iných, napr. štandardný domáci router pozná router ISP). 
+\end{itemize} 
+
+Algoritmy na vypĺňanie routovacích tabuliek:
+\begin{itemize}
+\item Distance vector algorithms - Bellman-Ford ($O(n^3)$). Každej hrane sa priradí cena, potom zbehne algoritmus na výpočet vzdialeností (násobenie matice susednosti), správy od routra $R$ pre $A$ sa smerujú po najkratšej ceste. Tento prístup sa využíva v malých (lokálnych) sieťach. Môže sa použiť aj zložitejší Dijsktrou algoritmus, ale pre niektoré zariadenia môže byť príliš zložiťý.           
+\item OLSR - Optimised Link State Routing - prehľadáva sa len do hĺbky 2, používa sa v ad-hoc sieťach (netreba vedieť). 
+\item Path vector protocol - vytvorí sa hierarchická štruktúra, každý vrchol je zodpovedný za svojich priamych potomkov, použije sa hierarchická adresácia. Táto hierarchická štruktúra je updateovaná pomocou špecializovaných protokolov (\href{http://tools.ietf.org/html/rfc1322}{RFC-1322}). Používa s v medzisieťovom smerovaní.  
+\end{itemize}
+    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{CIDR, tunelovanie}                                                                     
+\subsection{CIDR (Classless Inter-Domain Routing)} 
+Do roku 1993 boli všetky adresy rozdelené len do piatich tried a susediace adresy nemuseli susediť aj topologicky. Od roku 1993 CIDR rozdeľuje adresy na adresu siete a adresu zariadenia (maska siete, spomínané vyššie). 
+
+Dosahuje sa tak jednoduchší routing (stačí poslať správu sieti) a rozširuje sa potenciálny počet IPv4 adries (koncové zariadenia nemusia mať unikátnu adresu, NAT). 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Tunelovanie}          
+Pozri \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko11/}{cviká zo sietí}.
+                                  
+Účelom tunelu je vytvoriť virtuálne spojenie, cez ktoré sa dá komunikovať tak, akokoby boli koncové zariadenia spojené priamo. 
+Prakticky sa paket $P$ (hocijakej vrstvy) zabalí do špeciálneho tunelovacieho paketu - obalu (sieťová vrstva). Obal sa medzi sieťami prenáša, prechádza cez routre, firewally, NAT, proxy, ... (ktorým sa $P$ takýmto spôsobom úspešne vyhýba). 
+Ak dosiahne router v koncovej sieti, tak sa rozbalí a $P$ sa pošle, akokeby vznikol na tej koncovej sieti. 
+
+Výhody tunelovania sú, že je možné celý paket poslať bezpečne po sieti. Je možné zabezpečiť autenticitu (kto paket posielal), hlavičku a obsah (šifrovaním) a integritu (checksum). 
+To v bežných paketoch nie je možné v takej miere, lebo niektoré časti sa pri prechode cez routre menia (TTL, header checksum,...).  
+
+\emph{VPN (Virtual private network)} pozri \href{http://en.wikipedia.org/wiki/Virtual_private_network}{Wikipédiu}.
+Tunelovaním sa vytvára virtuálna lokálna sieť, ktorá spája množinu klientov. Títo klienti posielajú potom medzi sebou správy, akokeby boli na izolovanej fyzickej sieti (akékoľvek správy, nie je možné odpočúvať, vieme zaručiť kto správu poslal a či sa zmenila). 
+VPN sú populárne, nemôže chýbať v každej modernej firme. 
+Jednou z implementácií je OpenVPN. 
+                                                           
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Transportná vrstva}        
+\section{Transportná vrstva}       
+Dôležitá otázka. 
+   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Protokoly TCP a UDP}   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
