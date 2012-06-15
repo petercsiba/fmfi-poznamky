@@ -1,15 +1,48 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[unicode]{hyperref}
+\usepackage{graphicx}
+
+\textwidth 6.5in
+\oddsidemargin 0.0in
+\evensidemargin 0.0in
+
+\title{Poznámky z počítačových sietí - matroš na štátnice}
+\date{15.06.2012}
+\author{Peter Csiba, petherz@gmail.com, \url{https://bitbucket.org/petrzlen/fmfi_poznamky}} 
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Úvod.}   
+
+Text sú poznámky k oficiálnym \href{štátnicovým otázkam}{http://new.dcs.fmph.uniba.sk/index.php/Studium/Bakalarske/StatneSkusky} a boli spísané počas učenia sa na ne.
+Poznámky sa nesnažia ísť do hĺbky (na to je Tanenbaum, Wikipédia a RFC), naopak, snažia sa priniesť intuitívnu predstavu o technológiách a dávať jednotlivé pojmy do súvisu. 
+Autor neabsolvoval prednášky ani test z predmetu Počítačové siete. Pán RNDr. Jaroslav Janáček PhD. ohodnotil znalosti počítačových autora pred písaním na D+\footnote{
+Čo ho motivuje naučiť sa to poriadne. 
+}, takže autor preto neručí za korektnosť textu.
+Poznamenajme, že autor sa snažil písať pravdu a len pravdu, keďže jeho odpoveď na štátniciach vychádza z tototo materiálu. V skratke, čitateľ informácie z tohoto textu vstrebáva na vlastné riziko :).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Telekomunikácie}           
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Koncept prenosu informácií.} 
-?
+\subsection{Koncept prenosu informácií} 
+???
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Integrácia.}
-?
+\subsection{Integrácia}
+???
                
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{MPLS (Multiprotocol Label Switiching).}
+\subsection{MPLS (Multiprotocol Label Switiching)}
 Medzi 2. a 3. vrstvou OSI ("layer 2.5" protocol). 
 Podporuje priame spojenia, aj circuit based (na viacero skokov).
 Hlavička (label) sa skladá z adresy na linkovej vrstve. Hlavičky môžu tvoriť stack, čím sa umožňuje posielať datagram cez viacero liniek.
@@ -19,7 +52,7 @@ Navrhnutý 1996, podpora pre väčšinu linkových a dátových protokolov. Unif
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Základné pojmy zo sietí}    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Topológia a geografia.} 
+\subsection{Topológia a geografia} 
 Topológia - organizácia siete. Fyzická (aká je v skutočnosti) a logická (ako sa správa). Nemusia byť rovnaké, napr. zariadenia spojené Ethernetom a hubom majú fyzickú topológiu hviezdy a logickú topológiu zbernice (lebo posielaný signál počuje každý).  
 \begin{itemize}
 \item Point-to-point - dve zariadenia spojené priamo.         
@@ -39,7 +72,7 @@ Kategorizácia podľa geografie siete (od najmenších po najväčšie):
 \item LAN - Local area network - jedna budova, škola, internát. Typicky Ethernetové káble.  
 \item Chrbtica - Backbone - spája viacere menšie siete (podsiete - \emph{subnets}). Špeciálne prípad: Internet backbone.
 \begin{center}
-\includegraphics{backbone.jpg}
+\includegraphics[scale=0.4]{backbone.jpg}
 \end{center} 
 \item WAN - Wide area network - mestá, štáty až medzikontinentálne. 
 \item Internetwork - prepojenie viacerých sietí (napr. nackbone-om).
@@ -47,7 +80,7 @@ Kategorizácia podľa geografie siete (od najmenších po najväčšie):
 Niektoré sme vynechali. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Základné typy sietí, informačné toky.}  
+\subsection{Základné typy sietí, informačné toky}  
 ???
 \begin{itemize}
 \item Informačné 
@@ -57,12 +90,12 @@ Niektoré sme vynechali.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Zdroje, cieľové uzly, prepínací systém.}
+\subsection{Zdroje, cieľové uzly, prepínací systém}
 ???
 Asi niečo o sieťových zariadeniach. 
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Jednosmerné a obojsmerné spojenia.}
+\subsection{Jednosmerné a obojsmerné spojenia}
        
 \begin{itemize}                                  
 \item Obojsmerné (full-duplex). Oboma smermi paralelne, ako mobilné telefóny.
@@ -70,20 +103,20 @@ Asi niečo o sieťových zariadeniach.
 \end{itemize} 
      
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Konferencie, komunikačné kanály.}  
+\subsection{Konferencie, komunikačné kanály}  
 ???
 Dosť všeobecné. 
 Konferenčné hovory boli implementované aj na telekomunikačných linkách. Jedným spôsobom boli špeciálne zariadenia - mosty - ktorým sa priradilo virtuálne telefónne číslo a na ňom sa zdielala komunikácia. Druhým spôsobom bolo (napr. v UK) pridanie špeciálneho tlačítka, ktoré umožňovalo zavolať tretiemu účastníkovy od druhého (predĺžiť tak spojenie $A \rightarrow B$ na $A \rightarrow B \rightarrow C$. 
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Multiplexovanie.}   
+\subsection{Multiplexovanie}   
 \label{multiplexing}
 Viacero komunikácií (protokolov, pagáčov makových) cez jednu linku. 
 Napr. sťahovanie torrentov a pozeranie emailov naraz (resp. hranie age-a). 
-Viac na \url{http://en.wikipedia.org/wiki/Multiplexing}.
+Viac na \href{http://en.wikipedia.org/wiki/Multiplexing}{Wikipédií}.
        
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Virtuálne okruhy (virtual circuit).}     
+\subsection{Virtuálne okruhy (virtual circuit)}     
 Na sieťovej vrstve sa vytvorí cesta (obojsmerná) cez zariadenia, po ktorej sa posielajú dáta (bity, signály, fotóny, ...) medzi koncovými vrcholmi. Vytvorenie spojenia zaručuje, že dáta prídu v rovnakom poradí, ako boli odoslané. Opakom sú datagramy (napr. UDP), ktoré každý kus dát posielajú cez sieť (routre) neurčito.   
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -91,69 +124,69 @@ Na sieťovej vrstve sa vytvorí cesta (obojsmerná) cez zariadenia, po ktorej sa
 ???
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Technika štrukturovaného sieťového softwaru.} 
+\subsection{Technika štrukturovaného sieťového softwaru} 
 ???
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Koncepcia vrstiev, protokolov a interface.} 
+\subsection{Koncepcia vrstiev, protokolov a interface} 
 Pozri \ref{OSI}. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Virtuálna a fyzická komunikácia.}      
+\subsection{Virtuálna a fyzická komunikácia}      
 ???
 Buď ju pozvem na večeru, alebo si chatujem na fejsbúčiku. 
                             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Všeobecné závery z oblasti počítačových sietí, ktoré musia byť zakomponované do vrstvovej sieťovej architektúry}   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Adresovanie.}    
+\subsection{Adresovanie}    
 Identifikovanie zariadení v rámci siete. Plochá addresácia (flat addressing) - adresy sa prideľujú inkrementovaním countera (alebo tomu izomorfným spôsobom), napr. MAC adresy.
 Hierarchická adresácia (hierarchical addressing) - tvoria strom, napr. IP adresy (IANA prideľuje adresy kontinentom a štátom, tie prideľujú adresy ISP (Internet Service Provider, napr. Orange, T-com, ...),...) alebo telefónne čísla (keď ešte fungovali cez switche).
               
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Pravidlá pre prenos údajov.}   
+\subsection{Pravidlá pre prenos údajov}   
 ???
 Prirovnáme to k cestnej doprave. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Správa chýb.}
-Integrita správ (checksumy), samoopravné kódy (Teória kódovania \url{http://www.dcs.fmph.uniba.sk/texty/codebook.pdf}). 
+\subsection{Správa chýb}
+Integrita správ (checksumy), samoopravné kódy (\href{http://www.dcs.fmph.uniba.sk/texty/codebook.pdf}{Teória kódovania skriptá}). 
 Robí sa to skoro na každej úrovni (hlavička aj telo (payload)).
                   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Postupnosť (následnosť) správ.}
+\subsection{Postupnosť (následnosť) správ}
 V prípade point-to-point nie je čo riešiť. Ak sa dáta smerujú (routujú) cez viacero zariadení, tak nemusí byť zabezpečená, keďže môžu ísť rôznymi cestami (napr. keď sa router rozhodne predísť upchatiu na ďalšej linke). 
 Ak je vytvorený virtuálny obvod, tak je postupnosť zabezpečená. Inak napr. TCP (\ref{TCP}).
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Problém rýchleho odosielateľa a pomalého príjemcu.}
-Pozri \url{http://en.wikipedia.org/wiki/Flow_control}.
+\subsection{Problém rýchleho odosielateľa a pomalého príjemcu}
+Pozri \href{http://en.wikipedia.org/wiki/Flow\_control}{Flow control}.
 Rieši to napr. TCP pomocou posuvných okien (sliding windows, viac \ref{TCP}).
 Problém je inštanciou problémov upchania siete (môže byť dôsledkom útoku),
 presnejšie sa snaží upchaniu predchádzať (avoidance) ako riešiť vzniknuté (detection).
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Neschopnosť akceptovať správy ľubovoľnej dĺžky.}  
+\subsection{Neschopnosť akceptovať správy ľubovoľnej dĺžky}  
 Napr. $\infty$ dĺžky :)
 Konkrétnym prípadom je získanie MTU (maximum transport unit) v IP paketoch. 
 Nie všetky zariadenia vedia spracovať ľubovoľne dlhý paket. Napr. IPv4 umožňuje pakety sekať - \emph{fragmentácia paketov}, IPv6 definuje protokol na získanie MTU pre danú cestu a ponecháva na klientovi, aby zistil a dodržal túto hodnotu (inak bude jeho paket aj tak zahodený).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Efektívny prenos malých správ.} 
+\subsection{Efektívny prenos malých správ} 
 ???
 V dnešnej dobe, keď sa jeden klik klávesy pri SSH prenáša pomocou HTTP paketu?
 (Asi 1000 násoboný overhead).
       
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Multiplexovanie a demultiplexovanie.}  
+\subsection{Multiplexovanie a demultiplexovanie}  
 Pozri \ref{multiplexing}. Demultiplexovanie je inverznou operáciou. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Smerovanie (routing).}     
-Široká téma \url{http://en.wikipedia.org/wiki/Routing}. 
+\subsection{Smerovanie (routing)}     
+Široká téma \href{http://en.wikipedia.org/wiki/Routing}{Routing}. 
 Ide o to doručiť správy v prípade, že medzi komunikujúcimi zariadeniami neexistuje priame spojenie. 
 
-Spôsoby doručenia:
+\paragraph{Spôsoby doručenia.}
 \begin{itemize}
 \item Unicast - správa je určená jednému konkrétnemu.         
 \item Broadcast - správa je určená všetkým v sieti (neposiela sa ďalej medzi siete - internetwork).
@@ -161,7 +194,7 @@ Spôsoby doručenia:
 \item Anycast - správa sa doručuje práve jednému z množiny vrcholov (najčastejšie najbližšiemu).
 \end{itemize}                               
                 
-Používané zariadenia:
+\paragraph{Používané zariadenia.}
 \begin{itemize}
 \item Router. Pomocou \emph{routovacej tabuľky} $adresa_prijemcu \mapsto preposlat_na$ smeruje správy ďalej, resp. určenému príjemcovi.         
 \item Bridge. Príjemcu hľadá pomocou floodingu - opýta sa každého v sieti (napr. protokol ARP \ref{ARP}, resp Neighbor Discovery v IPv6). Keď našiel, tak si ho zapamätá. Používa sa v malých sieťach, ako najnižší router.  
@@ -170,7 +203,7 @@ Používané zariadenia:
 \item Switch. Narozdiel od hubu (kotrý preposiela správy všetkým ostatným), posiela správu len jej príjemcovi. 
 \end{itemize}  
 
-Routovacie tabuľky:  
+\paragraph{Routovacie tabuľky.} 
 \begin{itemize}
 \item Statické. Administrátor siete natvrdo zadá, kadiaľ sa majú preposielať dáta určené pre danú adresu.           
 \item Adaptívne. Vo veľkých dynamických sieťach (napr. Internet) nie je možné konfigurovať staticky, preto si routre medzi sebou pravidelne vymieňajú informácie (každý router pozná zopár iných, napr. štandardný domáci router pozná router ISP). 
@@ -180,37 +213,37 @@ Algoritmy na vypĺňanie routovaích tabuliek:
 \begin{itemize}
 \item Distance vector algorithms - Bellman-Ford ($O(n^3)$). Každej hrane sa priradí cena, potom zbehne algoritmus na výpočet vzdialeností (násobenie matice susednosti), správy od routra $R$ pre $A$ sa smerujú po najkratšej ceste. Tento prístup sa využíva v malých (lokálnych) sieťach. Môže sa použiť aj zložitejší Dijsktrou algoritmus, ale pre niektoré zariadenia môže byť príliš zložiťý.           
 \item OLSR - Optimised Link State Routing - prehľadáva sa len do hĺbky 2, používa sa v ad-hoc sieťach (netreba vedieť). 
-\item Path vector protocol - vytvorí sa hierarchická štruktúra, každý vrchol je zodpovedný za svojich priamych potomkov, použije sa hierarchická adresácia. Táto hierarchická štrutkúra je updateovaná pomocou špecializovaných protokolov \url{http://tools.ietf.org/html/rfc1322}. Používa s v medzisieťovom smerovaní.  
+\item Path vector protocol - vytvorí sa hierarchická štruktúra, každý vrchol je zodpovedný za svojich priamych potomkov, použije sa hierarchická adresácia. Táto hierarchická štruktúra je updateovaná pomocou špecializovaných protokolov (\href{http://tools.ietf.org/html/rfc1322}{RFC-1322}). Používa s v medzisieťovom smerovaní.  
 \end{itemize}
               
                                                          
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Rozhrania a služby}                     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Vzťah medzi vrstvami a rozhraniami.}  
+\subsection{Vzťah medzi vrstvami a rozhraniami}  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Service Access Points (SAP's).}     
+\subsection{Service Access Points (SAP's)}     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Interface Data Unit.}             
+\subsection{Interface Data Unit}             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Spojované a nespojované služby.}  
+\subsection{Spojované a nespojované služby}  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Kvalita služby a službové primitíva.}            
+\subsection{Kvalita služby a službové primitíva}            
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Referenčné modely}           
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Ciele a nebezpečenstvá.}   
+\subsection{Ciele a nebezpečenstvá}   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Open Systems Architecture.} 
+\subsection{Open Systems Architecture} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Norma ISO 7498.}                      
+\subsection{Norma ISO 7498}                      
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{TCP/IP}    
 \label{OSI}              
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Referenčný model.}     
+\subsection{Referenčný model}     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Porovnanie a kritika OSI a TCP/IP referenčných modelov.}    
+\subsection{Porovnanie a kritika OSI a TCP/IP referenčných modelov}    
 OSI - Open systems interconnection. IP - Internet\footnote{Nie ten konkrétny} Protocol suite. Oba modely delia komunikáciu na abstraktné vrstvy. 
 Každá vrstva má pdoobné funkcie a využíva funkcie susedných vrstiev. 
 
@@ -241,41 +274,49 @@ TCP/IP. Okrem vrstiev špecifikuje aj konkrétne protokoly. Internet tu neznamen
 Kritika: niečo pohaluzím. 
         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Teoretické základy pre dátovú komunikáciu  
+\section{Teoretické základy pre dátovú komunikáciu} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Nyquistovo tvrdenie.}               
+\subsection{Nyquistovo tvrdenie}               
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Shannonove odhady a ich dôsledky.}  
+\subsection{Shannonove odhady a ich dôsledky}  
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Dátové prenosy     
+\section{Dátové prenosy}     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{UART.}        
+\subsection{UART}        
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{USRT.}     
+\subsection{USRT}     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Synchronizácia.}   
+\subsection{Synchronizácia}   
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Elektromagnetické spektrum a bezdrôtové prenosy}  
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Prenosové média a sieťové komponenty} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Techniky prepojovania sietí.}  
+\subsection{Techniky prepojovania sietí}  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Charakter kabeláže.}     
+\subsection{Charakter kabeláže}     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Štruktúrovaná kabeláž.}  
+\subsection{Štruktúrovaná kabeláž}  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Sieťové zariadenia.}            
+\subsection{Sieťové zariadenia}           
+
+ 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Linková vrstva}        
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{MAC adresa (Media Access Control address).}     
+\subsection{MAC adresa (Media Access Control address)}     
 Unikátny identifikátor pre sieťové zariadenia (sieťové karty napr.),
 dodávané ich výrobcom. Má 6 byteov, prvé tri pre výrobcu (OUI - Organizationally Unique Identifier), ďalšie tri pre unikátny identifikátor (NIC - Network interface controller). Špeciálne $FF:FF:FF:FF:FF:FF$ je broadcastová adresa. 
           
 MAC -  Media Access Control - akým spôsobom sa pristupuje k zdielanému médiu (na ktorom môže vysielať viacero staníc naraz).          
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{IEEE štandardy 802 pre LAN (a WAN).}  
+\subsection{IEEE štandardy 802 pre LAN (a WAN)}  
 Február 1980. Rôzne veľkosti paketov. Rozdeľuje dátovú vrstvu na MAC  (predošlý odstavec) a LLC - Logical Link Control, ktorý umožňuje viacerým rôznym protokolom "paralelný" prístup k médiu (komunikačný kanál).
 
 Je ich viacero, napr.:
@@ -286,29 +327,29 @@ Je ich viacero, napr.:
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{FDDI (Fiber Distributed Data Interface).}  
+\subsection{FDDI (Fiber Distributed Data Interface)}  
 Sieťová karta. Umožňuje prenos 100Mbit/s, na kružnicovej topológií (zdielané médium). Používal sa v LAN. Nahradený Fast Ethernet.    
                  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Fast Ethernet.}            
+\subsection{Fast Ethernet}            
 Lacný, všade používaný (nazývaný aj LAN kábel).
 100Mbit / s. Hviezdicová topológia (centrom je Hub, Switch alebo Router).
 Používa CSMA/CD (Detekcia kolízií s náhodným čakaním (podľa exponenciálnej distribúcie pravdepodobnosti = \emph{exponential backoff}) v prípade kolízie). Viacero verzií podľa druhu vodiča (medené / optické).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Gigabit Ethernet.}       
+\subsection{Gigabit Ethernet}       
 Od roku 2010 "common and economical" (štandardizované 1998). Pomocou switchov je umožnená full-duplex komunikácia (obojsmerná). 
 Zas asi 10 verzií (od 25m po 70 km), (asi vždy) optické vlákna. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{10 Gigabit Ethernet.}  
+\subsection{10 Gigabit Ethernet}  
 Len full-duplex (obojsmerne), nedá sa použiť s hubmi ani s CSMA/CD. 
 Od roku 2002. Problémom sú 10Gbit routre (podľa istých zdrojov realizovateľné na moderných grafickách kartách, lepšie ako bitcoiny). Optické káble. Zas kopa verzií, typovo rovnakých. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{802.11 (Wireless LAN).}  
+\subsection{802.11 (Wireless LAN)}  
 
-Pozri: \url{http://netlab.dcs.fmph.uniba.sk/siete/cviko2/}, ďalej len výcuc. 
+Pozri \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko2/}{Cviká z počítačových sietí}, ďalej len výcuc. 
 CSMA (Carrier Sense Multiple Access - Collision avoidance) - ak je linka obsadená, tak exponential backoff. Zdielané médium - 2.4GHz až 5GHz pásma. 
 Antény ovplyvňujú kvalitu. Viacero protokolov (rôzne prenosové rýchlosti).
 
@@ -332,63 +373,63 @@ Distribučný systém - prepojenie viacerých WiFi routrov (staníc) medzi sebou
 Mesh networking (také peer-to-peer). Každý je rovnocenný, preposiela pakety ďalej (chová sa ako wifi router). Nie je rozšírené. 
       
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{802.15 (Wireless PAN).} 
+\subsection{802.15 (Wireless PAN)} 
 PAN - personal area network - len medzi zariadenia používané jednou osobou (napr.:mobil, tablet, notebook, desktop, mp3 player) - nazýva sa aj \emph{Body Area Network}.
 Bluetooth, WiFi (staré infraporty a ďalšie). 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{802.16 (Wireless broadband).}
+\subsection{802.16 (Wireless broadband)}
 Ako mobilná sieť, ale ponúka bezdrátové pripojenie k Internetu.
-\url{http://en.wikipedia.org/wiki/Broadband_Wireless_Access}. 
+Viac na \href{http://en.wikipedia.org/wiki/Broadband\_Wireless\_Access}{Broadband Wireless Access}. 
        
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Bluetooth.}           
+\subsection{Bluetooth}           
 Výmena dát na krátku vzdialenosť. Každý pozná. 
 Dosť komplikovaná implementácia. 
                                                  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Sieťová vrstva}                      
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Interná organizácia sieťovej vrstvy.} 
+\subsection{Interná organizácia sieťovej vrstvy} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Príklad prenosu packetov cez sieť.} 
+\subsection{Príklad prenosu packetov cez sieť} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Uzly a smerovacie tabuľky.}     
+\subsection{Uzly a smerovacie tabuľky}     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{IP protokol.}               
+\subsection{IP protokol}               
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Smerovanie.}             
+\subsection{Smerovanie}             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{CIDR, tunelovanie.}                                                                     
+\subsection{CIDR, tunelovanie}                                                                     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Transportná vrstva}        
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Protokoly TCP a UDP.}   
+\subsection{Protokoly TCP a UDP}   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Vytváranie, riadenie a ukončovanie spojenia v TCP.} 
+\subsection{Vytváranie, riadenie a ukončovanie spojenia v TCP} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{SSL.}                             
+\subsection{SSL}                             
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Aplikačná vrstva a podporné protokoly}            
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Telefónny systém}    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Modemy.}      
+\subsection{Modemy}      
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Štandardy.}    
+\subsection{Štandardy}    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Konštelačné vzorky.}  
+\subsection{Konštelačné vzorky}  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Modulačné techniky.}   
+\subsection{Modulačné techniky}   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{ISDN - systém pre domáce a firemné využitie.}  
+\subsection{ISDN - systém pre domáce a firemné využitie}  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{xDSL, B-ISDN.}       
+\subsection{xDSL, B-ISDN}       
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Diaľkové vedenia a multiplexovanie, optické siete}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{FDMA/TDMA/CDMA.}                           
+\subsection{FDMA/TDMA/CDMA}                           
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Synchrónne optické siete (SDH, SONET architektúra - definícia rámcov v SDH).}
+\subsection{Synchrónne optické siete (SDH, SONET architektúra - definícia rámcov v SDH)}
 
 
 
@@ -397,26 +438,12 @@ Dosť komplikovaná implementácia.
 \item \url{http://en.wikipedia.org} 
 \item \url{http://netlab.dcs.fmph.uniba.sk/siete/} 
 \item \url{http://www.dcs.fmph.uniba.sk/\~plachetk/TEACHING/DISTRSYS2012/siete.pdf} 
-\item  
-\item  
-\item  
-\item  
-\item  
-\item  
-\item 
 \end{itemize}
 
 \section{Ďalšie pojmy}
 \begin{itemize}
 \item lip synch (VoIP)                                  
 \item \emph{ATM} is a core protocol used over the SONET/SDH backbone of the public switched telephone network (PSTN) and Integrated Services Digital Network (ISDN), but its use is declining in favour of All IP. 
-\item  
-\item  
-\item  
-\item  
-\item  
-\item  
-\item  
-\item  
-\item 
 \end{itemize}
+
+\end{document}
