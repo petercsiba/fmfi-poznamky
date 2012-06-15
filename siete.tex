@@ -24,14 +24,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Úvod.}   
 
-Text sú poznámky k oficiálnym \href{štátnicovým otázkam}{http://new.dcs.fmph.uniba.sk/index.php/Studium/Bakalarske/StatneSkusky} a boli spísané počas učenia sa na ne.
-Poznámky sa nesnažia ísť do hĺbky (na to je Tanenbaum, Wikipédia a RFC), naopak, snažia sa priniesť intuitívnu predstavu o technológiách a dávať jednotlivé pojmy do súvisu. 
-Autor neabsolvoval prednášky ani test z predmetu Počítačové siete. Pán RNDr. Jaroslav Janáček PhD. ohodnotil znalosti počítačových sietí autora pred písaním na D+\footnote{
-Čo autora motivovalo naučiť sa to poriadne. 
-}, takže autor preto neručí za korektnosť textu.
-Poznamenajme, že autor sa snažil písať pravdu a len pravdu, keďže jeho odpoveď na štátniciach vychádza z tototo materiálu. V skratke, čitateľ informácie z tohoto textu vstrebáva na vlastné riziko :).
+Text je poznámkami k oficiálnym \href{http://new.dcs.fmph.uniba.sk/index.php/Studium/Bakalarske/StatneSkusky}{štátnicovým otázkam} a boli spísané počas učenia sa na ne.
+Poznámky sa nesnažia ísť do hĺbky (na to je Tanenbaum, RFC a Wikipédia). Naopak, snažia sa priniesť intuitívnu predstavu o technológiách a dávať jednotlivé pojmy do súvisu. 
 
-Autor odporúča si pozrieť detaily hlavných protokolov, ako IP, UDP, TCP, SSL/TLS alebo DNS. 
+Poznámky sú organizované podľa štátnicových otázok, snažia sa minimalizovať omáčku a nevysvetlujú a neuvádzajú do problematiky. Text je určený čitateľom, ktorý sa už s hlavnými pojmami stretli.
+Ďalej autor odporúča čitateľovi si pozrieť hlavne detaily konkrétnych TCP/IP protokolov, ako napríklad IP, UDP, TCP, SSL/TLS alebo DNS. 
+
+Autor neabsolvoval prednášky ani test z predmetu Počítačové siete a nemá skúsenosti s ich administráciou. Nemenovaný prednášajúci ohodnotil znalosti počítačových sietí autora pred písaním textu na D+\footnote{
+Čo autora motivovalo naučiť sa to ešte lepšie. 
+}, takže autor aj preto neručí za korektnosť textu. V skratke, čitateľ informácie z tohoto textu vstrebáva na vlastné riziko :).
+
+Nakoniec poznamenajme, že autor sa snažil písať pravdu a len pravdu, keďže jeho odpoveď na záverečných skúškach vychádza z tototo materiálu. 
+Ak čitateľ chce prispieť ku kvalite textu, nech autorovi napíše a ten mu udelí prístup do repozitára. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Telekomunikácie}           
@@ -274,8 +278,9 @@ Extended Binary Coded Decimal Interchange Code (EBCDIC) is an 8-bit character en
 Poznamenajme, že v skutočnosti je prvou hlavičkou hlavička fyzickej vrstvy. 
                   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{TCP/IP}    
-\label{OSI}              
+\section{TCP/IP}       
+Zoznam vrstiev a protokolov v TCP/IP referenčnom modely. 
+   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Referenčný model}        
 Pozri \ref{reference_model}.
@@ -546,6 +551,7 @@ $158.195.213.69/8 \mapsto 158.195.213.255$.
 Adresy môžu byť staticky nastavené (administrátorom), alebo získané dynamicky (pomocou DHCP, pozri \ref{DHCP}) (dá sa určite nastaviť vo vašom obľúbenom operačnom systéme). 
 
 \paragraph{ARP.}
+\label{ARP}
 IP adresy musia byť v konečnom dôsledku preložené na MAC adresy. Na tento účel slúži protokol \emph{ARP - \href{http://en.wikipedia.org/wiki/Address\_Resolution\_Protocol}{Address Resolution Protocol}}. Prebieha v dvoch fázach. Najprv uzol pošle broadcast všetkým na sieti s otázkou "Who has IPadresa?". Dotyčné zariadenie odpovedá svojou MAC adresou. Uzol si zobrazenie $IPaddress \mapsto MACaddress$ môže istý čas pamätať.  
 
 \paragraph{ICMP (Internet Control Message Protocol).}
@@ -629,6 +635,7 @@ Používa sa aj pri tunelovaní.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{TCP (Transmission Control Protocol)}   
+\label{TCP}
 Pozri \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko5/}{praktiká z počítačových sietí} \footnote{Väčšina textu tejto sekcie (TCP) je skopírovaná z danej stránky, dúfame, že sa tým neporušili žiadne copyrighty.}.
 
 Transmission control protocol (TCP) je najpoužívanejším protokolom transportnej vrstvy na Internete. Služby ako World Wide Web (HTTP protokol), e-mail (protokoly SMTP, POP3, IMAP) a mnohé iné používajú TCP na prenos údajov.
@@ -720,9 +727,11 @@ Certifikát, ktorý nie je registrovaný CA je neplatný a všetky prehliadače 
 \section{Aplikačná vrstva a podporné protokoly}     
 Dôležitá otázka.   
 
+Protokoly určené na špecializovanú komunikáciu medzi procesmi (process-to-process).  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{DHCP (Dynamic Host Configuration Protocol)} 
+\label{DHCP}
 Pozri \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko4/}{praktiká z počítačových sietí}. 
   
 Protokol slúži na získanie IP adresy v lokálnej sieti. 
@@ -766,34 +775,86 @@ Dva režimy pracovania DNS servra:
 
 Odpovede sa môžu cacheovať, maximálne ale TTL čas. DNS je na porte 53, pristupuje sa UDP alebo TCP. 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{HTTP (Hypertext Transfer Protocol)}  
+Request-response, client-server. Skoro každá webová komunikácia ide cez HTTP, keďže firewally nezvyknú blokovať port 80. 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{SSH (Secure Shell)}   
+Secure Shell (SSH) is a network protocol for secure data communication, remote shell services or command execution and other secure network services between two networked computers that it connects via a secure channel over an insecure network: a server and a client (running SSH server and SSH client programs, respectively).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{FTP (File Transfer Protocol)}  
+File Transfer Protocol (FTP) is a standard network protocol used to transfer files from one host to another host over a TCP-based network, such as the Internet. It is often used to upload web pages and other documents from a private development machine to a public web-hosting server.
+
+Komunikácia nie je šifrovaná a veľa webhostingov nepodporuje šifrovanú verziu SFTP. Odporúča sa preto používať SCP, ak sa dá.  
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{SMTP (Simple Mail Transfer Protocol)}   
+While electronic mail servers and other mail transfer agents use SMTP to send and receive mail messages, user-level client mail applications typically only use SMTP for sending messages to a mail server for relaying. For receiving messages, client applications usually use either the Post Office Protocol (POP) or the Internet Message Access Protocol (IMAP). 
+
+Tiež len štruktúra, zabezpečenie napr. PGP. 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Telefónny systém}  
-Naozaj len v krátkosti. 
+Naozaj len v krátkosti (už nemám silu písať). 
+
+The public switched telephone network (PSTN) is the network of the world's public circuit-switched telephone networks. It consists of telephone lines, fiber optic cables, microwave transmission links, cellular networks, communications satellites, and undersea telephone cables, all inter-connected by switching centers, thus allowing any telephone in the world to communicate with any other. Originally a network of fixed-line analog telephone systems, the PSTN is now almost entirely digital in its core and includes mobile as well as fixed telephones.
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Modemy}      
+Modem (modulátor-demodulátor) - transformuje analógový signál na digitálny a naopak. V prípade Internetu sa využíval na pripojenie pomocou telefónnych liniek (dial-up).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Štandardy}    
+??? Tých je určite kopa. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Konštelačné vzorky}  
+??? Google mi vyhľadá iba súhvezdia a iné konštelácie. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Modulačné techniky}   
+\href{http://cs.wikipedia.org/wiki/Modulace}{Česká wikipédia je fajná}. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{ISDN - systém pre domáce a firemné využitie}  
+ISDN je zkratka z anglického termínu Integrated Services Digital Network, český název pro tuto síť je Digitální síť integrovaných služeb.
+
+Dnešní telefonní sítě jsou založeny na digitálních telefonních ústřednách a přenosové cesty mezi ústřednami jsou také plně digitalizovány. Poslední analogová část sítě tak zůstává účastnická přípojka. Tedy poslední část od ústředny k telefonnímu přístroji (modemu, faxu atd.) účastníka. ISDN nabízí plně digitální přenos až k účastníkovi (A/D a D/A převod signálu se odehrává přímo v koncovém přístroji). ISDN dále nabízí možnost komunikovat pomocí jedné digitální účastnické přípojky pomocí hlasu, textu a obrazu. Obecně pak mluvíme o multimediální komunikaci. ISDN přípojku lze pomocí takzvaného terminálového adaptoru (TA) nesprávně „ISDN modem“ samozřejmě použít také pro připojení do sítě Internet.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{xDSL, B-ISDN}       
+\subsection{xDSL, B-ISDN}     
+  
+DSL (anglicky Digital Subscriber Line) je technologie, která umožňuje využít stávající vedení telefonu nebo kabelové televize pro vysokorychlostní přenos dat. Využívá telefonní rozvody plochým nekrouceným kabelem, kroucenou dvojlinku nebo koaxiální kabel kabelové televize. Jednotlivé typy DSL se liší v používaném frekvenčním pásmu, maximální rychlosti a dosahu. Obecně platí že čím větší vzdálenost od ústředny nebo méně kvalitní vedení, tím nižší maximální dosažitelná rychlost.
 
-
+Pro běžné domácí nasazení se obvykle využívá asymetrická varianta (ADSL), kde je vyšší přenosová rychlost ve směru k zákazníkovi (anglicky download) a nižší rychlost směrem od zákazníka (anglicky upload). Ve firemním prostředí se používají symetrické varianty, kde jsou obě rychlosti stejné.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Diaľkové vedenia a multiplexovanie, optické siete}
-Tiež len v krátkosti. 
+Tiež len v krátkosti (už nemám silu písať). Je to rôznych spôsoboch využívania frekvenčného pásma. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{FDMA/TDMA/CDMA}                           
+\subsection{FDMA/TDMA/CDMA}  
+
+V tejto sekcií popisujeme Multiple Access systémy, ktoré riešia problém, keď viacerý užívatelia chcú naraz využívať zdieľané médium na komunikáciu. 
+
+\emph{Frequency Division Multiple Access} or FDMA is a channel access method used in multiple-access protocols as a channelization protocol. FDMA gives users an individual allocation of one or several frequency bands, or channels. It is particularly commonplace in satellite communication. FDMA, like other Multiple Access systems, coordinates access between multiple users
+In FDMA all users share the satellite simultaneously but each user transmits at single frequency.
+FDMA can be used with both analog and digital signal.
+              
+\emph{Time Division Multiple Access} paralelizuje digitálnu komunikáciu tak, že každému užívateľu vyhradí krátky \emph{time slot} na jeho prenos. Užívatelia sa striedajú (pozri operačné systémy a scheduling). 
+                         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Synchrónne optické siete (SDH, SONET architektúra - definícia rámcov v SDH)}
+Synchrónne optické siete = Synchronous Optical Networking (SONET) $\approx$ Synchronous Digital Hierarchy (SDH). 
+Standardized multiplexing protocol that transfer multiple digital bit streams over optical fiber using lasers or highly coherent light from light-emitting diodes (LEDs).
 
+Výhodou oproti Ethernetu je, že je možné prenášať dáta na veľké (medzištátne) vzdialenosti. 
+
+\href{http://en.wikipedia.org/wiki/Synchronous\_optical\_networking\#SDH_frame}{Definícia rámca na wikipédií}.
+Prenosová rýchlosť 155.52 Mbit/s a jeden rámec sa prenesie za 125 microsekúnd ($125 \times 10^{-6}$ sekúnd).
 
 
 \section{Referencie a odporúčaná literatúra}
@@ -801,12 +862,6 @@ Tiež len v krátkosti.
 \item \url{http://en.wikipedia.org} 
 \item \url{http://netlab.dcs.fmph.uniba.sk/siete/} 
 \item \url{http://www.dcs.fmph.uniba.sk/\~plachetk/TEACHING/DISTRSYS2012/siete.pdf} 
-\end{itemize}
-
-\section{Ďalšie pojmy}
-\begin{itemize}
-\item lip synch (VoIP)                                  
-\item \emph{ATM} is a core protocol used over the SONET/SDH backbone of the public switched telephone network (PSTN) and Integrated Services Digital Network (ISDN), but its use is declining in favour of All IP. 
 \end{itemize}
 
 \end{document}
