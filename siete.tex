@@ -183,6 +183,7 @@ Pozri \ref{multiplexing}. Demultiplexovanie je inverznou operáciou.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Smerovanie (routing)}     
+\label{routing}
 Široká téma \href{http://en.wikipedia.org/wiki/Routing}{Routing}. 
 Ide o to doručiť správy v prípade, že medzi komunikujúcimi zariadeniami neexistuje priame spojenie. 
 
@@ -394,18 +395,57 @@ In synchronous transmission, the clock data is recovered separately from the dat
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Elektromagnetické spektrum a bezdrôtové prenosy}  
 
+Mám pass. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Prenosové média a sieťové komponenty} 
+Mám dosť pass, nie som predsa fiitkár. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Techniky prepojovania sietí}  
+Asi rôzne topológie. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Charakter kabeláže}     
+Sivá, biela, čierna. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Štruktúrovaná kabeláž}  
+\paragraph{Koaxiálny kábel.}
+\begin{center}
+\includegraphics{coaxial.jpg}
+\end{center}
+\begin{itemize}
+\item A - Vonkajší plastový obal. 
+\item B - Medené tienidlo (pred vesmírnym šumom). 
+\item C - Elektrický izolátor.
+\item D - Medené jadro - prenosové médium. 
+\end{itemize}
+
+Je ich asi 10 typov. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Sieťové zariadenia}           
 
+\begin{itemize}
+\item Gateway - konverzia dát medzi rôznymi sieťovými protokolmi, prístupový / výstupový bod siete. Používa vrstvy 4-7 OSI modelu. 
+\item Hub - fyzicky je centrom hviezdicovej fyzickej topológie (ethernetové káble). Hub preposiela správu od každého každému a vytvára tak jednu kolíznu doménu. Logickú topológiu má teda zbernicovú. Druhá vrstva OSI. 
+\item Bridge - rámce s adresou (MAC adresou\footnote{
+Bond, James Bond. 
+}) nepreposiela každému. Ak adresu nepozná, tak sa spýta všetkých, koho adresa je (niečo ako ARP). Ďalej si už adresu pamätá (ak sa dlho nepoužila, môže ju zmazať). Druhá vrstva OSI. 
+\item Switch - konceptuálne rovnaké ako bridge. Rozdiel je v tom, že switch skúma iba hlavičku prechádzajúcich rámcov, bridge kontroluje aj integritu (checksum). Druhá vrstva OSI. \href{http://en.wikipedia.org/wiki/Ethernet#Bridging_and_switching}{Rozdiely medzi bridgeom a switchom}. 
+\item Router - pozri \ref{routing}. 
+\item Repeater - zosilňuje signály a porušené signály znovu posiela. Prvá vrstva OSI. 
+\item Proxy server - prostredník komunikácie (man in the middle). Cieľom je uľahčiť komunikáciu pre odosielateľa správy. Najvyššia vrstva.  
+\label{firewall} 
+\item Firewall - monitoruje hlavičky paketov a na základe ich adries a portov sa rozhoduje, či komunikáciu prepošle ďalej, blokuje (a pošle dôvod prečo, napr. ICMP) alebo zahodí (a má pass zdôvodnenie). \emph{Bezstavový} firewall má len takéto pravidlá. \emph{Stavový} firewall si vie pamätať vytvorené virtuálne spojenia (ako napr. TCP). To je nutné v prípade, že klient vytvára virtuálny okruh a očakáva odpoveď, ktorú by bezstavový firewall odmietol (stavový si pamätá vytvorený virtuálny okruh a dovolí spätnú správu). Sieťová vrstva.
+\label{NAT}
+\item Network address translsator (NAT) - pozri \href{http://netlab.dcs.fmph.uniba.sk/siete/cviko8/}{praktiká zo sietí}. Prepisuje adresy a porty v hlavičkách paketov. Účelom môže byť skrytie privátnych adries\footnote{
+Privátne adresy sa nemôžu vyskytnúť na Internete (konkrétny). 
+} za jednu verejnú (vytvoreným TCP spojeniam je možné pamätať si koncové adresy a porty). Takýto nat sa nazýva aj SNAT (source NAT). Existuje aj DNAT (destination NAT), ktorý pomocou \href{http://en.wikipedia.org/wiki/Port_forwarding}{port-forwardingu} sprístupňuje privátne služby verejnosti (služba publikuje verejnú IP adresu a špeciálny port, povie to DNATu a ten mu preposiela komunikáciu zo zvoleného portu). Ak protokol nevytvára virtuálne okruhy, tak SNAT nevie pracovať stopercentne (keďže nevie, komu má preposielať spätné správy).  
+\item Sieťová karta - každý vie. 
+\item Modem (modulátor-demodulátor) - transformuje analógový signál na digitálny a naopak. V prípade Internetu sa využíval na pripojenie pomocou telefónnych liniek (dial-up).
+\end{itemize}
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Linková vrstva}        
