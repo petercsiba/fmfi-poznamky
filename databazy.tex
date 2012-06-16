@@ -22,6 +22,7 @@
 \clearpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Úvod}   
 
 Text je poznámkami k oficiálnym \href{http://new.dcs.fmph.uniba.sk/index.php/Studium/Bakalarske/StatneSkusky}{štátnicovým otázkam} a boli spísané počas učenia sa na ne.
@@ -39,28 +40,143 @@ Ak čitateľ chce prispieť ku kvalite textu, nech autorovi napíše a ten mu ud
 
 P.S. Autor zistil, že názvoslovie pijan, ľúbi, krčma, alkohol použil už napríklad \href{http://csip.sk/uploads/ullman.pdf}{Ullman}.
 
-    
-    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Úvod a motivácia databáz}
+\paragraph{Účel.}
+\begin{itemize}
+\item Zobrazenie vybranej časti reality v počítačí.
+\item Uchovávanie informácií v konzistentnom stave a ich pridávanie.
+\item Poskytovanie informácií (dotazy, reporty - periodické správy). 
+\item Ochrana informácií pred zničením a neoprávneným prístupom. 
+\end{itemize}
+
+\paragraph{Charakteristiky DBMS (Database Management System).}
+\begin{itemize}
+\item Dáta majú štruktúru, ktorá sa zriedka mení, objem dát je veľký.
+\item Dáta nie sú uložené na užívateľovom počítači, pre prístup k dátam sa využíva počítačová sieť (klient-server).
+\item Dotazy sú zložité.
+\item Množstvo užívateľov pristupuje k dátam súčasne.
+\item Vyžaduje sa vysoká priepustnosť.
+\item Vyžaduje sa vysoká odolnosť voči poruchám.
+\item Vyžaduje sa vysoký stupeň bezpečnosti.
+\item Prístup koncových užívateľov k dátam musí byť jednoduchý(API, GUI).
+\end{itemize}
+
+\paragraph{Porovnanie dotazov v dátových modeloch.}
+Vo všeobecnosti sa snažíme zbaviť všeobecných kvatifikátorov pomocou pravidla $\forall P \rightarrow \not \exists \not P$.
+
+Máme tabuľky: 
+\begin{itemize}
+\item studenti(Student, Skupina)
+\item rozvrh\_skupiny(Skupina, Miestnost, Cas)
+\item rozvrh\_ucitelia(Ucitel, Skupina)
+\end{itemize}
+
+\begin{itemize}
+\item \emph{Hovorovo.} Treba nájsť (všetky) štvorice [Student, Miestnost, Cas, Ucitel]
+také, že ten učiteľ učí toho študenta v tej miestnosti a tom čase. 
+\item \emph{Predikátový kalkul.}
+
+\{[Student, Miestnost, Cas, Ucitel]: $\exists$ Skupina (Student, Skupina) $\wedge$ rozvrh\_skupiny(Skupina, Miestnost, Cas) $\wedge$ rozvrh\_ucitelia(Ucitel, Skupina)\}
+\item \emph{Relačná algebra.}
+$$
+\Pi_{student, miestnost, cas, ucitel}(studenti \Join rozvrh_skupiny \Join rozvrh_ucitelia)
+$$
+\item \emph{Datalog (Prolog).}
+\begin{verbatim}
+rozvrh_studenti(Student, Miestnost, Cas, Ucitel) <--
+\begin{verbatim}
+  studenti(Student, Skupina),
+  rozvrh_skupiny(Skupina, Miestnost, Cas),
+  rozvrh_ucitelia(Učitel, Skupina).
+
+? rozvrh_studenti(S, M, C, U)
+\end{verbatim} 
+
+\item \emph{SQL.}
+\begin{verbatim}
+SELECT S.student, RK.miestnost, RK.cas, RU.ucitel
+FROM studenti S, rozvrh_skupiny RK, rozvrh_ucitelia RU
+WHERE S.skupina=RK.skupina AND S.skupina=RU.skupina
+\end{verbatim}
+
+\end{itemize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %TODO vynechava stranu, (asi) lebo article a section* a section
 \section{Dátové modely} 
+\href{http://en.wikipedia.org/wiki/Database_model}{Pozri Wikipédiu.}
+
+\paragraph{Používané dátové modely.}
+\begin{itemize}
+\item Entitno-relačný. Pozri \ref{entity_relationship}. 
+\item Relačný. Pozri \ref{relacny_kalkul} a \ref{relacna_algebra}. 
+\item Navigačný (XML). Stromová štruktúra, dotazovací jazyk XPath a XQuery. 
+\item Objektový. Niečo ako objekty v programovaní. Objekty okrem zapuzdrenia dát špecifikujú prístup k nim a k ich vzťahom, je možné s nimi programaticky narábať. Napríklad DOM (Document Object Model). 
+\end{itemize}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Trojschémová architektúra (ANSI sparc)}
+
+\paragraph{Úrovne.}
+\begin{itemize}
+\item Konceptuálna úroveň (všeobecná databázová schéma). 
+\item Interná úroveň (špecifikácia polí, kľúčov, indexov, ...).
+\item Fyzická úroveň. Algoritmy a dátové štruktúry, využtie diskového priestoru. Pozri \ref{fyzicka_organizacia}.
+\end{itemize}
+
+\begin{center}
+\includegraphics{db_ansi_sparc.jpg}
+\end{center} 
+
+\paragraph{Vlastnosti.}
+\begin{itemize}
+\item Nezávislý pohľad užívateľov. Každý môže použiť svoj dotazovací jazyk. 
+\item Užívateľ nevidí fyzickú organizáciu dát. Tá sa môže zmeniť, bez toho, aby to užívateľ postrehol. 
+\end{itemize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Entitno-relačný model}
+\label{entity_relationship}
+
+Máme entity (tabuľky, polia, ...) a vzťahy medzi nimi. 
+\paragraph{Typy vzťahov.}
+\begin{itemize}
+\item One-to-one (1-1). Napríklad hlava a telo. 
+\item One-to-many (1-n). Napríklad vozidlo a kolesá. 
+\item Many-to-many (n-m). Napríklad kupujúci a produkt (táto dvojica nemusí byť unikátna).
+\end{itemize}
+
+\begin{center}
+\includegraphics[scale=0.5]{db_entity_relationship.png}
+\end{center} 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Relačný model, relačná algebra}
+Pozri \ref{relacny_kalkul} a \ref{relacna_algebra}. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Negácia a rekurzia v relačnej algebre}
+Pozri \ref{relacna_algebra}. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis relačnej algebry s inými dotazovacími jazykmi}
+Pozri \ref{relacna_algebra_suvis}.
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Relačný kalkul} 
+\label{relacny_kalkul}
+
+Deklaruje výroky, ktoré ohraničujú výsledok dotazu. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Predikátová interpretácia relačnej algebry}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Negácia, doménovo nezávislé a bezpečné formuly}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -85,6 +201,8 @@ P.S. Autor zistil, že názvoslovie pijan, ľúbi, krčma, alkohol použil už n
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Relačná algebra} 
+\label{relacna_algebra}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Operátory relačnej algebry}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -95,6 +213,7 @@ P.S. Autor zistil, že názvoslovie pijan, ľúbi, krčma, alkohol použil už n
 \subsection{Rekurzia, výpočet pevného bodu}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis relačnej algebry s inými dotazovacími jazykmi}
+\label{relacna_algebra_suvis}
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -161,6 +280,8 @@ P.S. Autor zistil, že názvoslovie pijan, ľúbi, krčma, alkohol použil už n
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Fyzická organizácia} 
+\label{fyzicka_organizacia}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Dvojúrovňový model pamäti a organizácie dát}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
