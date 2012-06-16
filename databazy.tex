@@ -380,14 +380,125 @@ Pán Šturc definujeme slabšie podmienky.
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Jazyk SQL} 
+\section{Jazyk SQL (Structured Query Language)} 
+\emph{SQL} je jazykom pre prístup k relačným databázou navrhnutým na základe relačnej algebry a relačného kalkulu. 
+Predpokladáme, že väčšina pozná (alebo si aspoň myslí, že pozná). Takže len stručne. 
+Kto nevie, tak \href{http://en.wikipedia.org/wiki/SQL}{Wikipedia}. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Programovanie v SQL (Data Definition Language, Data Manipulation Language)}
+\subsection{Programovanie v SQL (DDL, DML)}
+
+SQL je typový jazyk.
+
+Poznamenajme, že SQL používa trojhodnotovú logiku: \{TRUE, FALSE, NULL\}
+a tabuľky nie sú množinami, ale zoznammi (rovnaká $n$-tica - riadok - sa môže vyskytovať viackrát). Obe sú v spore s relačnou algebrou. 
+
+Ďalej poznamenajme, že tabuľka nemusí byť materializovaná, môže byť dočasná alebo trvalá. 
+
+\paragraph{DDL (Data Definition Language).}
+Vytvára (mení, maže) štruktúru dát, relácie, indexy, užívateľov (a prístupové práva), triggery, ... . 
+
+DDL a DML sú podmnožinami jazyka SQL. 
+
+\begin{itemize}
+\item CREATE. Najčastejšie CREATE TABLE.
+\item ALTER. 
+\item RENAME.
+\item DROP. Navždy vymazať. 
+\item TRUNCATE. Vyprázdniť. 
+\end{itemize}
+
+\paragraph{DML (Data Manipulation Language).}
+Slúži na prístup, pridávanie, zmenu a zmazanie dát. 
+
+\begin{itemize}
+\item SELECT. 
+\item INSERT. 
+\item UPDATE.
+\item DELETE. Navždy vymazať. 
+\item MERGE. Vyprázdniť. 
+\end{itemize}
+
+\paragraph{Kľúčové slová pre SELECT.}
+\begin{itemize}
+\item FROM. Z tabuľky.  
+\item WHERE. Kde podmienka. 
+\item \verb|[FULL, LEFT, RIGHT] [INNER, OUTER] JOIN|. Spájanie viacerých tabuliek podľa podmienky. Odporúčame si pozrieť \href{http://www.codinghorror.com/blog/2007/10/a-visual-explanation-of-sql-joins.html}{grafické vysvetlenie}. Najbežnejší je LEFT INNER JOIN (resp. len JOIN). [FULL, LEFT, RIGHT] hovorí, z pohľadu ktorej JOINujeme a OUTER (default je INNER) hovorí, že zahŕňame aj riadok, ktorý nemá pár. 
+\item UNION. Množinové zjednotenie dvoch tabuliek. UNION ALL je spojenie.
+\item INTERSECT. Množinový prienik dvoch tabuliek. 
+\item DISTINCT. Množinové správanie.    
+\item EXISTS. Či SELECT vracia prázdny výsledok. 
+\item ANY. Ľubovoľný vyhovujúci prvok z tabuľky. Použitie sa dá obísť, ide skôr o skratku. 
+\item LIMIT. Obmedzenie počtu výstupných riadkov.
+\item ORDER BY. Usporiadanie výstupu.
+\end{itemize}
+
+\paragraph{Agregácia.}
+\begin{itemize}
+\item GROUP BY. Agregácia.  
+\item COUNT.
+\item SUM.
+\item AVG. 
+\end{itemize}
+
+\paragraph{NULL.}
+Poznamenajme, že hodnota NULL sa môže chovať kontraintuitívne. 
+Napríklad: 
+\begin{verbatim}
+SELECT r.C
+FROM r
+WHERE A < 1 OR A >= 1
+\end{verbatim} 
+nevráti riadky, kde $A=0$. 
+
+\paragraph{Index.}
+Uľahčujú vyhľadávanie, väčšinou sú implementované binárnymi vyhľadávacími stromami.
+Tj. namiesto vyhľadávania v čase $O(n)$ máme $O(logn)$.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Negácia a rekurzia v SQL}
+
+O negácií to isté ako o negácií v Datalogu. 
+
+Rekurzia v SQL je možná, napr. pomocou WITH, ktorý definuje dočasnú tabuľku. Rekurzia nastáva, keď sa odvolávame na tabuľku, ktorú práve definujeme. Koho viac zaujíma, môže si pozrieť \href{http://sqlanywhere.blogspot.sk/2012/04/example-recursive-union.html}{praktický príklad}. 
+
+Konstra rekurzívneho programu pre UNION ALL: 
+\begin{verbatim}
+01. <typical_recursive_union> ::= WITH RECURSIVE <local_view_name>
+02. "(" <alias_name_list> ")"
+03. AS "(" <initial_query_specification>
+04. UNION ALL
+05. <recursive_query_specification> ")"
+06. <outer_query_specification>
+07. [ <order_by_clause> ]
+08. [ <for_clause> ]
+\end{verbatim} 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis SQL s inými dotazovacími jazykmi}
-    
+
+Bol postavený na relačnej algebre (pozri \ref{relacna_algebra}) a relačnom kalkule \ref{relacny_kalkul}. Existujú priamočiare algortimické transformácie s Datalogom a relačnou algebrou. 
+ 
+\paragraph{Konverzia z Datalogu.}
+Existuje jednoduchý algortimus na preklad Datalogu do SQL,
+využíva konštrukcie na vytváranie dočasných tabuliek: 
+\begin{verbatim}
+WITH r AS (SELECT ...),
+SELECT ...
+\end{verbatim} 
+alebo
+\begin{verbatim}
+CREATE TEMPORARY TABLE r AS (SELECT ...);
+SELECT ...
+\end{verbatim}
+alebo permanentnú, možno nie materializovanú: 
+\begin{verbatim}
+CREATE VIEW r AS (SELECT ...);
+SELECT ...
+\end{verbatim}
+
+Hlavne CREATE VIEW si odporúčame pozrieť. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Teória navrhovania relačných báz dát} 
