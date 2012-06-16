@@ -64,7 +64,7 @@ P.S. Autor zistil, že názvoslovie pijan, ľúbi, krčma, alkohol použil už n
 \end{itemize}
 
 \paragraph{Porovnanie dotazov v dátových modeloch.}
-Vo všeobecnosti sa snažíme zbaviť všeobecných kvatifikátorov pomocou pravidla $\forall P \rightarrow \not \exists \not P$.
+Vo všeobecnosti sa snažíme zbaviť všeobecných kvatifikátorov pomocou pravidla $\forall P \rightarrow \neg \exists \neg P$.
 
 Máme tabuľky: 
 \begin{itemize}
@@ -200,7 +200,7 @@ Formula by nemala mať voľné premenné. Výsledkom sú prvky relácie, ktoré 
 \item prvocisla2: $\{Z : (\exists X) (\exists Y) (krat(X,Y,Z) \wedge Z \notin zlozene\_cisla) \}$.
 \item prvocisla3: $\{Z : Z \notin zlozene\_cisla\}$.
 \end{enumerate}
-Tretiu formulu (reláciu, resp. množinu) sme získali dvojitou negáciou prvej a pravidlom $P \rightarrow Q \Leftrightarrow \not P \vee Q$ (medzi krok je druhá formula). 
+Tretiu formulu (reláciu, resp. množinu) sme získali dvojitou negáciou prvej a pravidlom $P \rightarrow Q \Leftrightarrow \neg P \vee Q$ (medzi krok je druhá formula). 
 
 Formuly pre prvocisla1 a prvocisla3 sú \emph{nebezpečné}, keďže ich výsledom je napríklad aj ''petrzlen''.
 V prvom prípade je implikácia pravdivá (lebo ľavá strana je nepravdivá) a v druhom prípade je to zjavné, keďže ''petrzlen'' nie je zložené číslo. 
@@ -253,9 +253,16 @@ Napríklad:
   krat(_, _, Z),
   not zlozene_cislo(Z)
 \end{verbatim} 
-Predikáty 1 a 2 a aj predikáty 4 a 5 sú sémanticky ekvivalentné. Premenné na ľavej strane sú kvantifikované $\forall$ a premenné na pravej strane $\exists$. Čiarka medzi atómami má význam AND. \emph{Podcieľmi} nazývame atómy tela rozdelené čiarkami, napríklad 
+Predikáty 1 a 2 a aj predikáty 4 a 5 sú sémanticky ekvivalentné. Premenné na ľavej strane sú kvantifikované $\forall$ a premenné na pravej strane $\exists$. Čiarka medzi atómami má význam AND. Bodka označuje koniec predikátu. \emph{Podcieľmi} nazývame atómy tela rozdelené čiarkami, napríklad 
   \verb|{krat(_, _, Z)}| a \verb|not zlozene_cislo(Z)| sú podcieľmi \verb|prvocislo(Z)|. 
-
+V 5 používame \emph{anonymné premenné} ''\_''. Ich sémentika je rovnaká, ako keby sa použila ľubovoľná nepoužitá premenná. Poznmenajme, že v tele pravidla sú premenné implicitne kvantifikované $\exists$.
+  
+Alebo (disjunkcia) sa vyjadruje:
+\begin{verbatim}
+colour(F) <-- F = black
+colour(F) <-- F = white
+\end{verbatim} 
+  
 \paragraph{Ďalšie syntaktické pravidlá.}
 
 \begin{itemize}
@@ -285,13 +292,30 @@ $$
 Existuje algoritmický predklad medzi týmito dvoma modelmi.
 Algoritmus, ktorý prepisuje relačný kalkul do Datalogu pozostáva z nasledujúcich krokov (treba ich vedieť \underline{použiť}):
 
-%TODO 
 \begin{enumerate}
-\item Premenovanie premenných, lokalizácia kvantifikátorov.
-\item Eliminácia všeobecných kvantifikátorov a implikácií.
-\item Definícia pomocných predikátov.
-\item Bezpečnosť pomocných predikátov.
-\item Prepis do pravidiel Datalogu.
+\item Premenovanie premenných, lokalizácia kvantifikátorov. Vlastne veta o variantoch z matematickej logiky. 
+
+\item Eliminácia všeobecných kvantifikátorov a implikácií. Použijeme pravidlá $(\forall x)A(x) \leftrightarrow \neg (\exists x) \neg A(x)$ a $(A \rightarrow B) \leftrightarrow (\neg A \vee B)$.
+
+\item Definícia pomocných predikátov. Chceme sa vyhnúť sekvencií $\neg (\exists X) povodny\_predikat(X)$. Definujeme preto pomocné predikáty: 
+$$
+\begin{array}{l}
+\neg novy\_predikat \\
+novy\_predikat \leftarrow (\exists X) povodny\_predikat(X).\\
+\end{array} 
+$$
+
+\item Bezpečnosť pomocných predikátov. Pridáme k premenným ich dómeny:
+$$
+novy\_predikat \leftarrow domena(X) \wedge (\exists X) povodny\_predikat(X).
+$$
+
+\item Prepis do pravidiel Datalogu. Len zmeniť syntax:
+\begin{verbatim}
+answer <-- not novy_predikat.
+novy_predikat <-- povodny_predikat(X).
+\end{verbatim}
+
 \end{enumerate}
 
 Poznamenajme, že podobne existuje algoritmus, ktorý prepisuje datalogove dotazy do SQL (tiež treba vedieť použiť). 
@@ -299,22 +323,43 @@ Poznamenajme, že podobne existuje algoritmus, ktorý prepisuje datalogove dotaz
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Výpočet dotazu na Datalogový program}
 
-Datalog počíta \emph{minimálny model} programu (minimálne relácie, pre ktoré je daný program splnený).  
-Minimálny model existuje pre každý \emph{bezpečný program} (ktorý sa definuje prakticky rovnako, ako v relačnom kalkule).
+Datalog počíta \emph{minimálny model} programu (minimálne relácie, pre ktoré je daný program splnený). Inými slovami, Datalog vracia najmenšiu množinu, pre ktorú sú splnené všetky potrebné predikáty, na ktorých závisí dôsledok (dotaz). Tj. neuvažuje také výsledky, pre ktoré sú predpoklady nesplnené. Napríklad program: 
+\begin{verbatim}
+colour(black).
+colour(white).
+? colour(C).
+\end{verbatim}
+by mohol vrátiť aj ''mrkva'', lebo nič tomu neodporuje.
 
-%TODO
+Minimálny model existuje pre každý \emph{bezpečný program} (ktorý sa definuje prakticky rovnako, ako v relačnom kalkule).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Negácia}
 
-%TODO
+\paragraph{Russelov paradox.}
+\begin{verbatim}
+man(barber).
+man(mayor).
+shaves(barber, X) <-- man(X), not shaves(X, X).
+? shaves(barber, barber)
+\end{verbatim}
+
+Paradox nenastáva, keďže pravidlo je definované ako implikácia. Výsledok nemôže byť FALSE,
+lebo by predpoklad bol splnený. Ak je výsledok TRUE, tak \verb|man(X), not shaves(X, X) --> shaves(barber, X)| platí. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Bezpečnosť Datalogových programov}
 
-(Zopakujeme) Minimálny model existuje pre každý \emph{bezpečný program} (ktorý sa definuje prakticky rovnako, ako v relačnom kalkule).
+\emph{Bezpečný predikát} je taký, ktorého všetky premenné vyskytytujúce sa v hlave, sú viazané v EDB. 
+
+\emph{Bezpečný program} má všetky svoje predikáty bezpečené. 
+
+(Zopakujeme) Minimálny model existuje pre každý bezpečný program (ktorý sa definuje prakticky rovnako, ako v relačnom kalkule).
  
-%TODO 
+Všeobecne platí, že anonymné premenné v negovaných EDB podcieľoch
+nespôsobujú problém s bezpečnosťou.
+ 
+Pán Šturc definujeme slabšie podmienky. 
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
