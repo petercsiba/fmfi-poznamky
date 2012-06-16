@@ -226,7 +226,7 @@ V praxi nie je použiteľný, keďže ide o teoretický model (s potenciálne ne
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Datalog} 
-\href{http://en.wikipedia.org/wiki/Datalog}{Datalog} je dotazovací jazyk s pravidlami určený pre deduktívne databázy, ktorý je syntakticky podmnožinou Prologu. Je založený na predikátovej logike prvého rádu (neumožňuje kvantifikovať množiny). 
+\href{http://en.wikipedia.org/wiki/Datalog}{Datalog} je dotazovací jazyk s pravidlami určený pre deduktívne databázy, ktorý je syntakticky podmnožinou Prologu. Je založený na predikátovej logike prvého rádu (neumožňuje kvantifikovať množiny) a \underline{umožňuje rekurziu}. 
 
 Odporúčame si pozrieť slide-i Plachetku pre ďalšie príklady dotazov.
 Ideálne si niektoré úlohy treba vyskúšať v Datalógovom interpretery (tak sa to učí najlepšie).
@@ -273,6 +273,18 @@ colour(F) <-- F = white
 \paragraph{Sémantika.}
 Je založená na relačnom kalkule (a matematickej logike). 
 Niečo sa spomenulo vyššie, doplňujeme v ďalšej sekcií. 
+
+\paragraph{Agregácia (subtotal).}
+\begin{verbatim}
+objednava_od_hp(K, V) <--
+objednavky(K, V), dodava(hp, V, _, _).
+answer(K, P) <--
+subtotal(objednava_od_hp(K, V), [K], [P = count(V)]).
+\end{verbatim} 
+
+Príkaz \verb|subtotal| má tri parametre. Prvým je predikát, druhým je \emph{grupovací atribút} a tretím \emph{agregovací atribút}. Viac v \ref{rel_alg_agg}. 
+
+Podobne sa dá definovať subtotal aj pre relačný kalkulus. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis s relačným kalkulom}
@@ -366,17 +378,127 @@ Pán Šturc definujeme slabšie podmienky.
 \section{Relačná algebra} 
 \label{relacna_algebra}
 
+Hovorí AKO sa má niečo vypočítať. Operuje len nad konečnými množinami (aby neboli problémy s negáciami). Formalizuje SQL. Viac na \href{http://en.wikipedia.org/wiki/Relational_algebra}{Wikipédií} - náhodny poznatok odtiaľ: Reflexívno tranzitívny uzáver sa nedá relačnou algebrou vyjadriť. 
+ 
+V tejto sekcií budeme implicitne veľkými písmenami značiť $m$-tice atribútov nad $n$-reláciami $r$ ako $X = (X_1, X_2, \ldots, X_m)$ (nemusí $n=m$). 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Operátory relačnej algebry}
+
+\paragraph{Operátory.}
+\begin{itemize}
+\item Projekcia $\Pi$. Nech $r$ má atribúty $Y$, potom $\Pi_X(r)$ vznikne kopírovaním riadkov $r$, pričom sa skopírujú len tie atribúty, ktoré sú v $X$. Treba eliminovať potenciálne duplicity. 
+\item Selekcia $\Sigma$. Nech $c$ je podmienka a $X$ atribúty $r$, potom $\Sigma_{c(X)} = \{X:r(X) \wedge c(X)\}$. 
+\item Kartézsky súčin $\times$. Relácie $r_1$ a $r_2$, atribúty $X$, $Y$ pričom $X \cap Y = \emptyset$, potom $r_1 \times r_2 = \{[X,Y]:r_1(X) \wedge r_2(Y)\}$.
+\item Join (theta-join). Podmienka $c$, relácie $r_1$ a $r_2$, atribúty $X$, $Y$ pričom $X \cap Y = \emptyset$, potom $r_1 \Join_{c(X,Y)} r_2 = \{[X,Y]:r_1(X) \wedge r_2(X) \wedge c(X,Y)\}$.
+\item Premenovanie $P_{r_2(Y)}(r1)$ atribútov relácie.
+\item Natural join $\Join$. Nech $r_1$ je typu\footnote{Všetky atribúty $r_1$ je zjednotenie $X$ a $Z$} $r_1(X, Z)$ a $r_2$ je typu $r_2(Y, Z)$, pričom $Z$ sú spoločné
+atribúty $r_1$ a $r_2$. Potom $r_1 \Join r_2 = \{[X,Y,Z]:r_1(X,Z) \wedge r_2(Y,Z)\}$, pričom
+spoločné atribúty (atribúty s rovnakým menom) sú testované na
+rovnosť a sú kopírované iba raz. Natural join sa dá vyjadriť projekciou a theta-joinom. 
+\item Tradičné množinové $\Cap, \Cup, \ldots $ .
+\item Eliminácia duplikátov $r_2 = \Delta(r_1)$.
+\end{itemize}
+
+\paragraph{Optimalizácia výpočtu.}
+Použitie operátorov sa zvykne zapisovať v strome, kde operátory sú vrcholy a argumenty (relácie) hrany.
+Pre jeden výraz môže existovať viacero výpočtovo ekvivalentných stromov.
+Zopár pravidiel na konštrukciu optimálneho: 
+\begin{itemize}
+\item Selekciu urob čo najskôr.
+\item Vyhýbaj sa kartézskym súčinom, nahraď ich joinom. Ak
+nasleduje selekcia, pridaj ju do joinovacej podmienky.
+\item Postupnosť unárnych operácií (selekcie a projekcie) spoj do
+jednej operácie a zviaž s nasledujúcou operáciou.
+\item Výsledok opakovaného podvýrazu ulož, ak je veľkosť tabuľky
+malá, tak ju materializuj. 
+\item Nájdi optimálne poradie joinov technikou dynamického
+programovania. Poradí pre N tabuliek je zhruba $2^N$ (binárne stromy). 
+\end{itemize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Multimnožinová interpretácia relácií}
+
+Plachetka: "Relačná algebra počíta nad multimnožinami". Na Wikipédií som to nenašiel explicitne spomenuté a takisto sme operátory definovali pre množiny. V každom prípade je možné jednoduchým spôsobom rozšíriť definície na \emph{multimnožiny}\footnote{Rovnaký prvok sa môže vyskytnúť viackrát}. Kto nevie, \href{http://en.wikipedia.org/wiki/Multiset}{Wikipédia}. 
+
+Niektoré základné vlastnosti operácií sa nezachovávajú, ako napríklad $S \cup S = S$. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Grupovanie a agregácia}
+\label{rel_alg_agg}
+(Skopírovaný slide.)
+
+O každom atribúte $x \in X$ platí buď 
+\begin{itemize}
+\item $x$ je atribútom $r_1$ (v tom prípade atribútu $X$ hovoríme
+        \emph{grupovací atribút}), alebo
+\item $x = AGG(Y)$, kde $Y$ je atribútom $r_1$ a $AGG$ je nejaká
+     agregačná funkcia, ktorá zo stĺpca Y vyrába jednu hodnotu (v
+         tom prípade atribútu x hovoríme \emph{agregovaný atribút})
+V SQL je $AGG \in \{SUM, COUNT, AVG, STDEV, MAX, MIN\}$.
+\end{itemize}
+
+Operátor $\Gamma_X(r_1)$
+\begin{enumerate}
+\item najprv vyrobí z relácie $r_1$ skupiny, pričom riadky v každej zo
+skupín majú rovnaké hodnoty grupovacích atribútov
+\item potom vypočíta agregované atribúty pre každú skupinu.
+\end{enumerate}
+Výsledkom je tabuľka, v ktorej každej skupine prináleží jeden
+riadok.
+ 
+Implementuje sa projekciou (multimnožinovou) a vyhodením duplikátov. 
+
+SQL:
+\begin{tabular}{lc}
+SELECT $<S\_attr>$ & 5 \\
+FROM $r_1$, $r_2$, ..., $r_n$ & 1 \\
+WHERE $<w\_cond>$ & 2 \\
+GROUP BY $<G\_attr>$ & 3 \\
+HAVING $<h\_cond>$ & 4 \\
+\end{tabular}
+
+Relačná algebra: 
+$$\Pi_{S_attr}(\Sigma_{h_cond}(\Gamma_{G_attr, agg(Attr)}(\Sigma_{w_cond}(r_1 \times r_2 \times \ldots \times r_n))))$$.
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Rekurzia, výpočet pevného bodu}
+
+Podľa Wiki základná relačná algebra nevie rekurziu (to je celkom zrejmé). 
+Plachetkov slide: 
+
+Operátor \emph{minimal fixpoint} (tranzitívny uzáver) $\Phi(<vyraz>)$ iteruje výraz, kým sa relácie použité vo výraze
+menia (t.j. kým sa mení obsah aspoň 1 relácie výrazu)
+
+Príklad:
+\begin{tabular}{ll}
+ancestor &:= parent(X, A) \\
+ancestor &:= ancestor $\cup \Pi_{X,A}$(ancestor $\Join$ parent) \\
+ancestor &:= ancestor $\cup \Pi_{X,A}$(ancestor $\Join$ parent) \\
+... & \\
+\end{tabular}
+sa zapíše ako\\
+ancestor := $\Phi$($\cup \Pi_{X,A}$(ancestor $\Join$ parent)) \\
+
+Výpočet pevného bodu patrí do predmetu Základy teórie programovania (blok B1). 
+Naivný algortimus: \\
+\verb|answer = {};| \\
+\verb|do| \\
+\verb|{| \\
+\verb|answer = iteration_step(|$\Phi_1$\verb|);| \\
+\verb|answer = iteration_step(|$\Phi_2$\verb|);| \\
+\verb|...| \\
+\verb|answer = iteration_step(|$\Phi_n$\verb|);| \\
+\verb|} while answer changed; /* anywhere inside this loop */| \\
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis relačnej algebry s inými dotazovacími jazykmi}
 \label{relacna_algebra_suvis}
+
+SQL bolo inšpirované relačnou algebrou. 
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -424,6 +546,7 @@ Slúži na prístup, pridávanie, zmenu a zmazanie dát.
 \item FROM. Z tabuľky.  
 \item WHERE. Kde podmienka. 
 \item \verb|[FULL, LEFT, RIGHT] [INNER, OUTER] JOIN|. Spájanie viacerých tabuliek podľa podmienky. Odporúčame si pozrieť \href{http://www.codinghorror.com/blog/2007/10/a-visual-explanation-of-sql-joins.html}{grafické vysvetlenie}. Najbežnejší je LEFT INNER JOIN (resp. len JOIN). [FULL, LEFT, RIGHT] hovorí, z pohľadu ktorej JOINujeme a OUTER (default je INNER) hovorí, že zahŕňame aj riadok, ktorý nemá pár. 
+\item CROSS. Kartézsky súčin. 
 \item UNION. Množinové zjednotenie dvoch tabuliek. UNION ALL je spojenie.
 \item INTERSECT. Množinový prienik dvoch tabuliek. 
 \item DISTINCT. Množinové správanie.    
@@ -477,7 +600,7 @@ Konstra rekurzívneho programu pre UNION ALL:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis SQL s inými dotazovacími jazykmi}
 
-Bol postavený na relačnej algebre (pozri \ref{relacna_algebra}) a relačnom kalkule \ref{relacny_kalkul}. Existujú priamočiare algortimické transformácie s Datalogom a relačnou algebrou. 
+Bol postavený na relačnej algebre (pozri \ref{relacna_algebra}) a relačnom kalkule \ref{relacny_kalkul}. Existujú priamočiare algortimické transformácie s Datalogom a relačnou algebrou (operátorový strom). 
  
 \paragraph{Konverzia z Datalogu.}
 Existuje jednoduchý algortimus na preklad Datalogu do SQL,
