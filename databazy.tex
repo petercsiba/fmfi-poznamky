@@ -129,7 +129,7 @@ WHERE S.skupina=RK.skupina AND S.skupina=RU.skupina
 \end{itemize}
 
 \begin{center}
-\includegraphics{db_ansi_sparc.jpg}
+\includegraphics[scale=0.5]{db_ansi_sparc.jpg}
 \end{center} 
 
 \paragraph{Vlastnosti.}
@@ -172,17 +172,53 @@ Pozri \ref{relacna_algebra_suvis}.
 \label{relacny_kalkul}
 
 Deklaruje výroky, ktoré ohraničujú výsledok dotazu. 
+\paragraph{Použité pojmy.}
+Je odporúčané vedieť matematickú logiku. 
+
+\begin{itemize}
+\item $n$-árna relácia (konečná, nekonečná). Usporiadané $n$-tice. Karteziánsky súčin. 
+\item Atribúty - zložky $n$-tíc. Domény (typy atribútov) - množiny karteziánskeho súčinu. 
+\item Predikát $P$ prislúchajúci relácií $R$- zobrazenie $R_P : R \mapsto$ \{true, false\}, pričom $R_P(A) = true \leftrightarrow A \in R$, kde $A$ je usporiadaná $n$-tica. V praxi medzi tým nerozlišujeme. 
+\end{itemize}
+
+\paragraph{Dotaz.}
+Dotazy v relačnom kalkule sú logické formuly predikátovej logiky prvého rádu.
+Formula by nemala mať voľné premenné. Výsledkom sú prvky relácie, ktoré spĺňajú formulu. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Predikátová interpretácia relačnej algebry}
-
+??? Asi ide o prepis symbolov relačnej algebry do predikátovej logiky. 
+%TODO 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Negácia, doménovo nezávislé a bezpečné formuly}
+
+\paragraph{Príklad dotazov.}
+\begin{enumerate}
+\item prvocisla1: $\{Z : (\forall X) (\forall Y) (krat(X,Y,Z) \rightarrow X = 1 \wedge Y = 1)\}$.
+\item zlozene\_cisla: $\{Z : (\exists X) (\exists Y) (krat(X,Y,Z) \wedge X \neq 1 \wedge Y \neq 1)\}$.
+\item prvocisla2: $\{Z : (\exists X) (\exists Y) (krat(X,Y,Z) \wedge Z \notin zlozene_cisla\)}$.
+\item prvocisla3: $\{Z : Z \notin zlozene\_cisla\}$.
+\end{enumerate}
+Tretiu formulu (reláciu, resp. množinu) sme získali dvojitou negáciou prvej a pravidlom $P \rightarrow Q \Leftrightarrow \not P \vee Q$ (medzi krok je druhá formula). 
+
+Formuly pre prvocisla1 a prvocisla3 sú \emph{nebezpečné}, keďže ich výsledom je napríklad aj ''petrzlen''.
+V prvom prípade je implikácia pravdivá (lebo ľavá strana je nepravdivá) a v druhom prípade je to zjavné, keďže ''petrzlen'' nie je zložené číslo. 
+Správna je len formula prvocisla2. 
+
+\emph{Množina faktov} (nazývaná aj \emph{extenzionálna databáza (EDB)}) je \underline{konečná} množina, na ktorej je predikát v dotaze pravdivý (to zrejme neplati pre prvocisla1 a prvocisla3, ale platí pre prvocisla2 a zlozene\_cisla).
+Neformálne, \emph{bezpečný dotaz} je taký, v ktorom sa každá premenná vyskytuje v aspoň jednom EDB v pozitívnom kontexte. Tj. chceme, aby sa premenná \underline{ne}vyskytovala v negovanej množine faktov (výroku). Napríklad v prvocisla3 je $Z$ v negatívnom kontexte.  
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Relačný kalkul (doménový)}
+
+Myslím, že je to popísané v predošlých sekciách.
+Pripomeňme, že \emph{domény} sú typy atribútov - množiny karteziánskeho súčinu.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis relačného kalkulu s inými dotazovacími jazykmi}
+Základná intuícia. Celkom dobre sa doň prekladá z hovorového a jendoducho sa z neho konštruuje datalog, resp. relačná algebra.
+V praxi nie je použiteľný, keďže ide o teoretický model (s potenciálne nekonečnými reláciami). 
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
