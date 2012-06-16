@@ -197,7 +197,7 @@ Formula by nemala mať voľné premenné. Výsledkom sú prvky relácie, ktoré 
 \begin{enumerate}
 \item prvocisla1: $\{Z : (\forall X) (\forall Y) (krat(X,Y,Z) \rightarrow X = 1 \wedge Y = 1)\}$.
 \item zlozene\_cisla: $\{Z : (\exists X) (\exists Y) (krat(X,Y,Z) \wedge X \neq 1 \wedge Y \neq 1)\}$.
-\item prvocisla2: $\{Z : (\exists X) (\exists Y) (krat(X,Y,Z) \wedge Z \notin zlozene_cisla\)}$.
+\item prvocisla2: $\{Z : (\exists X) (\exists Y) (krat(X,Y,Z) \wedge Z \notin zlozene\_cisla) \}$.
 \item prvocisla3: $\{Z : Z \notin zlozene\_cisla\}$.
 \end{enumerate}
 Tretiu formulu (reláciu, resp. množinu) sme získali dvojitou negáciou prvej a pravidlom $P \rightarrow Q \Leftrightarrow \not P \vee Q$ (medzi krok je druhá formula). 
@@ -215,24 +215,106 @@ Neformálne, \emph{bezpečný dotaz} je taký, v ktorom sa každá premenná vys
 Myslím, že je to popísané v predošlých sekciách.
 Pripomeňme, že \emph{domény} sú typy atribútov - množiny karteziánskeho súčinu.
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis relačného kalkulu s inými dotazovacími jazykmi}
 Základná intuícia. Celkom dobre sa doň prekladá z hovorového a jendoducho sa z neho konštruuje datalog, resp. relačná algebra.
 V praxi nie je použiteľný, keďže ide o teoretický model (s potenciálne nekonečnými reláciami). 
     
+%TODO 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Datalog} 
+\href{http://en.wikipedia.org/wiki/Datalog}{Datalog} je dotazovací jazyk s pravidlami určený pre deduktívne databázy, ktorý je syntakticky podmnožinou Prologu. Je založený na predikátovej logike prvého rádu (neumožňuje kvantifikovať množiny). 
+
+Odporúčame si pozrieť slide-i Plachetku pre ďalšie príklady dotazov.
+Ideálne si niektoré úlohy treba vyskúšať v Datalógovom interpretery (tak sa to učí najlepšie).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Syntax a sémantika Datalogových programov}
+
+\paragraph{Syntax.}
+Program pozostáva z množiny pravidiel - \emph{implikácií} - \emph{predikátov}, ktoré majú \emph{hlavu} a \emph{telo}\footnote{
+Nie pätu. Poznámka autora. 
+} (ľavá a pravá strana implikácie, resp. \emph{premisa} a \emph{dôsledok}). 
+Napríklad:
+\begin{verbatim}
+1. krat(1, 1, 1) <-- TRUE.
+2. krat(1, 1, 1).
+3. zlozene_cislo(Z) <--
+  krat(X, Y, Z),
+  not X = 1,
+  not Y = 1.
+4. prvocislo(Z) <--
+  krat(X, Y, Z),
+  not zlozene_cislo(Z)
+5. prvocislo(Z) <--
+  krat(_, _, Z),
+  not zlozene_cislo(Z)
+\end{verbatim} 
+Predikáty 1 a 2 a aj predikáty 4 a 5 sú sémanticky ekvivalentné. Premenné na ľavej strane sú kvantifikované $\forall$ a premenné na pravej strane $\exists$. Čiarka medzi atómami má význam AND. \emph{Podcieľmi} nazývame atómy tela rozdelené čiarkami, napríklad 
+  \verb|{krat(_, _, Z)}| a \verb|not zlozene_cislo(Z)| sú podcieľmi \verb|prvocislo(Z)|. 
+
+\paragraph{Ďalšie syntaktické pravidlá.}
+
+\begin{itemize}
+\item Argumentmi (hláv) predikátov môžu byť len jednoduché atribúty. Nemôžeme \verb|zlozene_cislo(f(f(Z,5)) <-- |. 
+\item (Tvrdí Wiki, nie Plachetka). Každá premenná v hlave predikátu sa musí vyskytovať aj v nie negovanom podcieli predikátu (súvisí s bezpečnosťou). 
+\end{itemize}
+
+\paragraph{Sémantika.}
+Je založená na relačnom kalkule (a matematickej logike). 
+Niečo sa spomenulo vyššie, doplňujeme v ďalšej sekcií. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis s relačným kalkulom}
+
+Napríklad 
+\begin{verbatim}
+3. zlozene_cislo(Z) <--
+  krat(X, Y, Z),
+  not X = 1,
+  not Y = 1.
+\end{verbatim} 
+je sémanticky ekvivalentným programom k $$
+zlozene\_cisla: \{Z : (\exists X) (\exists Y) (krat(X,Y,Z) \wedge X \neq 1 \wedge Y \neq 1)\}.
+$$
+
+
+Existuje algoritmický predklad medzi týmito dvoma modelmi.
+Algoritmus, ktorý prepisuje relačný kalkul do Datalogu pozostáva z nasledujúcich krokov (treba ich vedieť \underline{použiť}):
+
+%TODO 
+\begin{enumerate}
+\item Premenovanie premenných, lokalizácia kvantifikátorov.
+\item Eliminácia všeobecných kvantifikátorov a implikácií.
+\item Definícia pomocných predikátov.
+\item Bezpečnosť pomocných predikátov.
+\item Prepis do pravidiel Datalogu.
+\end{enumerate}
+
+Poznamenajme, že podobne existuje algoritmus, ktorý prepisuje datalogove dotazy do SQL (tiež treba vedieť použiť). 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Výpočet dotazu na Datalogový program}
+
+Datalog počíta \emph{minimálny model} programu (minimálne relácie, pre ktoré je daný program splnený).  
+Minimálny model existuje pre každý \emph{bezpečný program} (ktorý sa definuje prakticky rovnako, ako v relačnom kalkule).
+
+%TODO
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Negácia}
+
+%TODO
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Bezpečnosť Datalogových programov}
+
+(Zopakujeme) Minimálny model existuje pre každý \emph{bezpečný program} (ktorý sa definuje prakticky rovnako, ako v relačnom kalkule).
+ 
+%TODO 
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
