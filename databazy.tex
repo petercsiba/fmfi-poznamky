@@ -12,7 +12,7 @@
 \evensidemargin 0.0in
 
 \title{Poznámky z Úvodu do databázových systémov - materiál na štátnice}
-\date{16.06.2012}
+\date{17.06.2012}
 \author{Peter Csiba, petherz@gmail.com, \url{https://github.com/Petrzlen/fmfi-poznamky}} 
 
 \begin{document}
@@ -129,7 +129,7 @@ WHERE S.skupina=RK.skupina AND S.skupina=RU.skupina
 \end{itemize}
 
 \begin{center}
-\includegraphics[scale=0.5]{db_ansi_sparc.jpg}
+\includegraphics[scale=0.75]{db_ansi_sparc.jpg}
 \end{center} 
 
 \paragraph{Vlastnosti.}
@@ -388,7 +388,7 @@ V tejto sekcií budeme implicitne veľkými písmenami značiť $m$-tice atribú
 \paragraph{Operátory.}
 \begin{itemize}
 \item Projekcia $\Pi$. Nech $r$ má atribúty $Y$, potom $\Pi_X(r)$ vznikne kopírovaním riadkov $r$, pričom sa skopírujú len tie atribúty, ktoré sú v $X$. Treba eliminovať potenciálne duplicity. 
-\item Selekcia $\Sigma$. Nech $c$ je podmienka a $X$ atribúty $r$, potom $\Sigma_{c(X)} = \{X:r(X) \wedge c(X)\}$. 
+\item Selekcia $\sigma$. Nech $c$ je podmienka a $X$ atribúty $r$, potom $\sigma_{c(X)} = \{X:r(X) \wedge c(X)\}$. 
 \item Kartézsky súčin $\times$. Relácie $r_1$ a $r_2$, atribúty $X$, $Y$ pričom $X \cap Y = \emptyset$, potom $r_1 \times r_2 = \{[X,Y]:r_1(X) \wedge r_2(Y)\}$.
 \item Join (theta-join). Podmienka $c$, relácie $r_1$ a $r_2$, atribúty $X$, $Y$ pričom $X \cap Y = \emptyset$, potom $r_1 \Join_{c(X,Y)} r_2 = \{[X,Y]:r_1(X) \wedge r_2(X) \wedge c(X,Y)\}$.
 \item Premenovanie $P_{r_2(Y)}(r1)$ atribútov relácie.
@@ -396,7 +396,7 @@ V tejto sekcií budeme implicitne veľkými písmenami značiť $m$-tice atribú
 atribúty $r_1$ a $r_2$. Potom $r_1 \Join r_2 = \{[X,Y,Z]:r_1(X,Z) \wedge r_2(Y,Z)\}$, pričom
 spoločné atribúty (atribúty s rovnakým menom) sú testované na
 rovnosť a sú kopírované iba raz. Natural join sa dá vyjadriť projekciou a theta-joinom. 
-\item Tradičné množinové $\Cap, \Cup, \ldots $ .
+\item Tradičné množinové $\cap, \cup, \ldots $ .
 \item Eliminácia duplikátov $r_2 = \Delta(r_1)$.
 \end{itemize}
 
@@ -428,17 +428,19 @@ Niektoré základné vlastnosti operácií sa nezachovávajú, ako napríklad $S
 \label{rel_alg_agg}
 (Skopírovaný slide.)
 
-O každom atribúte $x \in X$ platí buď 
+\paragraph{Atribúty.}
+O každom atribúte pre operátor agregácie platí $x \in X$ platí buď 
 \begin{itemize}
 \item $x$ je atribútom $r_1$ (v tom prípade atribútu $X$ hovoríme
         \emph{grupovací atribút}), alebo
 \item $x = AGG(Y)$, kde $Y$ je atribútom $r_1$ a $AGG$ je nejaká
      agregačná funkcia, ktorá zo stĺpca Y vyrába jednu hodnotu (v
          tom prípade atribútu x hovoríme \emph{agregovaný atribút})
-V SQL je $AGG \in \{SUM, COUNT, AVG, STDEV, MAX, MIN\}$.
+V SQL je $AGG \in$ \{SUM, COUNT, AVG, STDEV, MAX, MIN\}.
 \end{itemize}
 
-Operátor $\Gamma_X(r_1)$
+\paragraph{Operátor.}
+$\Gamma_X(r_1)$
 \begin{enumerate}
 \item najprv vyrobí z relácie $r_1$ skupiny, pričom riadky v každej zo
 skupín majú rovnaké hodnoty grupovacích atribútov
@@ -459,7 +461,7 @@ HAVING $<h\_cond>$ & 4 \\
 \end{tabular}
 
 Relačná algebra: 
-$$\Pi_{S_attr}(\Sigma_{h_cond}(\Gamma_{G_attr, agg(Attr)}(\Sigma_{w_cond}(r_1 \times r_2 \times \ldots \times r_n))))$$.
+$$\Pi_{S_attr}(\sigma_{h_cond}(\Gamma_{G_attr, agg(Attr)}(\sigma_{w_cond}(r_1 \times r_2 \times \ldots \times r_n))))$$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -492,7 +494,7 @@ Naivný algortimus: \\
 \verb|answer = iteration_step(|$\Phi_n$\verb|);| \\
 \verb|} while answer changed; /* anywhere inside this loop */| \\
 
-Oveľa viac v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_5.pdf}{slide-och z roku 2011}.
+Oveľa viac v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_5.pdf}{slide-och z roku 2011}. Spíšem, ak mi zostane čas. 
 
 %TODO str.197-220 
 
@@ -638,7 +640,7 @@ V tejto sekcií predpokladáme, že všetky spomínané datábázy sú relačné
 \end{center}
 \item DFD (Data-Flow Diagrams). Znnázorňuje, ako dáta prúdia cez systém, vstupy, výstupy. 
 \begin{center}
-\includegraphics[scale=0.5]{db_dfd.png}
+\includegraphics[scale=0.75]{db_dfd.png}
 \end{center}
 \item UML (Unified Modeling Language).S tým sa musel stretnúť každý, napríklad pri Design Patternoch. 
 \begin{center}
@@ -796,7 +798,7 @@ Tabuľky, ktoré nie sú v normálnych formách, môžu napríklad viesť k stra
 
 \emph{Dekompozícia relačnej schémy} sú relácie $r_i$ a funkčné závislosti $F_i$, pričom $r_i$ vznikli projekciou $r$ (a vymazaním duplikátov), $\Cup_i r_i = U$ a $F^+ \supseteq F_i$ (nepridali sa nové závislosti).
 
-\emph{Bezstratová dekompozícia} práve vtedy, keď $r = \Pi_{r_1}(r) \Join \cdots Join \Pi_{r_n}(r)$. Všetky funkčné závislosti sa museli zachovať, inak by sa relácia $r$ neobnovila. Poznamenajme, že $r_i$ sme definovali ako relácie a v $\Pi_{r_1}(r) $ ich používame ako množiny atribútov. 
+\emph{Bezstratová dekompozícia} práve vtedy, keď $r = \Pi_{r_1}(r) \Join \cdots \Join \Pi_{r_n}(r)$. Všetky funkčné závislosti sa museli zachovať, inak by sa relácia $r$ neobnovila. Poznamenajme, že $r_i$ sme definovali ako relácie a v $\Pi_{r_1}(r) $ ich používame ako množiny atribútov. 
 
 \paragraph{Prvá normálna forma (1NF).} (Historický problém) Atribúty definujeme nad doménami s atomickými hodnotami (nie napr. \verb|enum|). V skutočnosti sa definuje trocha \href{http://en.wikipedia.org/wiki/First_normal_form}{inak} - pridávajú sa množinové vlastnosti riadkov a stĺpcov. 
 
@@ -887,10 +889,10 @@ Skracujeme na \{Prvé písmeno operácie\}\{Číslo transakcie\}(argument). Napr
 \subsection{Požiadavky na transakčný systém (ACID)}
 
 \begin{itemize}
-\item \bf{A}tomicity. Všetko alebo nič. Buď transakcia prebehne, alebo nijakým spôsobom neovplyvní stav systému. 
-\item \bf{C}onsistency. Transakcia je operáciou z konzistentného stavu do konzistentného stavu (uzavretosť operácie). 
-\item \bf{I}solation. Vysledok transakcií je ekvivalentný s takým výsledkom, ktorý by sa dosiahol sériovým (postupným) vykonaním transakcií. 
-\item \bf{D}urability. Po príkaze COMMIT je transakcia platná navždy. 
+\item {\bf A}tomicity. Všetko alebo nič. Buď transakcia prebehne, alebo nijakým spôsobom neovplyvní stav systému. 
+\item {\bf C}onsistency. Transakcia je operáciou z konzistentného stavu do konzistentného stavu (uzavretosť operácie). 
+\item {\bf I}solation. Vysledok transakcií je ekvivalentný s takým výsledkom, ktorý by sa dosiahol sériovým (postupným) vykonaním transakcií. 
+\item {\bf D}urability. Po príkaze COMMIT je transakcia platná navždy. 
 \end{itemize}
 
 Tieto vlastnosti musia byť zachované za každých okolností, aj v prípade náhleho výpadku databázy alebo klienta. 
@@ -1094,15 +1096,141 @@ Príklady:
 \section{Fyzická organizácia} 
 \label{fyzicka_organizacia}
 
+Prerekvizity: Operačné systémy - organizácia a prístup k dátam.
+Cieľom je minimalizovať počet diskovýh operácií (sú rádovo 100krát pomalšie ako RAM)
+a byť schopný pracovať aj s tabuľkami väčšími ako veľkosť operačnej pamäte. 
+
+\begin{center}
+\includegraphics[scale=0.5]{db_fyzicky_model.png}
+\end{center}
+
+Na popis, ako funguje query, slúži príkaz \verb|EXPLAIN|. Dá sa pomocou neho značne zefektívniť beh dotazu. 
+
+\paragraph{Označenie.}
+\begin{itemize}
+\item $B(R)$: počet blokov $R$
+\item $T(R)$: počet tuples (záznamov) $R$, vrátane duplikátov
+\item $V(R, a_1, a_2, ..., a_N)$: počet rôznych tuples $\Pi_{a1, a2, \ldots, a_N}(R)$
+\end{itemize}
+
+\paragraph{Medzivýsledky.}
+\begin{itemize}
+\item Materializácia - môže zaberať veľký priestor.
+\item Iterátory - namiesto materializácie sa vytvára iterátor, ktorý prechádza tabuľkou. Majú tri funkcie: 
+\begin{itemize}
+\item open(R).
+\item next(R).
+\item close(R). 
+\end{itemize}
+\end{itemize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Dvojúrovňový model pamäti a organizácie dát}
+
+Operačná pamäť (RAM) a disk. Snažíme sa redukovať počet diskových čítaní. Pričom vieme, že zaberie rovnako času čítanie jedného celého bloku (sektoru) ako jeho ľubovoľnej časti. 
+Poznamenajme, že rýchlosť operačnej pamäte je rádovo stonásobne vyššia a jej nevýhodou je, že sa do nej nemusia zmestiť celé tabuľky. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Indexové stromy, hashovanie}
+
+Jednou možnosťou je mať tabuľku vždy utriedenú. Oveľa jednoduchšie a praktickejšie je mať externý index v nezávislom súbore - ISAM (Index Sequential Access Method).
+Kľúče, podľa ktorých sa usporiadava, nemusia nijako súvisieť s tými z funkčných závislosti (aj keď PRIMARY INDEX by mal byť kľúčom relácie). 
+
+\paragraph{Sekvenčné indexy.}
+\begin{itemize}
+\item Dense. Referencia na každý riadok tabuľky.
+\item Sparse. Referencia len na bloky tabuliek (ktoré sú ďalej usporiadané). Optimalizáciou je v poslednom bloku si pamätať referenciu na nasledujúci (continuous). Názorné príklady v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_10.pdf}{slide}-och. 
+\item Multilevel. Index indexu. Najvnútornejší je vždy dense. 
+\end{itemize}
+
+Výhodou je rýchle sekvenčné prehľadávanie. V prípade hustého indexu vieme rozhodnúť o existencií záznamu bez čítania celého záznamu. 
+Nevýhodou je drahé vkladanie a hlavne vyhľadávanie. 
+
+\paragraph{B stromy.}
+\emph{B(M) stromy} sú podobné, ako binárne vyhľadávacie stromy, len sa v každom vnútornom (nelistovom) vrchole vetvia maximálne $m$ krát a minimálne $\lfloor m/2 \rfloor$ krát. Ak sa vrchol vetví $k$ krát, tak sa v ňom pamätá $k-1$ záznamov, ktorými sa oddeľujú hodnoty v podstromoch. Napríklad 2-3 strom (štátnicová otázka) je B(3) stromom. 
+ 
+\begin{center}
+\includegraphics[scale=0.5]{db_bm_tree.png}
+\end{center}
+
+\paragraph{$B^+$ stromy.}
+Majú vo vnútorných uzloch (nie listoch) len kľúče - index (resp. ich hodnoty). Dátové záznamy sú iba v listoch. 
+Vkladanie a vyberanie je celkom intuitívne (treba rozobrať viacero prípadov, aby sa zachovala podmienka $\lfloor m/2 \rfloor \leq k \leq m$, kde $k$ je stupeň vrchola). Prakticky nastáva buď triviálny prípad, alebo sa to rieši rekurzívne. Názorné príklady v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_10.pdf}{slide}-och. 
+
+\begin{itemize}
+\item Výhody. Kvôli veľkému vetveniu vyžaduje relatívne málo idskových operácií. Vhodné na prehľadávanie, vyhľadávanie aj mazanie (väčsinou triviálny prípad). 
+\item Nevýhody. Pamäťový overhead. Netriviálna implementácia. 
+\end{itemize}
+
+\paragraph{Hashovanie.}
+Princíp hashovania by mal byť čitateľovi zrejmý. Hľadáme \emph{ideálnu hashovaciu funkciu},
+ktorá nám hashe rozdelí na rovnomerné buchety a nebude prichádzať k preplneniu žiadneho z nich. 
+Jednotlivé buckety chceme mať v rovnakých diskových blokoch (aj preto spájané zoznamy prislúchajúce k rovnakému hashu rozdeľujeme na bloky). 
+
+Magické konštanty pre \emph{load factor} $\frac{vyuzitych\_blokov}{vsetkych\_blokov}$ sú 50\% a 80\%. 
+
+\begin{itemize}
+\item Priama adresácia. Máme pole s riadkami tabuľky.
+\item Neriama adresácia. Máme pole, v ktorých sú referencie na riadky tabuľky. 
+\end{itemize}
+
+\paragraph{Rozšíriteľné hashovanie.} 
+Používame iba prvých $i$ bitov hashu, ak nastane preplnenie poľa, tak zvýšime $i$ (adresný priestor sa teda zdvojnásobí). 
+
+\paragraph{Lineárne hashovanie}. 
+Používame hashovaciu funkciu $h_{p,q}(K)=K mod (2^q \cdot p)$. Pamätáme si pointer $n$ na blok, počet blokov $M$ a počet prvkov $N$.
+%V prípade preplnenie bloku ukladáme do $h_N(K) + n$, kde $n < N$. 
+Ak sa presiahne load factor, tak sa pridá nový blok, rozdelením bloku $n$ a zvýšením $q++$ pre tento blok, posunutím pointra $n++$ a zvýšením počtu blokov $M++$ (ak $M=2^x$, tak $n=0$).
+Na bloky $0 \leq k < n$ a $2^q \cdot p$ používame teda $h_{p,q+1}$ a na ostatné $h_{p,1}$.
+\underline{Veľmi pomôže} \href{http://www.youtube.com/watch?v=Yw1ts57uL7c}{video}. Vyhľadávanie bloku: 
+\begin{verbatim}
+n=N;
+k=K mod N; /* hashovacia funkcia */
+while ((k>p) and (not A[k]))
+{
+n = n / 2; /* celočíselné delenie */
+k = k – n;
+}
+\end{verbatim} 
+
+\paragraph{Porovnanie s B stromami.}
+
+\begin{itemize}
+\item Výhody. Teoreticky lineárny čas, celková jednoduchosť.
+\item Nevýhody. B stromy lepšie vracajú intervaly výsledkov. 
+\end{itemize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Operátory fyzickej algebry}
+???
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Implementácia vybraných fyzických operátorov (merge-sort, nested-loop join)}
 
+\paragraph{Mergesort.}
+Chceme utriediť pole dĺžky $N$ a do operačnej pamäti sa nám zmestí $3B$ prvkov.
+V prvej iterácií načítame bloky dĺžky $B$, utriedime v operačnej pamäti a zapíšeme na disk. 
+Keď potom mergeujeme dva, vstupné bloky dĺžok $D$, tak načítame z oboch $B$ a mergeujeme do tretieho - výstupného (v operačnej pamäti máme $3B$). Ak sa vyprázdni vstupný, tak načítame ďalších $B$ prvkov. Ak sa naplní výstupný, zapíšeme na disk a vyprázdnime. 
+
+Zložitosť vie vypočítať každý z vzhľadom na cenu diskovej operácie a počtu krokov. 
+
+\paragraph{Join.}
+Podobne ako mergesort. Ak sa do operačnej pamäti zmestí $M$ diskových blokov,
+tak $M-2$ vyhradíme na menšiu z relácií, 1 na druhú reláciu a jeden na výstup. 
+
+\paragraph{Merge Join (equijoin).}
+Predpokladáme utriedené joinovacie relácie a joinovaciu podmienku pre rovnosť.
+Potom vieme join vypočítať podobným spôsobom ako mergesort, akurát s a potrebujeme zbaviť duplikátov. 
+
+\paragraph{Index scan.}
+Čítanie viacerých za sebou idúcich záznamov.
+Nájdi prvý vyhovujúci záznam, ďalšie stačí hľadať v nasledujúcich blokoch.
+\verb|cost = height + b + 1|, kde \verb|height| je hĺbka indexového stromu a
+\verb|b| je počet blokov obsahujúcich vyhovujúce záznamy.
+
+\paragraph{Hash join.}
+Máme dva hash-indexy nad reláciami. Chceme ich joinovať s rovnosťou. Joinovacia pdomienka bude splnená len pre rovnaké hashe, stačí nám čítať príslušné buckety (bloky) a ich prípadné buckety. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
