@@ -821,10 +821,32 @@ Jediným kľúčom tabuľky je $(Employee, Skill)$, ale tabuľka nie je v 2NF, l
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{3NF, BCNF}
 
-\paragraph{Tretia normálna forma (3NF).} 
+\paragraph{Tretia normálna forma (3NF).} (Plachetka) Relačná schéma $(r,F)$ je v 3NF práve vtedy, keď je v 2NF a pre každú (platnú) funkčnú závislosť $X \rightarrow Y$ platí, že buď $X$ je nadkľúč v $r$, alebo $Y$ je časťou nejakého kľúča v $r$. 
+(\href{http://en.wikipedia.org/wiki/Third_normal_form}{Wikipédia}, silnejšia podmienka) Relačná schéma $(r,F)$ je v 3NF práve vtedy, keď je v 2NF a pre každú (platnú) pre každý atribút $U_i$ platí, že sa buď vyskytuje v šavej strane nejakého kľúča $r$, alebo je odvoditeľný z každého nadkľúča $r$.
+
+Testovanie 3NF je NP ťažké, ale jej konštrukcia je polynomiálna. 
+
+Ak to správne chápem, tak pri dekompozícií na $r_i$ musí podmienka 3NF platiť pre každú $r_i$ a nie pre celú $r$ (intuícia hovorí, že pri uvažovaní celej $r$ by to bola blbosť). 
+Plachetka na ďalších slide-och potvrdzuje. 
+
+\paragraph{Boyce-Coddova normálna forma (BCNF).} (Plachetka) Je v 2NF a pre každú platnú funkčnú závislosť $X \rightarrow Y$ platí, že $X$ je nadkľúč (\href{http://en.wikipedia.org/wiki/Boyce\%E2\%80\%93Codd_normal_form}{Wikipédia dodáva}, že $\neg (X \supseteq Y)$. 
+
+Platí, že BCNF je prísnejšie ako 3NF (a zvykne sa preto označovať aj 3.5NF). 
+Konštrukcia bezstratovej dekompozície do BCNF je NP ťažké, takisto, ako overenie jej existencie. 
+
+\paragraph{Príklad 3NF a nie BCNF.}
+Ak máme reláciu $ABC$ a funkčné závislosti $AB \rightarrow C$ a $C \rightarrow B$,
+tak je v 3NF ($AB$ je kľúč) ale nie v BCNF, lebo $C$ nie je kľúč v $r$. Rozloženie na $(AC)$ a $(BC)$ (podľa naivného algoritmu) pomôže (bezstratovosť: $AC$ je kľúč). 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Algoritmy pre dekompozíciu do normálnych foriem}
+
+\paragraph{Naivný 3NF.} Nájdi nevyhovujúcu funkčnú závislosť (exponenciálne), minimalizuj ju na $X \rightarrow Y$ a rozlož príslušnú reláciu na relácie $r-Y$ a $XY$. 
+
+\paragraph{Polynomiálny 3NF.} Nájdi minimálne pokrytie funkčnými závislosťami (polynomiálne). Pre každú $X \rightarrow Y$ z nich vytvor reláciu $XY$. Ak táto dekompozícia je stratová, pridaj reláciu pre ľubovoľný kľúč (bezstratovosť je ekvivalentná s existenciou takej tabuľky).
+
+\paragraph{Naivný BCNF.} Nájdi nevyhovujúcu funkčnú závislosť (exponenciálne), minimalizuj ju na $X \rightarrow Y$ a rozlož príslušnú reláciu na relácie $r-Y$ a $XY$. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Bezstratovosť dekompozície}
 (Názor autora, nesúhlasí s algoritmom v slide-och). 
