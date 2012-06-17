@@ -672,6 +672,108 @@ procedúry vkladania/vynechávania dát, pohľady (VIEWs), prístupové práva a
 Prudko odporúčame pozrieť si \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_6.pdf}{slide-i Plachetku} pre názorné grafické ukážky chýb. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Funkčné závislosti}
+
+\paragraph{Úvod a označenia.}
+Chceme odstrániť redundanciu a znej plynúcu potenciálnu nekonzistentnosť. 
+
+Ďalej budeme $X_i$ označovať \emph{inštanciu} množiny atribútov $X$ relácie $r$. 
+Inštanciou rozumieme riadok (prvok relácie) s projekciou na $X$.
+Ďalej, predikátom $r(X_i,Y_j, \ldots, Z_k)$ označujeme pre inštancie $(X_i,Y_j, \ldots, Z_k)$, či existuje spojená inštancia $(X_i,Y_j, \ldots, Z_k)$ v $r$.
+Spojenou inštanciou\footnote{Definovali sme si len pre dočasné potreby, nevieme, či sa používa aj v odbornej literatúre.} 
+rozumieme inštanciu $S$, ktorá má všetky atribúty relácie $r$. V prípade, že pre nejaké $X \cap Y \neq \emptyset$, tak inštancie $X_i$ a $Y_j$ musia mať na atribútoch $X \cap Y$ rovnaké hodnoty.  
+Teraz sme vysvetľovali niečo, čo je takmer zrejmé, formalizmom, ktorý môže na prvé čitanie zmiasť. 
+
+\paragraph{Definícia.}
+\emph{Funkčná závislosť} $X \rightarrow Y$ práve vtedy keď 
+$$(\forall X_1)(\forall Y_1,Y_2)(\forall Z_1) (r(X_1, Y_1, Z_1) \wedge r(X_1, Y_2, Z_1) \Rightarrow (Y_1 = Y_2)).$$
+
+Odteraz ''$\Rightarrow$'' implikácia a ''$\rightarrow$'' funkčná závislosť.
+Definujme makro $XY \equiv X \cup Y$. 
+
+%%%%%%%%%%%%%%%%%%%%
+\paragraph{Armstrongove axiómy.} 
+\begin{itemize}
+\item Reflexívnosť. $X \supseteq Y \Rightarrow X \rightarrow Y$.
+\item Rozšírenie (augmentation). $(\forall Z)(X \rightarrow Y \Rightarrow (XZ \rightarrow YZ))$.
+\item Tranzitívnosť. $(X \rightarrow Y \wedge Y \rightarrow Z) \Rightarrow (X \rightarrow Z)$.
+\end{itemize}
+ 
+Mali by ste vedieť dokázať (potom to ale nie sú axiómy, ale teorémy). 
+ 
+Armstrongové axiómy sú úplne: 
+Funkčná závislosť $X \rightarrow Y$ sa dá odvodiť z $F$ pomocou
+Armstrongovych axióm práve vtedy, keď $X \rightarrow Y$ je logickým
+dôsledkom\footnote{Učiteľ Matematickej logiky by sa nad týmto výrokom pozastavil. Logický dôsledok chápeme asi ako intuitívny pojem.} $F$.
+
+ 
+%%%%%%%%%%%%%%%%%%%%
+\paragraph{Niektoré ďalšie vlastnosti.}
+ 
+\begin{itemize}
+\item Union rule. $(X \rightarrow Y \wedge X \rightarrow Z) \Rightarrow (X \rightarrow YZ)$.
+\item Pseudotranzivita. $(X \rightarrow Y \wedge WY \rightarrow Z) \Rightarrow (WX \rightarrow WZ)$.
+\end{itemize}
+
+Mali by ste vedieť dokázať z Armstrongových.
+Všimneme si, že keď $r$ nemá funkčné závislosti, tak $r$ nemá redundantné dáta.  
+
+%%%%%%%%%%%%%%%%%%%%
+\paragraph{Uzáver množiny atribútov.}
+(Skopírovaný slide.)
+
+Nech $X$ je množina atribútov a $F$ množina funkčných
+závislostí. Potom \emph{uzáverom množiny atribútov} $X$ vzhľadom na $F$
+rozumieme množinu $X^+$ všetkých atribútov $Y$ takých, že $X \rightarrow Y$ je
+(logickým) dôsledkom funkčných závislostí $F$. 
+ 
+\begin{verbatim}
+X+ : = X;
+repeat
+for each U --> V in F do
+if U in X+ then X+ := X+ union V;
+while niečo sa pridalo do X+;
+\end{verbatim}
+
+Optimalizácia: každá závislosť sa použije práve raz, po použití ju
+možno vynechať. (Teda uzáver sa počíta v lineárnom čase\footnote{
+Na $F$ sme použili všetky Armstrongove axiómy (urobili sme niečo ako reflexívno tranzitívny uzáver). 
+}.)
+
+%%%%%%%%%%%%%%%%%%%%
+\paragraph{Uzáver množiny funkčných závislostí.}
+(Skopírovaný slide.)
+
+Označme $F^+$ množinu všetkých funkčných závislostí,
+ktoré sú dôsledkom funkčných závislostí z $F$ (t.j. ktoré sa dajú
+odvodiť z $F$ použitím Armstrongovych axióm). Množinu $F^+$ budeme
+nazývať \emph{uzáverom množiny funkčných závislostí} $F$.
+
+Je dosť rozsiahla, chceme uvažovať len vhodnú podmnožinu. 
+\emph{Maximálna funkčná závislosť} - nemôže vynechať atribút z ľavej strany ani pridať atribút k pravej strane tak, aby sme neporušili jej platnosť. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Pokrytie a minimálne pokrytie množiny funkčných závislostí}
+Množina funkčných závislostí $G$ \emph{pokrýva} množinu funkčných závislostí $F$ práve vtedy keď $G^+ \supseteq F^+$. 
+Stačí testovať, či vieme odvodiť každú funkčnú závislosť z F pomocou G (polynomiálne).     
+
+\emph{Kanonická funkčná závislosť} - je maximálna a na pravej strane má práve jeden atribút.     
+
+\emph{Minimálne pokrytie množiny funkčných závislostí} - je pokrytie pozostávajúce len z kanonických funkčných závislostí. 
+
+\paragraph{Polynomiálny algoritmus na výpočet minimálneho pokrytia.}
+\begin{enumerate}
+\item Nahraď $X \rightarrow Y$ množinou \{$X \rightarrow A$, $A \in Y$, $A$ je jednoduchý (jednotkový) atribút\}
+\item Vynechaj všetky redundantné (odvoditeľné) atribúty na ľavých stranách
+$X \rightarrow A$ (každý atribút treba testovať práve raz). 
+\item Vynechaj všetky redundantné (odvoditeľné z ostatných) závislosti $X \rightarrow A$ (opakuj tento
+krok s redukovanou množinou funkčných závislostí, kým
+žiadna závislosť nie je redundantná, každú závislosť treba
+testovať práve raz). Viac v slide-och. 
+
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Nadkľúče a kľúče}
 
 \emph{Kľúč} je (neformálne) minimálna množina atribútov, ktorá
@@ -679,27 +781,68 @@ jednoznačne identifikuje entitu. Kľúčov môže byť viac. \emph{Primárny
 kľúč} je niektorý z kľúčov a označuje sa počiarknutím atribútov,
 ktoré ho tvoria. Primátny kľúč by mal byť minimálny možný, odporúča sa použiť zástupcu \emph{surrogate key} (napr. AUTO INCREMENT v SQL). 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Funkčné závislosti}
-%%%%%%%%%%%%%%%%%%%%
-\paragraph{Armstrongove axiómy.} 
-%%%%%%%%%%%%%%%%%%%%
-\paragraph{Uzáver množiny atribútov.}
-%%%%%%%%%%%%%%%%%%%%
-\paragraph{Uzáver množiny funkčných závislostí.}
+Formálne je \emph{nadkľúč} množina atribútov $K$ taká, že $K \rightarrow U$, kde $U$ sú všetky atribúty relácie $r$. \emph{Kľúčom} nazývame \underline{minimálny} (v zmysle množinovej inklúzie) nadkľúč $r$ (môže ich teda byť viacej).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Pokrytie a minimálne pokrytie množiny funkčných závislostí}
-    
+Algoritmus na nájdenie kľúčov existuje len exponenciálny (určite ste ho vedeli na teste). Plachetka odporúča úplne preberanie kľúčov zhora (najdlhších), po najkratšie. Výpočet sa reprezentuje binárnym stromom, kde sa v každom vrchole množina aitribútov vetví podľa toho, či  daný atribút zahrnieme, alebo nezahrnieme do potenciálneho kľúča (a podčiarkujeme si pritom atribúty, ktoré určite chceme zahrnúť). 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Normálne formy} 
+
+Tabuľky, ktoré nie sú v normálnych formách, môžu napríklad viesť k stratám závislosti pri vymazávaní alebo nekonzistentným dátam pri zmenách (viac v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_8.pdf}{slide-och}).
+
+\paragraph{Relačná schéma.}
+\emph{Relačná schéma} je množina atribútov $U$ a množina funkčných závislostí $F$, ktoré platia v relácií $r$. Tj, rozdeľujeme tabuľky na viacero tabuliek. 
+
+\emph{Dekompozícia relačnej schémy} sú relácie $r_i$ a funkčné závislosti $F_i$, pričom $r_i$ vznikli projekciou $r$ (a vymazaním duplikátov), $\Cup_i r_i = U$ a $F^+ \supseteq F_i$ (nepridali sa nové závislosti).
+
+\emph{Bezstratová dekompozícia} práve vtedy, keď $r = \Pi_{r_1}(r) \Join \cdots Join \Pi_{r_n}(r)$. Všetky funkčné závislosti sa museli zachovať, inak by sa relácia $r$ neobnovila. Poznamenajme, že $r_i$ sme definovali ako relácie a v $\Pi_{r_1}(r) $ ich používame ako množiny atribútov. 
+
+\paragraph{Prvá normálna forma (1NF).} (Historický problém) Atribúty definujeme nad doménami s atomickými hodnotami (nie napr. \verb|enum|). V skutočnosti sa definuje trocha \href{http://en.wikipedia.org/wiki/First_normal_form}{inak} - pridávajú sa množinové vlastnosti riadkov a stĺpcov. 
+
+\paragraph{Druhá normálna forma (2NF).} (Historický problém) Žiadny atribút v $r_i$ nezávisí iba na časti kľúča $r_i$ a každá z $r_i$ je v 1NF. Tj., ak je kľúč (=minimálny nadkľúč) v tvare $ABC$, tak v tabuľke neexistujú funkčné závislosti, ktorých ľavé strany sú $A,B,C,AB,BC$ alebo $AC$. 
+
+\begin{center}
+\begin{tabular}{l|l|l}
+$Employee$ & $Skill$ & $Current Work Location$ \\
+\hline
+Jones &	Typing &	114 Main Street \\
+Jones &	Shorthand &	114 Main Street \\
+Jones &	Whittling &	114 Main Street \\
+Bravo &	Light Cleaning &	73 Industrial Way \\
+Ellis &	Alchemy &	73 Industrial Way \\
+Ellis &	Flying &	73 Industrial Way \\
+Harrison &	Light Cleaning &	73 Industrial Way \\
+\end{tabular}
+\end{center}
+
+Jediným kľúčom tabuľky je $(Employee, Skill)$, ale tabuľka nie je v 2NF, lebo existuje funkčná závislosť $Employee \rightarrow Current Work Location$.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{3NF, BCNF}
+
+\paragraph{Tretia normálna forma (3NF).} 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Algoritmy pre dekompozíciu do normálnych foriem}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Bezstratovosť dekompozície}
+(Názor autora, nesúhlasí s algoritmom v slide-och). 
+
+\paragraph{Algoritmus.}
+Relačná schéma $(r,F)$ s atribútmi $U_1,\ldots,U_n$ a s dekompozíciou $(r_1, F_1),\ldots,(r_m, F_m)$.
+
+\begin{tabular}{ll}
+1. & Vytvor maticu $S[i,j] = 1$ ak $U_j \in r_i$, inak $S[i,j] = 0$.\\
+2. & Zvyšok opakuj, kým sa niečo mení:\\
+3. & Pre každý $(X \rightarrow Y) \in F$:\\
+4. & Ak pre riadok $r_i$, platí $(\forall U_j \in X)S[i,j]=1$, tak nastav $(\forall U_j)S[i,j]=1$.\\
+\end{tabular}
+
+Ak ľubovoľný riadok pozostáva zo samých jednotiek, tak je bezstratová. Všimnime si, že riadky sú medzi sebou nezávislé a reprezentujú atribúty, ktoré sa dajú odvodiť z atribútov relácií $r_i$. 
+Inak povedané, dekompozícia je bezstratová, ak existuje relácia, z ktorej atrbútov sa dá odvodiť funkčnými závislosťami ostatné atribúty v $U$. 
+
+\paragraph{Diskusia.}
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
