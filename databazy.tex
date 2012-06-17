@@ -954,15 +954,23 @@ Intuitívne sú dva rozvrhy view-ekvivalentné práve vtedy, keď majú rovnaký
 \begin{itemize}
 \item \emph{Sériové}. Žiadne dve transakcie sa neprekrývajú. Absolútne bezpečené, ibaže neefektívne (rýchle transakcie môžu čakať na jednu dlhú).
 \item \emph{Sériovateľné (Konflikt sériovateľné)}. Ak je konflikt-ekvivalentný nejakému sériovému rozvrhu. 
-\item \emph{View-sériovateľné}. Ak každý jeho prefix\footnote{Ak niekto vie, prečo \underline{každý} jeho prefix, a nie len celý rozvrh, tak mi prosím napíšte email.} je view-ekvivalentný nejakému sériovému rozvrhu. 
+\item \emph{View-sériovateľné}. Ak každý jeho prefix\footnote{Ak niekto vie, prečo \underline{každý} jeho prefix, a nie len celý rozvrh, tak mi prosím napíšte email.} je view-ekvivalentný nejakému sériovému rozvrhu. Rôzne poradie potenciálnych WRITEov nám nevadí (premyslite si). 
+\item \emph{Striktný rozvrh}. Ak rozvrh neobsahuje dirty read ani dirty write (čítanie a prepisovanie necommitovaných WRITEov). 
 \end{itemize}
 
+Je zrejmé, že sériové $\subsetneq$ konflikt sériovateľné $\subsetneq$ view-sériovateľné.
 Viac v nasledujúcej sekcií \ref{test_seriovatelnosti}.
 
+\paragraph{Zemiak.}
+\begin{center}
+\includegraphics[scale=0.5]{db_triedy_seriovatelnosti.png}
+\end{center}
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Implementácia sériovateľnosti a obnoviteľnosti v transakčných systémoch} 
+Táto sekcia má svoje nedostatky.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Testy sériovateľnosti}
 \label{test_seriovatelnosti}
@@ -980,11 +988,107 @@ Rozmýšľam, prečo nestačí použiť rovnakú metódu precedenčného grafu.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Algoritmy izolácie, zámky, časové pečiatky, validácia}
+
+Áno, vieme generovať sériovateľné rozvrhy. Snažíme sa \emph{izolovať} konflikty. 
+
+\paragraph{Zamykanie.}
+Môžeme zamykať polia, riadky, tabuľky alebo celý diskový blok. Dva typy lockov: 
+\begin{itemize}
+\item Read lock. Transakcia, ktorá ho vlastní, má právo čítať. Viacero transakcií môže mať read locky na rovnaké dáta. 
+\item Write lock (Exkluzívny lock). Ak má transakcia write lock, tak žiadna iná transakcia nemôže mať žiadny iný lock na rovnaké dáta. 
+\end{itemize}
+
+A dve základné pravidlá \emph{dvojfázového zamykania}: 
+\begin{itemize}
+\item Transakcia po unlocku už nemôže žiaden lock. Takže na začiatku si vypýta potrebné locky a na konci ich uvoľní. 
+\item Transakcia musí vlastniť potrebný zámok na vykonanie príslušných operácií. 
+\end{itemize}
+
+Scheduler kontroluje dodržanie týchto pravidiel, inak dáva priestor aktívnym transakciám prakticky akokoľvek. 
+(Veta) Každý rozvrh vykonaný podľa lockov je konflikt-sériovateľný (dôkaz je jednoduchý - naopak to neplatí, napr $r1(X), r2(X), r1(X), w2(X)$). 
+
+\paragraph{Časové pečiatky.}
+Idea je, kto prv príde, ten prv vykonáva. 
+Každej transakcií je priradený čas začiatku $TS_i$ a každý dátový objekt $X$ má dve časové pečiatky, na čítanie $TR_X$ a zápis $TW_X$ (inicializujú sa na nulu). Ak $T_i$ vykoná operáciu, do príslušnej časovej pečiatky zapíše $TS_i$. Dodržujú sa pritom dve pravidlá: 
+\begin{itemize}
+\item Transakcia $T_i$ nesmie čítať ak $TW_X > TS_i$.
+\item Transakcia $T_i$ nesmie písať ak $TR_X > TS_i \vee TW_X > TS_i$.
+\end{itemize}
+
+\begin{center}
+\includegraphics[scale=0.5]{db_lock_ts.png}
+\end{center}
+
+\paragraph{Validácia (optimizmus).}
+Každá transakcia si píše lokálne. Ak príde na COMMIT, tak sa skontroluje, či je doterajší rozvrh sériovateľný. Ak nie, tak ABORT na transakciu a všetky kolidujúce (reflexívno tranzitívny uzáver). 
+
+\paragraph{Multiversion concurrency control (MVCC) (optimizmus).}
+Ku každému objektu si pamätáme viacere verzií podľa časov modifikácie.
+Podobne ako v algoritme časových pečiatok, aj tu definujeme $TS_i$ - čas začiatku transakcie, $TR_X$ a $TW_X$ ako čas začatia transakcie, ktorá $X$ čítala resp. písala. Obvyklé dve pravidlá: 
+
+\begin{itemize}
+\item Ak transakcia $T_i$ číta z $X$, tak dostane hodnotu v najstaršom čase pre ktorý $TW_X < TS_i$ a nastaví $TR_X = max(TR_X, TS_i)$.
+\item Ak transakcia $T_i$ píše do $X$, tak je ABORTnutá v prípade, že $TW_X < TS_i < TR_X$ (lebo nejaká transakcia už prečítala, ale ešte nezapísala), inak $TW_X = max(TW_X, TS_i)$.
+\end{itemize}
+
+\paragraph{Strict 2PL.}
+Rozširuje dvojfázové zamykanie o pravidlo, že zámky sa uvoľujú spolu s commitom. Takéto rozvrhy sú konflikt-sériovateľné a striktné. 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Uviaznutie (deadlock) a metódy riešenia uviaznutia}
+Napríklad: $wl1(X), w1(X), rl2(Y), rl2(X), wl1(Y)$.
+
+\emph{Wait-for} graf - orientovaný graf nad reláciou $T_i$ čaká na $T_j$ (kvôli locku).
+Ak obsahuje cyklus, tak v deadlocku sú práve tie transakcie, ktoré sú na danom cykle. 
+
+\paragraph{Riešenia.}
+
+\begin{itemize}
+\item Optimistická stratégia. Raz za čas skontrolujeme Wait-for graf. Ak cyklus, tak rozbijeme abortom. 
+\item Pesimistická stratégia. Vopred detekujeme potenciálny deadlock a rozbijáme abortom.  
+\item Wait-die stratégia. Transakcie sa usporiadajú podľa času začiatku. Ak skoršia žiada o lock staršiu, tak čaká na signál, kým staršia skončí. 
+\item Wound-wait (kill-wait) stratégia. Transakcie sa usporiadajú podľa času začiatku. Ak skoršia žiada o lock staršiu, tak staršiu zabije (abortuje). Inak čaká na skončenie staršej. 
+\end{itemize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Algoritmy obnovy, log-file, checkpointing, backup}
     
+Problém sériovateľného rozvrhu $r1(A), w1(A), r2(A), w2(C), c2, c1$ a výpadok pri $c2$.
+Potrebujeme preto obnovu a to potrebujeme LOG operácií (treba pritom dávať pozor na cache - nemôže sa zapisovať na disk aj cache zároveň). 
+
+\emph{Backup (DUMP)} - zálohuje databázu na iné médium (počas toho neprebiehaújú žiadne transakcie). 
+
+\begin{itemize}
+\item Okamžitý zápis dát. Najprv do logu a hneď potom na disk. 
+\item Oneskorený zápis dát. Predpokladá sa cache, na disk sa zapisuje až niekedy po commite. Prečo netreba UNDO?
+\end{itemize}
+
+\paragraph{Logovanie.}
+Stačí nám zapisovať iba WRITE operácie, so starou aj novou hodnotou (aby sme vedeli overiť, či sa naozaj vykonala).
+Raz za čas môže prebehnúť CHECKPOINTING (atomická procedúra, myslí sa na aktívne transakcie) - overenie, že sa po istý riadok LOG file-u vykonali všetky operácie.  
+
+\paragraph{Obnova.}
+Čítaním log file-u sa vytvára UNDO a REDO list.
+
+\begin{itemize}
+\item UNDO vráti neCOMMITované transakcie (v opačnom poradí). Stav po UNDO je rovnaký, ako keby sa operácie nevykonali.  
+\item REDO vykoná naspäť UNDO operácie a navráti pôvodný stav. 
+\end{itemize}
+
+\paragraph{Abort.}
+Rozvrh je \emph{obnoviteľný} práve vtedy, keď pre každú commmitovanú transakciu T2, ktorá čítala necommitovanú hodnotu zapísanú T1 (\emph{dirty read}), commituje T1 skôr ako T2. 
+
+Príklady: 
+\begin{itemize}
+\item Neobnoviteľný: $w1(X), r2(X), w2(X), c2, c1$.  
+\item Obnoviteľný: $w1(X), r2(X), w2(X), c1, c2$. Vzniká riziko kaskádového abortu. 
+\end{itemize}
+
+\emph{Kaskádový abort}. Keď abort jednej transakcie vynúti abort inej transakcie (kvôli dirty read).
+\emph{Avoids cascading aborts (ACA)} práve vtedy, keď rozvrh neobsahuje žiadny dirty read. 
+    
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Fyzická organizácia} 
