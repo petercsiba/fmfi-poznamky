@@ -492,7 +492,9 @@ Naivný algortimus: \\
 \verb|answer = iteration_step(|$\Phi_n$\verb|);| \\
 \verb|} while answer changed; /* anywhere inside this loop */| \\
 
+Oveľa viac v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_5.pdf}{slide-och z roku 2011}.
 
+%TODO str.197-220 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis relačnej algebry s inými dotazovacími jazykmi}
@@ -626,6 +628,57 @@ Hlavne CREATE VIEW si odporúčame pozrieť.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Teória navrhovania relačných báz dát} 
 
+V tejto sekcií predpokladáme, že všetky spomínané datábázy sú relačné. 
+
+\paragraph{Niektoré používané techniky.}
+\begin{itemize}
+\item \href{http://en.wikipedia.org/wiki/Structured_analysis}{SAD} (Structured Analysis and Design). Zachytáva procesy aj dáta naraz. Technika z roku 1980.
+\begin{center}
+\includegraphics[scale=0.5]{db_sad.jpg}
+\end{center}
+\item DFD (Data-Flow Diagrams). Znnázorňuje, ako dáta prúdia cez systém, vstupy, výstupy. 
+\begin{center}
+\includegraphics[scale=0.5]{db_dfd.png}
+\end{center}
+\item UML (Unified Modeling Language).S tým sa musel stretnúť každý, napríklad pri Design Patternoch. 
+\begin{center}
+\includegraphics[scale=0.5]{db_uml.png}
+\end{center}
+\item ER (Enitity Relationship). S tými sme sa už stretli, sú najvhodnejšie pre relačné databázy (ako už názov napovedá). Nevýhodou je, že nezachytávajú ako sa entity menia. 
+\begin{center}
+\includegraphics[scale=0.5]{db_entity_relationship.png}
+\end{center}
+\end{itemize}
+
+Existujú softwareové nástroje, ktoré výrazne uľahčujú ich tvorbu, resp. vedia konvertovať textovú schému na takéto diagramy (je ich dosť). 
+
+\paragraph{Kroky návrhu.}
+\begin{itemize}
+\item \emph{Koncepčný návrh}. Vytvorí sa diagram pre databázu a jej relácie. Zaujímajú nás entity a už menej ich atribúty a vôbec ich typy. 
+\item \emph{Logický návrh}. Typy atribútov, bezpečnostný model, optimalizácia (normalizácia, ...), kľúče. Predklad do SQL (ako normu pre relačné DB) môžeme považovať za takýto krok. Treba vedieť syntax \verb|CREATE TABLE| a \href{http://dev.mysql.com/doc/refman/5.5/en/innodb-foreign-key-constraints.html}{hlavne} \verb|FOREIGN KEY (id) REFERENCES (table)| a ktomu prislúchajúci \verb|ON DELETE [CASCADE, SET NULL, RESTRICT=NO ACTION]|, ktoré hovoria čo sa má spraviť, keď sa vymaže FOREIGN KEY. 
+\item \emph{Fyzický návrh}. Mapovanie návrhu na konkrétny DBMS (DB Management System). 
+\end{itemize}
+
+Výsledkom sú vytvorené tabuľky, kľúče, indexy, constrainty, užívateľské kontá,
+procedúry vkladania/vynechávania dát, pohľady (VIEWs), prístupové práva atď.
+
+\paragraph{Pravidlá dobrého návrhu.}
+\begin{itemize}
+\item \emph{Vyhýbať sa redundancií}. Ak sa dá niečo vypočítať, tak si to nepamätáme (jedine kvôli optimalizácií). Hlavným dôvodom je potenciálna nekonzistentnosť dát.  
+\item \emph{Vyhýbať sa slabým entity setom}. To sú také, ktoré nevedia odpovedať na všetky (zmysluplné) otázky. Štandardne \emph{fan trap} - zlé poradie vzťahov entít v reťazi  a \emph{chasm trap} - chýbajúca závislosť (v trojici).
+\item \emph{Nepoužívať entity set, ktorý sa dá nahradiť atribútom}. 
+\end{itemize}
+
+Prudko odporúčame pozrieť si \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_6.pdf}{slide-i Plachetku} pre názorné grafické ukážky chýb. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Nadkľúče a kľúče}
+
+\emph{Kľúč} je (neformálne) minimálna množina atribútov, ktorá
+jednoznačne identifikuje entitu. Kľúčov môže byť viac. \emph{Primárny
+kľúč} je niektorý z kľúčov a označuje sa počiarknutím atribútov,
+ktoré ho tvoria. Primátny kľúč by mal byť minimálny možný, odporúča sa použiť zástupcu \emph{surrogate key} (napr. AUTO INCREMENT v SQL). 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Funkčné závislosti}
 %%%%%%%%%%%%%%%%%%%%
@@ -633,12 +686,10 @@ Hlavne CREATE VIEW si odporúčame pozrieť.
 %%%%%%%%%%%%%%%%%%%%
 \paragraph{Uzáver množiny atribútov.}
 %%%%%%%%%%%%%%%%%%%%
-\paragraph{uzáver množiny funkčných závislostí.}
+\paragraph{Uzáver množiny funkčných závislostí.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Pokrytie a minimálne pokrytie množiny funkčných závislostí}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Nadkľúče a kľúče}
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
