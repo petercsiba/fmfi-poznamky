@@ -869,20 +869,115 @@ Inak povedané, dekompozícia je bezstratová, ak existuje relácia, z ktorej at
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Transakcie} 
+
+Predpokladáme centralizované databázy. Transakcií môže bežať naraz viac (a to je problém, ktorý chceme riešiť).  
+
+\paragraph{Operácie.}
+\begin{itemize}
+\item START.
+\item READ / WRITE.
+\item INSERT / DELETE.
+\item COMMIT. Úspech transakcie. 
+\item ABORT. Zrušenie transakcie, napríklad v prípade výpadku (alebo zlého schedulingu).  
+\end{itemize}
+
+Skracujeme na \{Prvé písmeno operácie\}\{Číslo transakcie\}(argument). Napríklad $r1(A)$ znamená, že transakcia 1 číta pole $A$. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Požiadavky na transakčný systém (ACID)}
+
+\begin{itemize}
+\item \bf{A}tomicity. Všetko alebo nič. Buď transakcia prebehne, alebo nijakým spôsobom neovplyvní stav systému. 
+\item \bf{C}onsistency. Transakcia je operáciou z konzistentného stavu do konzistentného stavu (uzavretosť operácie). 
+\item \bf{I}solation. Vysledok transakcií je ekvivalentný s takým výsledkom, ktorý by sa dosiahol sériovým (postupným) vykonaním transakcií. 
+\item \bf{D}urability. Po príkaze COMMIT je transakcia platná navždy. 
+\end{itemize}
+
+Tieto vlastnosti musia byť zachované za každých okolností, aj v prípade náhleho výpadku databázy alebo klienta. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Architektúra transakčného systému}
+
+Popisujeme len abstraktný model. 
+
+\begin{itemize}
+\item Transaction manager. Bufferuje. 
+\item Scheduler. Vytvára rozvrhy - poradia transakcií a ich jendotlivých príkazov. 
+\item Recovery manager. Pamätá si log file, je schopný vykonať spätné zmeny (v prípade ABORTu napr.).
+\item Cache manager. Stará sa o to, aby časť disku bola v operačnej pamäti.  
+\end{itemize}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Rozvrhy}
+
+\emph{Rozvrh} je postupnosť operácií transakcií, ktorá obsahuje operácie jednotlivých transakcií ako svoje podpostupnosti (ktoré sa neprekrývajú a rozvrh nič iné neobsahuje). 
+\emph{Aktívna transakcia}, ak je medzi START a COMMIT / ABORT. 
+
+\paragraph{Príklad zlého rozvrhu.}
+\begin{center}
+\begin{tabular}{c|c}
+T1 & T2 \\
+\hline
+\verb|Read(A); A <-- A+100| & \\
+\verb|Write(A);| & \\
+& \verb|Read(A);A <-- Ax2;| \\
+& \verb|Write(A);| \\
+& \verb|Read(B);B <-- Bx2;| \\
+& \verb|Write(B);| \\
+& \verb|Commit;| \\
+\verb|Read(B); B <-- B+100;| & \\
+\verb|Write(B);| & \\
+\verb|Commit;| & \\
+\end{tabular}
+\end{center}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Triedy sériovateľnosti a obnoviteľnosti}
+
+\emph{Konfliktné operácie} sú dve operácie, ktoré patria dvom rôznym transakciám a aspoň jedna z nich je WRITE. 
+
+\emph{Históriou} rozvrhu označujeme postupnosť operácií. 
+
+\emph{Konflikt-ekvivalentné} sú dve histórie, keď majú rovnaké operácie a poradie konfliktných operácií je rovnaké v oboch históriách. 
+
+Transakcia $T2$ \emph{číta} $X$ od transakcie $T1$ práve vtedy, keď existuje $w1(X)$ pred $r2(X)$,
+takéto operácie nazveme \emph{nepekné}. 
+
+\emph{View-ekvivalentné} sú dve histórie $H1$ a $H2$, ak 
+\begin{itemize}
+\item pre každú nepeknú dvojicu v $H1$ existuje rovnaká nepekná dvojica v $H2$ a
+\item a pre každý dátový objekt $X$ je posledný WRITE v rovnakých transakciách\footnote{Podmienka je nutná pre rozvrhy, ktoré majú viacero WRITEov na konci - také samozrejme nie sú serializovateľné}. 
+\end{itemize}
+Intuitívne sú dva rozvrhy view-ekvivalentné práve vtedy, keď majú rovnaký výsledok. 
+
+\paragraph{Triedy sériovateľnosti.}
+\begin{itemize}
+\item \emph{Sériové}. Žiadne dve transakcie sa neprekrývajú. Absolútne bezpečené, ibaže neefektívne (rýchle transakcie môžu čakať na jednu dlhú).
+\item \emph{Sériovateľné (Konflikt sériovateľné)}. Ak je konflikt-ekvivalentný nejakému sériovému rozvrhu. 
+\item \emph{View-sériovateľné}. Ak každý jeho prefix\footnote{Ak niekto vie, prečo \underline{každý} jeho prefix, a nie len celý rozvrh, tak mi prosím napíšte email.} je view-ekvivalentný nejakému sériovému rozvrhu. 
+\end{itemize}
+
+Viac v nasledujúcej sekcií \ref{test_seriovatelnosti}.
+
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Implementácia sériovateľnosti a obnoviteľnosti v transakčných systémoch} 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Testy sériovateľnosti}
+\label{test_seriovatelnosti}
+
+\emph{Precedenčný graf} rozvrhu je orientovaný graf na vrcholoch prislúchajúcich transakciám,
+pričom hrana z $T_i$ do $T_j$ existuje práve vtedy, keď $O_i$ a $O_j$ sú konfliktné operácie a $O_i$ je v rozvrhu pred $O_j$.  
+Podobným spôsobom vieme na základe relácie \emph{číta} z view-sériovateľnosti definovať precedenčný graf pre view-sériovateľné rozvrhy. 
+
+\paragraph{Veta.} Rozvrh je (konflikt) sériovateľný práve vtedy, keď jeho precedenčný graf je acyklický. Každé jeho topologické (čiastočné) usporiadanie (vrcholov=transakcií) je s ním konflikt-ekvivaletné.  
+
+Ale test view-sériovateľnosti je NP-ťažký problém\footnote{
+Rozmýšľam, prečo nestačí použiť rovnakú metódu precedenčného grafu. 
+}. 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Algoritmy izolácie, zámky, časové pečiatky, validácia}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
