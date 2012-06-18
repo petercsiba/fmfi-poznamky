@@ -1,0 +1,47 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[unicode]{hyperref}
+\usepackage{graphicx}
+
+\textwidth 6.5in
+\oddsidemargin 0.0in
+\evensidemargin 0.0in
+
+\title{Poznámky z Úvodu do databázových systémov - materiál na štátnice}
+\date{18.06.2012}
+\author{Peter Csiba, petherz@gmail.com, \url{https://github.com/Petrzlen/fmfi-poznamky}} 
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Úvod}   
+
+Tento text vysvetľuje netriviálne a nejasné pasáže z predmetu Úvod do diskrétnej matematiky,
+prípadne patchuje chyby v skriptách. 
+
+Autor si v matematike a hlavne jej diskrétnej a kombinatorickej časti naozaj verí. 
+
+Nakoniec poznamenajme, že autor sa snažil písať pravdu a len pravdu, keďže jeho odpoveď na záverečných skúškach vychádza z tototo materiálu.
+Ak čitateľ chce prispieť ku kvalite textu, nech autorovi napíše a ten mu udelí prístup do repozitára.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\section*{Referencie a odporúčaná literatúra}
+Obe skriptá sú v repozitáry. 
+
+\begin{itemize}                                
+\item Úvod do diskrétnych matematických štruktúr. Daniel Olejár a Martin Škoviera.
+\item Úvod do diskrétnych štruktúr. Eduard Toman, BRATISLAVA 2008.
+\end{itemize}
+
+\end{document}
