@@ -1,0 +1,482 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[unicode]{hyperref}
+\usepackage{graphicx}
+
+\textwidth 6.5in
+\oddsidemargin 0.0in
+\evensidemargin 0.0in
+
+\title{Poznámky z Kombinatorických štruktúr}
+\date{17.01.2013}
+\author{Peter Csiba, petherz@gmail.com, \url{https://github.com/Petrzlen/fmfi-poznamky}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Úvod}
+
+Autor neabsolvoval prednášky ani skúšku z predmetu Kombinatorické štruktúry.
+Poznámky sú voľným prepisom poznámok Martina Šrámeka doplnených o komentár autora. 
+
+Nakoniec poznamenajme, že autor sa snažil písať pravdu a len pravdu, keďže jeho odpoveď na skúškach vychádza z tototo materiálu.
+Ak čitateľ chce prispieť ku kvalite textu, nech autorovi napíše a ten mu udelí prístup do repozitára. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Latinské štvorce}
+\begin{itemize}
+\item $n \times n$
+\item $\{1,\ldots,n\} = X$
+\item Každý riadok aj stĺpec je permutácia. 
+\end{itemize}
+
+
+\begin{itemize}
+\item $S_n$ sym. grupa $n!$
+\item $\Phi, \Psi$ - permutacie na $X$
+\item $\Phi, \Psi$ su \emph{dis...ntne} na $Y$ ak $\forall x \in Y \Psi(x) \neq \Phi(x)$
+\item $\Phi, \Psi$ su \emph{dis...ntne} $\Leftrightarrow$ su dis...ntne na $X$
+\end{itemize}
+
+\paragraph{Poznamky.}
+\begin{itemize}
+\item Latinsky stvorec - maximalny latinsky obdlznik.
+\item Maximalna mnoznina navzajom maximalne vzdialencyh permutacii. 
+\end{itemize}
+
+\subsection{Metrika medzi permutaciami}
+\subsubsection{Vseobecna metrika}
+\begin{itemize}
+\item $S(x,y)=0 \Leftrightarrow x=y$
+\item $S(x,y)=S(y,x)$
+\item $S(x,y)+S(y,z) \geq S(x,z)$
+\end{itemize}
+\footnote{
+Podla pravidla o generalizacii kde nedavame kvantifikatory, tak su vseobecne.
+}
+
+\subsubsection{Metricky system permutacii}
+\begin{itemize}
+\item $S(\Psi, \Phi)$ - max pocet prvkov mnoziny $Y \subseteq X$ pri ktorej $\Psi$ a $\Phi$ su dis...ntne.
+\item $S(\Psi, \Phi) = |\{x \in X, \Psi(x) \neq \Phi(x)\}|$
+\item $S(\Psi, \Phi) = S(\Phi^{-1}\Psi, id)$
+\end{itemize}
+
+\subsection{Hallova veta}
+Latinsky stvorec je maximalna mnozina dis...permutacii z $S_n$. $L_n = [\Phi_1, \ldots, \Phi_n]$.
+\paragraph{Hallova veta.}
+Nech $(X_1, \ldots, X_k)$ je system mnozin $X_i \subseteq X$. $T \subseteq X$ je system rozlicnych reprezentantov ak $T=[x_1, \ldots, x_k], x_i \in X_i, x_i \neq x_j$ pre $i \neq j$. Potom system $X$ ma system rozlicnych reprezentantov $\Leftrightarrow$ pre kazdy system mnozin $Y \subseteq X$ plati $|\cup Y_i| \geq |Y|$.
+
+\paragraph{Veta.}
+Kazdy latinsky obdlznik sa da doplnit na stvorec. Lebo Hallova veta. 
+
+\subsection{Normalizovane LS}
+\begin{tabular}{l c r}
+1 & 2 & \ldots \\
+2 & & \\
+3 & & \\
+\ldots & & \\
+\end{tabular}
+
+\subsection{Ortogonalne LS}
+\begin{itemize}
+\item $L_n = [\Phi_1, \ldots \Phi_n]$ jeden LS
+\item $L_n' = [\Phi_1, \ldots \Phi_n]$ sruhy LS
+\item $L_n \perp L_n' \Leftrightarrow (i,j) \neq (k,l) \in X \times X$ plati $(\Phi_i(j), \Phi_i'(j)) \neq (\Phi_k(l), \Phi_k'(l))$
+\item Tj. vsetky dvojice $(i,j)$. 
+\end{itemize}
+
+\paragraph{Vlastnosti 1-2.}
+\begin{itemize}
+\item $L_n \perp L_n' \Leftrightarrow L_n \cdot L_n'$ je LS.
+\item Ak $L_n \perp L_n' \Rightarrow \forall \Phi, \Psi \in S_n: \Psi L_n \perp \Phi L_n' \wedge L_n \Psi \perp L_n' \Phi$.
+\end{itemize}
+
+\subsection{Polonormalizovane LS}
+$[id, \Phi_2, \ldots, \Phi_n]$. 
+\paragraph{Vlastnost 3.}
+Nech $L_n^{(1)}, \ldots ,L_n^{(r)}$ je mnozina navzajom $\perp$ LS. Potom $r \leq n-1$. 
+TODO - polonormalizovane prelozene cez seba. 
+
+\subsection{Uplna mnozina.}
+\paragraph{Uplna mnozina.}
+Uplna mnozina $L_n^{(1)}, \ldots ,L_n^{(n-1)}$ je mnozina $n-1$ LS.
+
+\paragraph{Sievers.}
+Nech $n=p^r$, kde $p$ je prvocislo a $n \geq 1$. Potom existuje uplna mnozina $(n-1)$ navzajom ortogonalnych LS radu $n$.
+TODO - $\exists GF(n) = F$, technicky sporom. 
+
+\section{Vyvazene blokove plany}
+\paragraph{$(v,k,\lambda)$-konfiguracia.}
+\begin{itemize}
+\item $X = \{x_1, \ldots, x_v\}$ - body.
+\item System podmnozin $B = {X_1, \ldots, X_n}$ - bloky. 
+\item 1. $|X_i|=k$ (konst)
+\item 2. $X_i \cap X_j = \lambda$ (konst) $i \neq j$.
+\item 3. $0 < \lambda < k < v-1$
+\end{itemize}
+\paragraph{Incidencna matica.}
+$A=(a_{ij}), a_{ij} = 1 \Leftrightarrow x_j \in X_i$
+\paragraph{Jednotkova matica.}
+$J=(1)$
+\subsection{Vlastnosti}
+\begin{enumerate}
+\item $AJ = kJ$
+\item $AA^T = \lambda J + (k-\lambda)I$
+\item $det(AA^T)=(det A)^2=[k + \lambda(v-1)](k-\lambda)^{v-1} > 0$, TODO, rozvoj podla riadka
+\item $k(k-1) = \lambda(v-1)$, TODO, z $AA^T$ na $JAJ$. 
+\item $JA=AJ=kJ$, TODO
+\item $AA^T=A^TA$, zamenitelnost blokov a bodov, TODO
+\end{enumerate}
+
+\subsection{Bruck, Ryser}
+Nutne podmienky na existenciu $(v,k,\lambda)$ konfiguracie:
+
+\begin{itemize}
+\item $v$ je parne, tak $k-\lambda$ je stvorec
+\item $v$ je neparne, $z^2 = (k-\lambda)x^2 + (-1)^{\frac{v-1}{2}}\lambda yz$ ma nenulove riesenie v $\mathbb{Z}$. 
+\end{itemize}
+
+\subsection{Diferencne mnoziny}
+Specialny pripad. 
+
+\subsubsection{Definovane na $\mathbb{Z}_v$}
+$\mathbb{Z}_v \supseteq D = \{d_1, \ldots, d_k\}$, ak kazdy prvok $a \in \mathbb{Z}_v - {0}$ sa da vyjadrit $\lambda$ roznymi sposobmi ako rozdiel dvoch prvkov z $D$. 
+\paragraph{Konstrukcia.}
+\begin{itemize}
+\item $X=\mathbb{Z}_v$
+\item $X_i = D + i$
+\end{itemize}
+Napriklad $X=\mathbb{Z}_7, D=\{1,2,4\}$ dava $[1,2,4],[2,3,5],[3,4,6],[4,5,0],[5,6,1],[6,0,2],[0,1,3]$ - Fannova rovina $(7,3,1)$. 
+
+\subsubsection{Definovane na grupach}
+Nech $G$ je konecna grupa radu $v$, nie nutne komutativna. Mnozina $D = \{d_1, \ldots, d_k\} \subseteq G$ sa nazyva DM zalozena na $G$, ak je splnena jedna z dvoch podmienok: 
+
+\begin{itemize}
+\item $\forall a \neq e \, \exists_\lambda (d_i, d_j), i\neq j : a = d_id_j^{-1}$
+\item $\forall a \neq e \, \exists_\lambda (d_i, d_j), i\neq j : a = d_i^{-1}d_j$
+\end{itemize}
+
+\paragraph{Tvrdenie.} 
+Kazda $(v,k,\lambda)$ dif. mnozina zalozena na $G$ definuje $(v,k,\lambda)$ konfiguraciu:
+\begin{itemize}
+\item $X = G$
+\item $B=\{Dg, g \in G\}$
+\end{itemize}
+TODO
+
+\paragraph{Priklad.}
+$(16,6,2)$-konfiguracia. 
+\begin{itemize}
+\item $G=\mathbb{Z}_4$
+\item $D=\{(1,0,0,0),(0,1,0,0),(0,0,1,0),(0,0,0,1),(1,1,0,0),(0,0,1,1)\}$
+\end{itemize}
+
+\section{Hadamardove matice}
+Len strucne. Nechcelo sa mi texovat matice. 
+$H_n = (a_{ij})$
+\begin{itemize}
+\item (i) $a_{ij} = \pm 1$
+\item (ii) $HH^T = nI$ - navzajom ortogonalne, maximalny objem spomedzi jednotkovych
+\end{itemize}
+
+\subsection{Vlastnosti}
+\paragraph{Zakladne.}
+\begin{enumerate}
+\item $<H_i, H_j> = n$ ak $i=j$, $0$ ak $i\neq j$. Len iny zapis (ii)
+\item $H$ je uzavreta na vymeny riadkov a stlpcov, nasobenie $-1$
+\item Kazda $H$ je normalna, tj. $HH^T = H^TH$.
+\item Kazdu $H$ maticu je mozne previest na normalnu - prvy riadok a prvy stlpec ma same 1. 
+\end{enumerate}
+
+\paragraph{Delitelnost 4.}
+$n=1 or n=2 or 4|n$. Normalizacia. Spocitame kolko je typov stlpcov podla prvych torch riadkov. 
+
+\subsection{Konstrukcie}
+\subsubsection{Sylvestrova}
+\begin{tabular}{c c}
+$H$ & $H$ \\
+$H$ & $-H$ \\
+\end{tabular}
+\subsubsection{Kroneckerov sucin}
+\begin{tabular}{c c c}
+$a_{11}H$ & \ldots & $a_{1n}H$ \\
+\ldots & \ldots & \ldots \\
+$a_{n1}H$ & \ldots & $a_{nn}H$ 
+\end{tabular}
+
+\subsection{Hadamarova hypoteza}
+Pre kazde $n$ delitene 4 existuje matica.
+Nezname su pre 168,224,284,312. (Najdi bug).  
+
+\subsection{Ekvivalencia s blokovymi planmi}
+Normalizovane $H$ matice su ekvivalentne s $(4n-1, 2n-1, n-1)$-konfiguraciami. 
+TODO: Trivialne. 
+
+\paragraph{Kvadraticke rezidua.}
+TODO. Kvadraticke rezidua -> Diferencna mnozina -> Hadamardova matica. 
+
+\section{Konecne projektivne roviny}
+Uz len to najdolezitejsie. 
+\begin{itemize}
+\item $V_{n+1}(F) = F^{n+1} - {0}$
+\item (PP1) Kazdymi dvoma bodmi vedie prave jedna priamka.
+\item (PP2) Kazde dve priamky maju prave jeden spolocny bod. 
+\item (PP3) Existuju styri rozne body vo vseobecnej polohe (ziadne tri z nich nie su kolinearne)
+\end{itemize}
+
+\paragraph{Priklady.}
+\begin{itemize}
+\item Polgula kde stotoznime priamky cez s bodmi na obale. 
+\item $\mathbb{Z}_2^3 - {0}$
+\item Znizenim dimenzie. Stotoznime body $y = kx, k \in F$.
+\end{itemize}
+
+\subsection{Desarguesova veta}
+Ak sú trojuholníky $T1, T2$ perspektivne z bodu $S$, tak su perspektivne aj z priamky. 
+
+\subsection{Vlastnosti}
+Nech $n\geq 2, \Pi $ je projektivna geometria. NPSE:
+\begin{enumerate}
+\item Nejaka priamka obsahuje prave $n+1$ bodov.
+\item Nejakym bodom prechadza prave $n+1$ priamok. 
+\item Kazda priamka obsahuje presne $n+1$ bodov. 
+\item Kazdym bodom prechadza $n+1$ priamok.
+\item V $\Pi$ sa nachadza presne $n^2+n+1$ bodov. 
+\item V $\Pi$ sa nachadza presne $n^2+n+1$ priamok. 
+\end{enumerate}
+
+\paragraph{Oznacenie.}
+$n$-rad projektivnej roviny
+
+\subsection{$(v,k,\lambda)$-konfiguracie}
+Kazda projektivna rovina, ktora ma na nejakej priamke konecny pocet bodov definuje $(v, k, \lambda)$-konfiguraciu:
+\begin{itemize}
+\item $v=n^2+n+1$ - body
+\item $k=n+1$ - priamka obsahujuca body
+\item $\lambda=1$ - prisecniky priamok
+\end{itemize}
+
+\subsection{Existencia projektivnej roviny}
+\paragraph{Tvrdenie.}
+Pre existenciu proj. roviny radu $n$ je nutne, aby pre $n \equiv 1,2 (\textrm(mod) 4)$ existovali $a,b$, take, ze $n = a^2+b^2$. Bez dokazu. 
+
+\paragraph{Hypoteza.}
+PR radu $n$ existuje iba pre $n=p^r$. 
+
+\subsection{Ortonormalne latinske stvorce}
+\paragraph{Latinska vlastnost.}
+Matica $C=(c_{ij})$ rozmerov $n \times (t+2)$ ma \emph{latinsku vlastnost}, ak $(c_{ik}, c_{il}) \neq (c_{jk}, c_{jl})$. 
+\paragraph{Lema.}
+Nech $n \geq 3$ a $t \geq 2$ su z $\mathbb{N}$. Potom mnozina $t$ navzajom roznych ortogonalnych latinskych stvorcov radu $n$ existuje $\Leftrightarrow$ existuje matica $C=(c_{ij})$, $n\times (t+2)$ s latinskou vlastnostou. 
+TODO. Ake su rozmery matice v dokaze? 
+
+\paragraph{Veta.}
+Ak existuje mnozina $t$ navzajom ortogonalnych LS radu $n$ a mnozina $t$ ortogonalnych LS radu $m$, tak existuje aj mnozina $t$ OLS radu $nm$.
+
+\paragraph{Dosledok.} $n = p^{\alpha_1} \ldots p^{\alpha_k}$.
+
+\subsubsection{LS a PR}
+\paragraph{Veta.}
+Nech $n \geq 3$. Potom PR radu $n$ existuje $\Leftrightarrow$ existuje $n-1$ navzajom ortogonalnych LS radu $n$. 
+
+$\Rightarrow$. Fixujeme jednu priamku $X={x_1, \ldots, x_{n+1}}$. Zvysnych $n^2$ bodov oznacime $y_1,\ldots,y_{n^2}$. Priamky prechadzajuce $x_j$ oznacime postupne $L_{j1},\ldots,L_{jn}$. Potom $c_{ij}=k \Leftrightarrow y_i \in L_{jk}$. Sporom. 
+$\Leftarrow$. Majme $n-1$ OLS radu $n$ a skonstruujeme $C$ rozmerov $n^2 \times (n+1)$ s LV. Bod a hodnota v $C$ urcuju na ktorej priamke lezi $y_i \in L_{jk}$. 
+TODO. 
+
+\subsection{Singerove diferencne mnoziny}
+PG. Kvadraticke rezidua. Bikvadraticke rezidua. Tetrakvadraticke rezidua.
+
+
+\section{Nevyvazene blokove plany} 
+Nevyvazena $(b,r,v,k,\lambda)$-konfiguracia je system podmnozin-blokov $\{X_1, \ldots, X_b\}, X_i \subseteq X$, kde $X = \{x_1,\ldots, x_v\}$ a plati:
+\begin{enumerate}
+\item $|X_i|=k$
+\item $x_i$ sa vyskytuje prave v $r$ blokoch 
+\item $x_i, x_j$ sa spolocne vyskytuju v $\lambda$ blokoch 
+\item $0 < \lambda, k < v-1$ (netrivialnost)
+\end{enumerate}
+
+\paragraph{Steinerovske systemy trojic.}
+$k=3, \lambda=1$. 
+\paragraph{Graf $K_v^\lambda$.}
+Kompletny graf o $v$ vrcholoch s $\lambda$ nasobnymi hranami. $(b,r,v,k,\lambda)$-konfiguracia odpovedaju jej rozkladu. 
+
+\subsection{Vlastnosti}
+Incidencna matica $b \times v$.
+\begin{enumerate}
+\item $AJ_v = kJ_{b,v}$
+\item $J_bA = rJ_{b,v}$
+\item $AA^T = \lambda J_v - (r-\lambda)I_v$
+\item $bk = vr$. Zratame dvojice dvoma roznymi sposobmi. 
+\item $r(k-1)=\lambda (v-1)$. Zratame dvojice s fixnym prvkom. 
+\item $det(A^TA = (r + \lambda (v-1))(r-\lambda)^{v-1}$
+\item $b \geq v$ (Fischerova nerovnost). Dokaz z predoslych dvoch. Dosledok $r \geq k$.  
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Steinerovske systemy trojic}
+SST je dvojica $S = (P,B)$ kde 
+\begin{itemize}
+\item $|P|=v$
+\item $B$ ke system trojprvkovych podmnozin $P$ takych, ze $\forall \{x_i, x_j\} \in {P \over 2}$ patri prave do jednej trojice. 
+\end{itemize}
+Zjavne blokovy plan je $k=3$ a $\lambda=1$. Mozeme nahliadnut na SST ako na rozklad $K_v$ na $K_3$. 
+
+\subsection{Veta Kirkman}
+\paragraph{Tvrdenie.} 
+Nutne $v \equiv 1,3 (\textrm{mod} 6)$
+\paragraph{Veta.} 
+Pre kazde $v \equiv 1,3 (\textrm{mod} 6)$ existuje SST. $N(v) \geq (e^{-5}v)\frac{v^2}{6}$.
+Bez dokazu.
+
+\subsection{Konstrukcie}
+\subsubsection{Projektivne SST}
+\begin{itemize}
+\item $\mathbb{Z}_2^{n+1} - {0}$ -> body $PG(2,n)$
+\item bloky $\{x,y,z\}$, $x+y+z = 0$ -> priamky v PG(2,n)
+\end{itemize}
+TODO
+
+\subsubsection{Afinne SST}
+\begin{itemize}
+\item $\mathbb{Z}_3^{n}$ - body $AG(3,n)$
+\item bloky $\{x,y,z\}$ - priamky v PG(2,n)
+\end{itemize}
+TODO
+
+
+\subsubsection{Priamy sucin SST}
+\begin{itemize}
+\item $R=(P,B)$
+\item $S=(Q,C)$
+\item $R \times S = (P \times Q, D)$
+\end{itemize}
+
+D obsahuje bloky v jednom z troch tvarov.
+TODO
+
+\subsubsection{$2n+1$ konstrukcia}
+TODO
+
+\subsubsection{Wilsonova-Schreiberova konstrukcia}
+\begin{itemize}
+\item Abelovska grupa $A$ radu $n$.
+\item $P=A \cup \{\alpha, \beta\}$
+\item TODO
+\item TODO
+\end{itemize}
+
+\subsection{Ciastocny SST}
+Pozadujeme, aby kazda dvojica bodov bola nanajvys v jednej trojici. 
+\paragraph{Tvrdenie.} Kazdy SST sa da (s pridanim nejakeho poctu bodov) doplnit na SST. TODO: niekde chyba ciastocny. 
+
+\subsection{T-design}
+Steinerovsky system $S(t,k,n)$ je $t$-blokovy plan, taky, ze $\lambda=1$. (System $k$-prvkovych podmnozin $n$-prvkovej mnoziny taky, ze kazda $t$-prvkova podmnozina je obsiahnuta v prave jednom bloku.) Navyse musi platit $1 < t < k < n$.
+\subsubsection{Steinerovske systemy stvoric}
+$S(3,4,n)$
+\subsubsection{Steinerovske systemy petic}
+$S(4,5,n)$
+
+\subsection{Projektivne specialne linearne grupy}
+$k$-tranzitivita, ostra $k$-tranzitivita. TODO.
+
+\paragraph{Tvrdenie (Klasifikacia $K \cup G$).}
+TODO
+
+\subsubsection{Mathieuove grupy}
+TODO
+
+\section{Symetricke konfiguracie} 
+\begin{itemize}
+\item Kazdym bodom prechadza $k$ priamok (kazdy bod je v $k$ blokoch)
+\item Kazda priamka prechadza $k$ bodmi (velkost bloku je $k$)
+\end{itemize}
+
+\subsection{Napriklad}
+\begin{itemize}
+\item $7_3$ - Fannova rovina
+\item $8_3$ - Mobius-Kantor
+\item $9_3$ - Pappus z Alexandrie
+\item $10_3$ - Desargues
+\item $15_3$ - Cremona-Richmond
+\end{itemize}
+TODO 
+
+\section{Matroidy}
+Axiomatizacia linearnej nezavislosti. 
+
+\subsection{Definicia}
+\begin{itemize}
+\item $X$ - konecnorozmerny vektorovy priestor. 
+\item $A \subseteq X$ - nezavisla mnozina vektorov. 
+\item (i) $A < \textrm{alef}_0$
+\item (ii) $A$ je LN $\Rightarrow A' \subseteq A$ je LN 
+\item (iii) $\emptyset$ je LN (trivialny dosledok (ii))
+\item (iv) $|A_1| < |A_2| \Rightarrow \exists x\in A_2 - A_1 : A_1 \cup \{x\}$ je LN
+\end{itemize}
+
+\paragraph{Matroid.}
+Nech $X$ je konecna mnozina, $N \subseteq P(X)$. Potom $(X,N)$ je matroid, ak plati: 
+\begin{itemize}
+\item N0) $\emptyset \in N$
+\item N1) $\forall A \in N: A' \subseteq A \Rightarrow A' \subseteq N$ (dedicnost)
+\item N2) $\forall A,B \in N: |A|<|B| \Rightarrow \exists x \in B-A : A \cup {x} \in N$. 
+\end{itemize}
+
+\subsection{Specialne matroidy} 
+\paragraph{Linearny matroid.} 
+\begin{itemize}
+\item $V = \{ R_1, \ldots, R_n\}$ vektory nad polom $F$. 
+\item Nech $X = \{1, \ldots, n\}$
+\item $\forall A: A \subseteq X \Rightarrow (A \in N \Leftrightarrow \{R_i, i \in A\}$ je LN)
+\item Potom $(Xn, N)$ je \emph{linearny matroid}. 
+\end{itemize}
+
+\paragraph{Grafovy matroid.}
+\begin{itemize}
+\item $X = E(G)$
+\item $A$ je acyklicka
+\end{itemize}
+
+\subsection{Vlastnosti} 
+\paragraph{Tvrdenie.} Nech $N_1, N_2$ su maximalne matroidy vzhladom na inkluziu. Potom $|N_1|=|N_2|$. 
+
+\paragraph{Baza matroidu.} Bazou matroidu nazyvame kazdu maximalnu nezavislu mnozinu vzhladom na inkluziu. 
+
+
+\paragraph{Veta.} Nech $(X, S)$ je lubovolny system (asi ze $S \subseteq P(X)$). NPSE: 
+\begin{itemize}
+\item $(X,S)$ je matroid. 
+\item $S$ je neprazdny dedicny system (t.j. NO, N1) splnajuci podmienku N2': $\forall A \subseteq X : \forall $ maximalne $B \subseteq A, B \in S$ maju rovnaku mohutnost. Dokaz: ked nie, tak vieme doplnit. 
+\end{itemize}
+
+\subsection{Hodnotova funkcia} 
+$r_u : P(X) \rightarrow \mathbb{N}, r_u(A) = $ najvecsia mohutnost nezavislej mnoziny v $A$. 
+
+\paragraph{Veta.} Nech $M=(X,N)$ je matroid, $r$ je hodnotova funkcia. Potom plati: 
+\begin{itemize}
+\item 
+\item
+\item
+\end{itemize}
+
+\begin{itemize}
+\item
+\item
+\end{itemize}
+
+\begin{itemize}
+\item
+\item
+\end{itemize}
+
+\end{document}
