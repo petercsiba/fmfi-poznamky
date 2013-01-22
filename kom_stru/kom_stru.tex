@@ -285,7 +285,10 @@ PR radu $n$ existuje iba pre $n=p^r$.
 \paragraph{Latinska vlastnost.}
 Matica $C=(c_{ij})$ rozmerov $n \times (t+2)$ ma \emph{latinsku vlastnost}, ak $(c_{ik}, c_{il}) \neq (c_{jk}, c_{jl})$. 
 \paragraph{Lema.}
-Nech $n \geq 3$ a $t \geq 2$ su z $\mathbb{N}$. Potom mnozina $t$ navzajom roznych ortogonalnych latinskych stvorcov radu $n$ existuje $\Leftrightarrow$ existuje matica $C=(c_{ij})$, $n\times (t+2)$ s latinskou vlastnostou. 
+Nech $n \geq 3$ a $t \geq 2$ su z $\mathbb{N}$. Potom mnozina $t$ navzajom roznych ortogonalnych
+latinskych stvorcov radu $n$ existuje $\Leftrightarrow$ existuje matica $C=(c_{ij})$, $n^2\times (t+2)$ s latinskou vlastnostou.
+Usamec: Robi sa to tak, ze do prvych dvoch stlpcov vypises veci $(1,1), (1, 2), \dots, (1, n),
+\dots, (n,n)$, do dalsich tie stvorce pod seba. Potom je obvious.
 TODO. Ake su rozmery matice v dokaze? 
 
 \paragraph{Veta.}
@@ -295,7 +298,8 @@ Ak existuje mnozina $t$ navzajom ortogonalnych LS radu $n$ a mnozina $t$ ortogon
 
 \subsubsection{LS a PR}
 \paragraph{Veta.}
-Nech $n \geq 3$. Potom PR radu $n$ existuje $\Leftrightarrow$ existuje $n-1$ navzajom ortogonalnych LS radu $n$. 
+Nech $n \geq 3$. Potom PR radu $n$ existuje $\Leftrightarrow$ existuje $n-1$ navzajom ortogonalnych LS radu $n$.
+Dobry dokaz tu: \url{http://www.math.cornell.edu/~web4520/CG10-0.pdf}
 
 $\Rightarrow$. Fixujeme jednu priamku $X={x_1, \ldots, x_{n+1}}$. Zvysnych $n^2$ bodov oznacime $y_1,\ldots,y_{n^2}$. Priamky prechadzajuce $x_j$ oznacime postupne $L_{j1},\ldots,L_{jn}$. Potom $c_{ij}=k \Leftrightarrow y_i \in L_{jk}$. Sporom. 
 $\Leftarrow$. Majme $n-1$ OLS radu $n$ a skonstruujeme $C$ rozmerov $n^2 \times (n+1)$ s LV. Bod a hodnota v $C$ urcuju na ktorej priamke lezi $y_i \in L_{jk}$. 
