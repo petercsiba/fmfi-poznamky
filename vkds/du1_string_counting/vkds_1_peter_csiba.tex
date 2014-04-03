@@ -1,0 +1,147 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tabularx} 
+
+\usepackage{hyperref} 
+
+\lstset{
+language=sh
+,breaklines=true
+,basicstyle=\ttfamily
+, showstringspaces=false}
+
+\author{Peter Csiba}
+\textwidth 6.5in
+\oddsidemargin 0.0in
+\evensidemargin 0.0in
+
+\title{Chosen chapters from Data Structures - Assignment 1 - String couting in text}
+\date{3rd of April, 2014}
+\author{Peter Csiba, petherz@gmail.com}
+
+\begin{document}
+\maketitle
+
+\section*{Introduction}
+
+\paragraph{Task.}
+Podľa \url{http://compbio.fmph.uniba.sk/vyuka/vpds/index.php/S\%C3\%BAbor:Du.pdf}:
+
+Cieľom tejto domácej úlohy je porovnať rýchlosť rôznych dátových štruktúr pre náhodné aj
+reálne dáta. Samotné dátové štruktúry implementujte v jazyku C++ alebo Java. Na spracovanie
+výsledkov, generovanie vstupov a pod. môžete použiť aj iné jazyky alebo programy.
+
+Implementujte tri verzie tejto štruktúry:
+\begin{enumerate} 
+\item \emph{Nevyvažovaný binárny vyhľadávací strom}, ktorý má ako kľúče slová a ako hodnoty počet výskytov. Ako pomôcku môžete použiť prednášku z prváckeho programovania: \url{http://compbio.fmph.uniba.sk/vyuka/prog/index.php/Prednáška_21} 
+\item \emph{Splay strom}. Použite pseudokód operácie splay uvedený v článku Sleator, Daniel Dominic, and Robert Endre Tarjan. "Self-adjusting binary search trees."Journal of the ACM (JACM) 32.3 (1985): 652-686 na strane 666 (pseudokód rotácie je na d’alšej strane). V každom vrchole si ukladajte smerník na rodič a. Operáciu splay(x) vykonajte po každej operácii add(w), pričom ju aplikujete na vrchol x, v ktorom je uložené slovo w.
+\item \emph{Vyhľadávací strom} zo štandardných knižníc vášho jazyka (napr. map v knižnici STL pre C++ alebo TreeMap v Jave). Požadované funkcie implementujte ako vhodnú kombináciu metód poskytovaných knižničnou štruktúrou.
+\end{enumerate} 
+
+\paragraph{Our approach.} 
+We have chosen the C++ programming language as we are used to it to implement algorithms and data structures. Maybe if other languages would be allowed then we would go for them so we could learn something new. 
+
+We implemented the BinSearchTree, SplayTree and STLTree structures\footnote{See string_counting.cpp for the implementation.
+} and made experiments which test them on various texts such as books and random texts. We evaluate and compare their performance in terms of running time and comparison count. In the end we tried to backup with data an intuitive hypothesis: "More frequent words are closer to the root in SplayTree". 
+
+
+\section{Human--written texts} 
+\subsection{Introduction.} 
+We evaluated two key metrics:
+\begin{itemize} 
+\item \emph{Time} - number of microsecond between the first and the last insertion. It's measured on an \textregistered{Intel} Core^{TM} i5 processor (no paralelism used for execution). 
+\item \emph{Comparisons} - number of comparisons in the measured data structure between the first and the last insertion. 
+\end{itemize}
+
+Command to compile: 
+\begin{lstlisting}
+g++ -o string_counting -Wall -O2 string_counting.cpp
+\end{lstlisting}
+
+The two texts were the first 20,000 words of books "ALICE'S ADVENTURES IN WONDERLAND" by Lewis Carroll which we would reference as \emph{alice} and "THE ORIGIN OF SPECIES BY MEANS OF NATURAL SELECTION" by Charles Darwin which we would reference as \emph{darwin}. Note that both texts have "free--to--use" licenses. 
+
+\subsection{Results.} 
+\paragraph{Most frequent words "alice":}
+\begin{lstlisting}
+1066 the
+651 and
+565 to
+487 a
+477 it
+453 she
+438 i
+358 of
+304 alice
+297 said
+290 was
+286 you
+271 in
+\end{lstlisting}
+There were 13 words with at least 250 occurences and 2165 words in total. 
+For the complete list see file "out/freq_StlTree_0.txt". 
+
+\paragraph{Most frequent words "darwin":}
+\begin{lstlisting}
+1313 the
+1018 of
+563 and
+560 in
+440 to
+299 a
+283 that
+\end{lstlisting}
+There were 7 words with at least 250 occurences and 3089 words in total. 
+For the complete list see file "out/freq_StlTree_1.txt". 
+
+\paragraph{Performance comparison.} 
+\begin{tabular}{|l|l|l|l|}
+\hline
+Filename&Data structure&Time&Comparison\\
+\hline
+in/1\_alice.txt&BSTree&5970&190852\\
+\hline
+in/1\_alice.txt&SplayTree&9194&189084\\
+\hline
+in/1\_alice.txt&StlTree&7417&233566\\
+\hline
+in/2\_darwin.txt&BSTree&7612&205485\\
+\hline
+in/2\_darwin.txt&SplayTree&11180&198494\\
+\hline
+in/2\_darwin.txt&StlTree&6196&246227\\
+\hline
+\end{tabular}
+
+\subsection{Analysis.} 
+
+\section{Machine--generate texts} 
+\subsection{Introduction.} 
+
+We implemented a random text generator with parameters: 
+\begin{itemize}
+\item $z$ - word count. 
+\item $L$ - word lengts. Each word has the same length. 
+\item $\sigma$ - number of symbols in the alphabet. 
+\end{itemize}
+
+\subsection{Results.} 
+
+\subsection{Analysis.} 
+
+\section{SplayTree depth to word frequencies}
+\subsection{Introduction.} 
+
+\subsection{Results.} 
+
+\subsection{Analysis.} 
+
+\section*{Conclusion} 
+
+\end{document}
+
