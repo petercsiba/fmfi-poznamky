@@ -21,8 +21,8 @@ using namespace std;
 typedef pair<string, int> PSI; 
 typedef pair<int, int> PII; 
 typedef unsigned long long int uLLI; 
+typedef long long int LLI; 
 
-#define MAX_WORDS 20000
 #define PRINT_K 250 
 #define FREQ_K 10 
 
@@ -334,7 +334,7 @@ class STLTree : public CountingDictionary{
     map<string, int, compare_counting_bool> dict; 
 };
 
-vector<string> read_words(string filename, int max_words){
+vector<string> read_words(string filename){
   ifstream filestream(filename.c_str()); 
   
   string line = ""; 
@@ -351,10 +351,6 @@ vector<string> read_words(string filename, int max_words){
         words.push_back(word); 
         word = ""; 
       }
-      
-      if(INT(words.size()) >= max_words) {
-        break; 
-      }
     }
   }
   
@@ -368,7 +364,7 @@ void experiment_B(){
 
   REP(in_i, INPUTS_SIZE){
     string filename = INPUTS[in_i]; 
-    vector<string> words = read_words(filename, MAX_WORDS); 
+    vector<string> words = read_words(filename); 
 
     vector<CountingDictionary*> dictionaries;
     dictionaries.push_back(new BinarySearchTree());
@@ -390,6 +386,7 @@ void experiment_B(){
       cout << "  Writing out most " <<  PRINT_K << " frequent words" << endl;
       vector<PSI> TF; 
       dict->frequent(TF, PRINT_K); 
+      sort(TF.begin(), TF.end()); 
       freq_top << "=================file=" << filename << "\t" << "structure=" << dict_names[dict_i] <<  endl; 
       freq_top << "  count=" << TF.size() << endl;
       REP(f_i, INT(TF.size())) freq_top << TF[f_i].first << " " << TF[f_i].second << endl; 
@@ -401,6 +398,7 @@ void experiment_B(){
       ofstream ffreq(filename_freq.c_str());
       cout << "  Writing out word frequencies to file=" << filename_freq << endl;
       cout << "  count=" << F.size() << endl; 
+      sort(F.begin(), F.end()); 
       REP(f_i, INT(F.size())) ffreq << F[f_i].first << " " << F[f_i].second << endl; 
 
       cout << "  Deleting" << endl;      
@@ -422,14 +420,22 @@ string random_string(int l, int s){
   return result; 
 }
 
-PII avg_std(vector<int> V){
-  long long int s = 0; 
+LLI bs_sqrt(LLI x, int from=0, int to=INF){
+  if(from + 1 >= to) return from; 
+  
+  LLI m = (from + to) / 2; // >0
+  if(m*m > x) return bs_sqrt(x, from, m);
+  else return bs_sqrt(x, m, to);  
+}
+
+PII avg_std(const vector<int>& V){
+  LLI s = 0; 
   REP(i, INT(V.size())) s+=V[i]; 
-  int avg = s / INT(V.size()); 
+  LLI avg = s / ((LLI)V.size()); 
   
   s=0; 
   REP(i, INT(V.size())) s += (V[i] - avg) * (V[i] - avg);
-  int std = ((int) sqrt((double)s)) / INT(V.size()); 
+  LLI std = bs_sqrt(s); 
   
   return pair<int, int>(avg, std); 
 }
@@ -500,7 +506,7 @@ void experiment_E(){
   cout << "==== Experiment E for " << filename << endl;
     
   REP(dict_i, 2){
-    vector<string> words = read_words(filename, INF); 
+    vector<string> words = read_words(filename); 
     vector<PII> FD; 
     
     REP(w_i, INT(words.size())) dicts[dict_i]->add(words[w_i]); 
@@ -519,8 +525,8 @@ int main(){
 
   //test_splay_tree(); 
   //experiment_B(); 
-  //experiment_C(); 
-  experiment_E(); 
+  experiment_C(); 
+  //experiment_E(); 
   
   return 0; 
 }
