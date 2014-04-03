@@ -1,5 +1,7 @@
 string_counting
 debug
+buf*
+*.pdf
 *.aux
 *.glo
 *.idx

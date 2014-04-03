@@ -8,6 +8,8 @@
 \usepackage{graphicx}
 \usepackage{tabularx} 
 
+\usepackage{amsmath} 
+
 \usepackage{hyperref} 
 
 \lstset{
@@ -40,22 +42,22 @@ výsledkov, generovanie vstupov a pod. môžete použiť aj iné jazyky alebo pr
 Implementujte tri verzie tejto štruktúry:
 \begin{enumerate} 
 \item \emph{Nevyvažovaný binárny vyhľadávací strom}, ktorý má ako kľúče slová a ako hodnoty počet výskytov. Ako pomôcku môžete použiť prednášku z prváckeho programovania: \url{http://compbio.fmph.uniba.sk/vyuka/prog/index.php/Prednáška_21} 
-\item \emph{Splay strom}. Použite pseudokód operácie splay uvedený v článku Sleator, Daniel Dominic, and Robert Endre Tarjan. "Self-adjusting binary search trees."Journal of the ACM (JACM) 32.3 (1985): 652-686 na strane 666 (pseudokód rotácie je na d’alšej strane). V každom vrchole si ukladajte smerník na rodič a. Operáciu splay(x) vykonajte po každej operácii add(w), pričom ju aplikujete na vrchol x, v ktorom je uložené slovo w.
+\item \emph{Splay strom}. Použite pseudokód operácie splay uvedený v článku Sleator, Daniel Dominic, and Robert Endre Tarjan. \emph{Self-adjusting binary search trees.} Journal of the ACM (JACM) 32.3 (1985): 652-686 na strane 666 (pseudokód rotácie je na d’alšej strane). V každom vrchole si ukladajte smerník na rodič a. Operáciu splay(x) vykonajte po každej operácii add(w), pričom ju aplikujete na vrchol x, v ktorom je uložené slovo w.
 \item \emph{Vyhľadávací strom} zo štandardných knižníc vášho jazyka (napr. map v knižnici STL pre C++ alebo TreeMap v Jave). Požadované funkcie implementujte ako vhodnú kombináciu metód poskytovaných knižničnou štruktúrou.
 \end{enumerate} 
 
 \paragraph{Our approach.} 
 We have chosen the C++ programming language as we are used to it to implement algorithms and data structures. Maybe if other languages would be allowed then we would go for them so we could learn something new. 
 
-We implemented the BinSearchTree, SplayTree and STLTree structures\footnote{See string_counting.cpp for the implementation.
-} and made experiments which test them on various texts such as books and random texts. We evaluate and compare their performance in terms of running time and comparison count. In the end we tried to backup with data an intuitive hypothesis: "More frequent words are closer to the root in SplayTree". 
+We implemented the BinSearchTree, SplayTree and STLTree structures\footnote{See string\_counting.cpp for the implementation.
+} and made experiments which test them on various texts such as books and random texts. We evaluate and compare their performance in terms of running time and comparison count. In the end we tried to backup with data an intuitive hypothesis: \emph{More frequent words are closer to the root in SplayTree}. 
 
-
+%========================== EXPERIMENT B =========================
 \section{Human--written texts} 
-\subsection{Introduction.} 
+\subsection{Introduction} 
 We evaluated two key metrics:
 \begin{itemize} 
-\item \emph{Time} - number of microsecond between the first and the last insertion. It's measured on an \textregistered{Intel} Core^{TM} i5 processor (no paralelism used for execution). 
+\item \emph{Time} - number of microsecond between the first and the last insertion. It's measured on an \textregistered{Intel} $Core^{TM}$ i5 processor (no paralelism used for execution). 
 \item \emph{Comparisons} - number of comparisons in the measured data structure between the first and the last insertion. 
 \end{itemize}
 
@@ -64,10 +66,10 @@ Command to compile:
 g++ -o string_counting -Wall -O2 string_counting.cpp
 \end{lstlisting}
 
-The two texts were the first 20,000 words of books "ALICE'S ADVENTURES IN WONDERLAND" by Lewis Carroll which we would reference as \emph{alice} and "THE ORIGIN OF SPECIES BY MEANS OF NATURAL SELECTION" by Charles Darwin which we would reference as \emph{darwin}. Note that both texts have "free--to--use" licenses. 
+The two texts were the first 20,000 words of books \emph{ALICE'S ADVENTURES IN WONDERLAND} by Lewis Carroll which we would reference as \emph{alice} and \emph{THE ORIGIN OF SPECIES BY MEANS OF NATURAL SELECTION} by Charles Darwin which we would reference as \emph{darwin}. Note that both texts have \emph{free--to--use} licenses. 
 
-\subsection{Results.} 
-\paragraph{Most frequent words "alice":}
+\subsection{Results} 
+\paragraph{Most frequent words \emph{alice}:}
 \begin{lstlisting}
 1066 the
 651 and
@@ -84,9 +86,9 @@ The two texts were the first 20,000 words of books "ALICE'S ADVENTURES IN WONDER
 271 in
 \end{lstlisting}
 There were 13 words with at least 250 occurences and 2165 words in total. 
-For the complete list see file "out/freq_StlTree_0.txt". 
+For the complete list see file \emph{out/freq\_StlTree\_0.txt}. 
 
-\paragraph{Most frequent words "darwin":}
+\paragraph{Most frequent words \emph{darwin}:}
 \begin{lstlisting}
 1313 the
 1018 of
@@ -97,9 +99,11 @@ For the complete list see file "out/freq_StlTree_0.txt".
 283 that
 \end{lstlisting}
 There were 7 words with at least 250 occurences and 3089 words in total. 
-For the complete list see file "out/freq_StlTree_1.txt". 
+For the complete list see file \emph{out/freq\_StlTree\_1.txt}. 
 
 \paragraph{Performance comparison.} 
+\begin{figure}[h]
+  \centering
 \begin{tabular}{|l|l|l|l|}
 \hline
 Filename&Data structure&Time&Comparison\\
@@ -117,31 +121,162 @@ in/2\_darwin.txt&SplayTree&11180&198494\\
 in/2\_darwin.txt&StlTree&6196&246227\\
 \hline
 \end{tabular}
+  \caption{Time and comparison counts for the tested data structures.}
+  \label{fig:main_time_cmp}
+\end{figure}
 
-\subsection{Analysis.} 
+\subsection{Analysis} 
 
+%========================== EXPERIMENT C =========================
 \section{Machine--generate texts} 
-\subsection{Introduction.} 
+\subsection{Introduction} 
 
 We implemented a random text generator with parameters: 
 \begin{itemize}
-\item $z$ - word count. 
+\item $z = 20000$ - word count. 
 \item $L$ - word lengts. Each word has the same length. 
 \item $\sigma$ - number of symbols in the alphabet. 
 \end{itemize}
 
-\subsection{Results.} 
+For each combination of $L \in \{2,3,\ldots,12\}$ and $\sigma \in \{2,4,\ldots,26\}$ we run 10 simulations and calculated \emph{avg} and \emph{std\_dev}. 
 
-\subsection{Analysis.} 
+\newpage
+\subsection{Results} 
 
+\subsubsection{Time} 
+
+\begin{figure}[h]
+  \centering
+  \begin{tabular}{|l|l|l|}
+    \hline
+    $L$ \textbackslash{} $\sigma$ & 2 & 26 \\
+    \hline
+    4  & $1714 \pm 1065$ & $14813 \pm 2123$ \\
+    \hline
+    10 & $6700 \pm 2900$ & $17943 \pm 6532$ \\
+    \hline
+  \end{tabular}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    $L$ \textbackslash{} $\sigma$ & 2 & 26 \\
+    \hline
+    4  & $2917 \pm 654$ & $26666 \pm 10163$ \\
+    \hline
+    10 & $12214 \pm 4816$ & $28099 \pm 3596$ \\
+    \hline
+  \end{tabular}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    $L$ \textbackslash{} $\sigma$ & 2 & 26 \\
+    \hline
+    4  & $1227 \pm 472$ & $11206 \pm 3338$ \\
+    \hline
+    10 & $4549 \pm 1404$ & $12371 \pm 3430$ \\
+    \hline
+  \end{tabular}
+  \caption{$avg(time)$ with $std\_dev(time)$ for BSTree, SplayTree and STLTree (from left to right).}
+  \label{fig:avg_std_time_table}
+\end{figure}
+
+\subsubsection{Comparison} 
+
+\begin{figure}[h]
+  \centering
+  \begin{tabular}{|l|l|l|}
+    \hline
+    $L$ \textbackslash{} $\sigma$ & 2 & 26 \\
+    \hline
+    4  & $84364 \pm 26631$ & $338517 \pm 30017$ \\
+    \hline
+    10 & $235998 \pm 44882$ & $333994 \pm 38474$ \\
+    \hline
+  \end{tabular}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    $L$ \textbackslash{} $\sigma$ & 2 & 26 \\
+    \hline
+    4  & $85359 \pm 786$ & $352790 \pm 509$ \\
+    \hline
+    10 & $246970 \pm 1134$ & $353501 \pm 1130$ \\
+    \hline
+  \end{tabular}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    $L$ \textbackslash{} $\sigma$ & 2 & 26 \\
+    \hline
+    4  & $104604 \pm 3001$ & $331962 \pm 2329$ \\
+    \hline
+    10 & $225515 \pm 1475$ & $333488 \pm 1496$ \\
+    \hline
+  \end{tabular}
+  \caption{$avg(comparison)$ with $std\_dev(comparison)$ for BSTree, SplayTree and STLTree (from left to right).}
+  \label{fig:avg_std_comparison}
+\end{figure}
+
+\subsection{Analysis} 
+
+%========================== EXPERIMENT E =========================
+\newpage
 \section{SplayTree depth to word frequencies}
 \subsection{Introduction.} 
+This time our dataset was the \emph{Holy Bible} with 4,397,206 characters. For each word with frequency over 9 we compared:
+\begin{itemize} 
+\item \emph{frequency} - number of occurences in text after the last word. 
+\item \emph{depth} - depth of the corresponding node in the data structure after the last word. 
+\end{itemize} 
 
-\subsection{Results.} 
+\subsection{Results} 
 
-\subsection{Analysis.} 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\textwidth]{out/depth_100.pdf}
+  \caption{For the Holy Bible with words over 100 occurences.}
+  \label{fig:depth_to_freq}
+\end{figure}
+
+Linear regression model for words at least 1000 occurences:  
+\begin{align} 
+y = 0.00199543*x + -0.202928 \\*
+y = 0.00127897*x + 2.10139, 
+\end{align} 
+where first line is for BSTree with $stddev=1.73767$ and second line is for SplayTree with $stddev=1.14946$. 
+
+Linear regression model for words at least 100 occurences:  
+\begin{align} 
+y = -0.00241335*x + 14.2685 \\*
+y = -0.00204148*x + 12.919, 
+\end{align} 
+where first line is for BSTree with $stddev=0.319003$ and second line is for SplayTree with $stddev=0.279686$. 
+
+Linear regression model for words at least 10 occurences:  
+\begin{align} 
+y = -0.00293875*x + 15.6318 \\*
+y = -0.00266678*x + 14.5734, 
+\end{align} 
+where first line is for BSTree with $stddev=0.0988542$ and second line is for SplayTree with $stddev=0.0954543$. 
+
+\subsection{Analysis} 
 
 \section*{Conclusion} 
+
+\newpage
+\section*{Appendix}
+
+\begin{figure}[b]
+  \centering
+  \includegraphics[width=0.9\textwidth]{out/rand_time_avg.pdf}
+  \includegraphics[width=0.9\textwidth]{out/rand_time_std.pdf}
+  \caption{$avg(time)$ with $std\_dev(time)$ for BSTree, SplayTree and STLTree.}
+  \label{fig:avg_std_time_plots}
+\end{figure}
+
+\begin{figure}[b]
+  \centering
+  \includegraphics[width=0.9\textwidth]{out/rand_cmp_avg.pdf}
+  \includegraphics[width=0.9\textwidth]{out/rand_cmp_std.pdf}
+  \caption{$avg(time)$ with $std\_dev(time)$ for BSTree, SplayTree and STLTree.}
+  \label{fig:avg_std_cmp_plots}
+\end{figure}
 
 \end{document}
 

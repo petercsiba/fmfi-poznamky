@@ -1,3 +1,11 @@
+/*
+Author: Peter Csiba
+Email: petherz@gmail.com 
+Github: https://github.com/Petrzlen/fmfi-poznamky/tree/master/vkds/du1_string_counting
+
+License: Free-to-use if author name and email is included. 
+*/
+
 #include <iostream>
 #include <vector>
 #include <cstdio> 
@@ -11,6 +19,7 @@
 #include <fstream> 
 #include <sys/time.h>
 #include <ctime> 
+#include <sstream> 
 
 using namespace std;
 
@@ -24,7 +33,7 @@ typedef unsigned long long int uLLI;
 typedef long long int LLI; 
 
 #define PRINT_K 250 
-#define FREQ_K 10 
+#define FREQ_K 10
 
 #define BINARY_TREE 0
 #define SPLAY_TREE 1 
@@ -55,12 +64,23 @@ class compare_counting_bool {
     }
 };
 
+// ==================== UTILS ====================
 uLLI get_time() {
     struct timeval tv;
     gettimeofday(&tv,NULL);
     return tv.tv_sec*(uLLI)1000000+tv.tv_usec;
 }
 
+template <typename T>
+string tostring ( T val )
+{
+   ostringstream ss;
+   ss << val;
+   return ss.str();
+}
+
+
+// ==================== DATA STRUCTURES ====================
 class CountingDictionary{
   public: 
     virtual void init() = 0; 
@@ -488,24 +508,65 @@ void experiment_C(){
     ofstream frand(string("out/rand_" + dict_names[d_i] + ".dat").c_str()); 
     frand << "L\tsigma\tavg(time)\tstd(time)\tavg(cmp)\tstd(cmp)" << endl;  
     
-    REP(L_i, Lsize) REP(sigma_i, sigmasize) {  
-      PII ptimes = avg_std(times[d_i][L_i][sigma_i]);
-      PII pcomparisons = avg_std(comparisons[d_i][L_i][sigma_i]);
+    //ofstream ftable(string("out/rand_table_" + dict_names[d_i] + ".csv").c_str()); 
+    //REP(sigma_i, sigmasize) ftable << "," << try_sigma[sigma_i]; 
       
-      frand << try_L[L_i] << "\t" << try_sigma[sigma_i] << "\t" << ptimes.first << "\t" << ptimes.second << "\t" << pcomparisons.first << "\t" << pcomparisons.second << endl;
+    REP(L_i, Lsize) {
+      //ftable << endl << try_L[L_i]; 
+    
+      REP(sigma_i, sigmasize) {  
+        PII ptimes = avg_std(times[d_i][L_i][sigma_i]);
+        PII pcomparisons = avg_std(comparisons[d_i][L_i][sigma_i]);
+        
+        frand << try_L[L_i] << "\t" << try_sigma[sigma_i] << "\t" << ptimes.first << "\t" << ptimes.second << "\t" << pcomparisons.first << "\t" << pcomparisons.second << endl;
+        
+        //ftable << ","  
+      }
     }
     
     frand.close(); 
   }
 }
 
+void lin_reg(const vector<PII>& P){
+  vector<int> X;
+  vector<int> Y;
+  LLI scalar=0; 
+  LLI squared=0; 
+  LLI n = P.size(); 
+  
+  REP(i, n) {
+    X.push_back(P[i].first); 
+    Y.push_back(P[i].second); 
+    scalar+= P[i].first * P[i].second; 
+    squared += P[i].first * P[i].first;
+  } 
+  
+  PII sX = avg_std(X); 
+  PII sY = avg_std(Y); 
+  
+  double a = ((double) (scalar - n * sX.first * sY.first)) / ((double)(squared - n * sX.first * sX.first));  
+  double b = (double) sY.first - a * ((double) sX.first); 
+  
+  cout << "y = " << a << "*x" << " + " << b << endl;
+  
+  double stddev = 0.0; 
+  REP(i, n) {
+    double m = a * ((double)X[i]) + b; 
+    stddev +=  (m - ((double)Y[i])) * (m - ((double)Y[i])); 
+  }
+  stddev = sqrt(stddev) / ((double) n); 
+  cout << "  stddev=" << stddev << endl;
+}
+
 void experiment_E(){
   CountingDictionary* dicts[] = {new BinarySearchTree(), new SplayTree()};
   string filename = INPUTS[3]; 
   
-  cout << "==== Experiment E for " << filename << endl;
+  cout << "==== Experiment E for " << filename << " with FREQ_K=" << FREQ_K << endl;
     
   REP(dict_i, 2){
+    cout << "==== Runing for " << dict_names[dict_i] << endl; 
     vector<string> words = read_words(filename); 
     vector<PII> FD; 
     
@@ -514,7 +575,9 @@ void experiment_E(){
     
     sort(FD.begin(), FD.end(), greater<PII>()); 
     
-    ofstream ffd(string("out/depth_" + dict_names[dict_i] + ".txt").c_str()); 
+    lin_reg(FD); 
+    
+    ofstream ffd(string("out/depth_" + tostring(FREQ_K) + "_" + dict_names[dict_i] + ".txt").c_str()); 
     REP(fd_i, INT(FD.size())) ffd << FD[fd_i].first << "\t" << FD[fd_i].second << endl; 
     ffd.close(); 
   }
@@ -525,8 +588,8 @@ int main(){
 
   //test_splay_tree(); 
   //experiment_B(); 
-  experiment_C(); 
-  //experiment_E(); 
+  //experiment_C(); 
+  experiment_E(); 
   
   return 0; 
 }
