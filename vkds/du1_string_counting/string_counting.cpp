@@ -10,6 +10,7 @@
 #include <cmath>
 #include <fstream> 
 #include <sys/time.h>
+#include <ctime> 
 
 using namespace std;
 
@@ -25,6 +26,7 @@ typedef unsigned long long int uLLI;
 #define BINARY_TREE 0
 #define SPLAY_TREE 1 
 #define STL_TREE 2 
+string dict_names[] = {"BSTree", "SplayTree", "StlTree"}; 
 
 string INPUTS[] = {"in/1_alice.txt", "in/2_darwin.txt"};
 
@@ -312,9 +314,7 @@ class STLTree : public CountingDictionary{
     map<string, int, compare_counting_bool> dict; 
 };
 
-int main(){
-  //test_splay_tree(); 
-  //return 0; 
+void experiment_B(){
 
   ofstream freq_top("out/freq_top.txt");
   ofstream fstats("out/stats.txt");
@@ -327,7 +327,6 @@ int main(){
     dictionaries.push_back(new BinarySearchTree());
     dictionaries.push_back(new SplayTree());
     dictionaries.push_back(new STLTree());
-    string dict_names[] = {"BSTree", "SplayTree", "StlTree"}; 
     
     string line = ""; 
     string word = ""; 
@@ -389,7 +388,91 @@ int main(){
   ifstream in_fstats("out/stats.txt"); 
   string s; 
   while(getline(in_fstats, s)) cout << s << endl;
+}
+
+string random_string(int l, int s){
+  string result; 
+  REP(i, l) result += (char)('a' + (rand() % s)); 
+  return result; 
+}
+
+pair<int, int> avg_std(vector<int> V){
+  long long int s = 0; 
+  REP(i, INT(V.size())) s+=V[i]; 
+  int avg = s / INT(V.size()); 
   
+  s=0; 
+  REP(i, INT(V.size())) s += (V[i] - avg) * (V[i] - avg);
+  int std = ((int) sqrt((double)s)) / INT(V.size()); 
+  
+  return pair<int, int>(avg, std); 
+}
+
+void experiment_C(){
+  const int dictsize = 3; 
+
+  vector<int> try_L; 
+  for(int i=2; i<=12; i++) try_L.push_back(i); 
+  const int Lsize = try_L.size(); 
+  
+  vector<int> try_sigma; 
+  for(int i=2; i<=26; i+=2) try_sigma.push_back(i); 
+  const int sigmasize = try_sigma.size(); 
+  
+  int z = 20000; 
+  int runs = 10; 
+  vector<int> times[dictsize][Lsize][sigmasize]; 
+  vector<int> comparisons[dictsize][Lsize][sigmasize]; 
+
+  int total_cases = Lsize * sigmasize; 
+  int cc = 1; 
+  
+  REP(L_i, Lsize) REP(sigma_i, sigmasize) {
+    cout << "Running\tL=" << try_L[L_i] << "\tsigma=" << try_sigma[sigma_i] << endl;
+    cout << "Case " << cc++ << "/" << total_cases << endl;
+    
+    REP(r_i, runs) {
+      vector<string> words; 
+      REP(w_i, z) words.push_back(random_string(try_L[L_i], try_sigma[sigma_i])); 
+      
+      CountingDictionary* dicts[] = {new BinarySearchTree(), new SplayTree(), new STLTree()};
+      REP(d_i, dictsize) {
+        comparison_count = 0; 
+        uLLI start_time = get_time(); 
+        
+        REP(w_i, INT(words.size())) dicts[d_i]->add(words[w_i]); 
+        
+        times[d_i][L_i][sigma_i].push_back(get_time() - start_time); 
+        comparisons[d_i][L_i][sigma_i].push_back(comparison_count); 
+        
+        delete dicts[d_i]; 
+      }
+    }
+  }
+  
+  REP(d_i, dictsize) {
+    cout << "Results for " << dict_names[d_i] << endl;
+  
+    ofstream frand(string("out/rand_" + dict_names[d_i] + ".dat").c_str()); 
+    frand << "L\tsigma\tavg(time)\tstd(time)\tavg(cmp)\tstd(cmp)" << endl;  
+    
+    REP(L_i, Lsize) REP(sigma_i, sigmasize) {  
+      pair<int, int> ptimes = avg_std(times[d_i][L_i][sigma_i]);
+      pair<int, int> pcomparisons = avg_std(comparisons[d_i][L_i][sigma_i]);
+      
+      frand << try_L[L_i] << "\t" << try_sigma[sigma_i] << "\t" << ptimes.first << "\t" << ptimes.second << "\t" << pcomparisons.first << "\t" << pcomparisons.second << endl;
+    }
+    
+    frand.close(); 
+  }
+}
+
+int main(){
+  srand(time(NULL)); 
+
+  //test_splay_tree(); 
+  //experiment_B(); 
+  experiment_C(); 
   
   return 0; 
 }
