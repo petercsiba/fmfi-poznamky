@@ -1,0 +1,86 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tabularx} 
+
+\usepackage{hyperref} 
+
+\usepackage{amsmath} 
+
+\lstset{
+language=sh
+,breaklines=true
+,basicstyle=\ttfamily
+, showstringspaces=false}
+
+\author{Peter Csiba}
+\textwidth 6.5in
+\oddsidemargin 0.0in
+\evensidemargin 0.0in
+
+\title{Pravdepodobnostné metódy - Domáca úloha \#3 - Minimálny rez}
+\date{04-04-2014}
+\author{Peter Csiba, csiba4@uniba.sk}
+
+\begin{document}
+\maketitle
+
+\section*{Zadanie}
+Uvažujme nasledujúci algoritmus pre hľadanie minimálneho rezu: Náhodne ováhujeme hrany a spočítame minimálnu kostru $T$. Následne odstránime najťažšiu hranu v kostre - tým sa $T$ rozpadne na dva stromy - $T_1$ a $T_2$. Dokážte, že s pravdepodobnosťou $\Omega(1/n^2)$ budú množiny vrcholov $T_1$ a $T_2$ zodpovedať množinám vrcholov minimálneho rezu. (To znamená, ak postup zopakujeme $O(n^2log n)$-krát, s vysokou pravdepodobnosťou nájdeme minimálny rez.) [3b]
+
+\paragraph{Riešenie.}
+Na druhej strane. 
+
+\paragraph{Zdroje.} 
+\begin{itemize} 
+\item \url{http://en.wikipedia.org/wiki/Kruskal's_algorithm} 
+\item \url{https://docs.google.com/file/d/0BzME2WFG2071R3JSQjhIb1JtVnM/edit} 
+\end{itemize} 
+
+\newpage
+\section*{Riešenie}
+Uvažujme Kruskalov algoritmus na hľadanie minimálnej kostry: 
+
+\begin{lstlisting} 
+ 1  A = emptyset
+ 2   foreach  v in G.V:
+ 3     MAKE-SET(v)
+ 4   foreach  (u, v) ordered by weight(u, v), increasing:
+ 5     if  FIND-SET(u) neq FIND-SET(v):
+ 6       A = A union {(u, v)}
+ 7       UNION(u, v)
+ 8  return  A
+\end{lstlisting}
+
+Naše riešenie bude postupovať podľa algoritmu Karger-a a Stein-a odprednášaného na prednáške: 
+\begin{enumerate} 
+\item kým G má viac ako dva vrcholy: 
+  \begin{enumerate} 
+  \item vyber náhodnú hranu $e \in_R E(G)$; 
+  \item kontrahuj $G \Leftarrow G/e$; 
+  \item algoritmus dá na výstupe rez $C$ práve vtedy, keď neskontrahujeme žiadnu hranu z $E(C, V/C)$; 
+  \end{enumerate} 
+
+\item nech $C^*$ je minimálny rez s hodnotou $c^*$; žiadny vrchol nemá stupeň nižší ako $c^*$; hrán je aspoň $nc^*/2$.
+\item v $i$-tej iterácií máme $n_i = n - i + 1$ vrcholov; 
+ak sme zatiaľ neskontrahovali žiadnu hranu z $C^*$ 
+tak minimálny rez je stále $C^*$ a počet hrán je aspoň $nc^*/2$. 
+\item $Pr[$v $i$-tom kroku skontrahujeme hranu z $C^* \mid $ prvých $i - 1$ krokov sme žiadnu hranu z $C^*$ neskontrahovali $] \leq 2 / n_i$.  
+\item $Pr[$neskontrahujeme žiadnu hranu z $C^*] = Pr[$ výstup algoritmu je $C^*] \geq \Pi_{i=1}^{n-2} (1 - 2/n_i) = 1 / \binom{n}{2}$. Takže ľubovoľný konkrétny minimálny rez $C^*$ dostaneme na výstupe s pravdepodobnosťou $\Omega(1/n^2)$.
+\end{enumerate} 
+
+Ak teraz spojíme myšlienky Kruskalovho algoritmu na minimálnu kostru a pravdepodobnostného algoritmu Karger-a a Stein-a na hľadanie minimálnej kostry tak de facto máme riešenie našej domácej úlohy. 
+
+Vidno to z dvoch krokov: 
+\begin{itemize}
+\item Kruskal(7)=UNION(u, v) je vlastne kontrakcia (1b), lebo komponenty=SETy prislúchajúce $u,v$ sa spoja a všetky ďalšie uvažované hrany sa vynechajú. 
+\item Kruskal(4)=vyber najlacnejšiu hranu mimo kontrahovaných komponentov je (1a)=vyber náhodnú hranu
+\end{itemize} 
+
+\end{document}
+

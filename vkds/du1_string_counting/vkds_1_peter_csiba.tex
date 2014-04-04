@@ -126,6 +126,7 @@ in/2\_darwin.txt&StlTree&6196&246227\\
 \end{figure}
 
 \subsection{Analysis} 
+Our intuition foretold us that SplayTree will have less comparisons then BSTree, but we believed in a greater difference. The second intuitive hypothesis that performance of the STL map (with -O2) will be the best was not true. In particular in the \emph{alice} text where it performed worse then the dummy BSTree. We also observe that while the comparison count of SplayTree is the best in both cases then time performance is the worst. We can contribute this to the long splay operation which could be maybe optimized. 
 
 %========================== EXPERIMENT C =========================
 \section{Machine--generate texts} 
@@ -214,6 +215,35 @@ For each combination of $L \in \{2,3,\ldots,12\}$ and $\sigma \in \{2,4,\ldots,2
 \end{figure}
 
 \subsection{Analysis} 
+Please refer to Appendix \ref{appendix} for a more indepth analysis. In this case of random generated texts we see the expected dominance of STLTree. When trying to explain it we should consider our implementation of the compare function for BSTree and SplayTree which is a little different to STLTree compare (int vs. bool): 
+
+\begin{lstlisting} 
+//BSTree, SplayTree
+int compare_counting_int(string& a, string& b){ 
+  comparison_count += 1; 
+  
+  if(a.size() == b.size() && a == b) {
+    return EQUAL; 
+  }
+  return (a < b) ? LESS : MORE; 
+}
+//STLTree
+class compare_counting_bool {
+  public: 
+    bool operator() (const string& lhs, const string& rhs) const{
+        comparison_count += 1; 
+        return lhs < rhs;
+    }
+};
+\end{lstlisting}
+
+We observe that the comparison counts are almost same in all three data structures what could be contributed to: 
+\begin{itemize} 
+\item $\sigma=2, L=4$ - small word set and small trees. 
+\item $\sigma=26, L=10$ - we have $10^{26}$ possible words so it's not probable\footnote{
+From the birthday paradox. 
+} to even a collision to occur. 
+\end{itemize} 
 
 %========================== EXPERIMENT E =========================
 \newpage
@@ -256,27 +286,33 @@ y = -0.00266678*x + 14.5734,
 where first line is for BSTree with $stddev=0.0988542$ and second line is for SplayTree with $stddev=0.0954543$. 
 
 \subsection{Analysis} 
+We tried to demonstrate that it's expected that the more frequent words will be on the top of the SplayTree in comparison to the BSTree. But we observed also that there is a little correlation in case of BSTree too. This could be explained to that the more frequent words are more likely to occur in the beginning of the text and thus on the top of the BSTree. We observe that in each frequency treshold (10,100,1000) we have greater correlation in case of SplayTree than in case of BSTree. 
 
 \section*{Conclusion} 
+It was a nice project. We had some surprises and proven hypotheses. And now TLE. 
 
 \newpage
 \section*{Appendix}
+\label{appendix} 
 
-\begin{figure}[b]
+Please, continue to next page.
+
+\begin{figure}[h]
   \centering
-  \includegraphics[width=0.9\textwidth]{out/rand_time_avg.pdf}
-  \includegraphics[width=0.9\textwidth]{out/rand_time_std.pdf}
-  \caption{$avg(time)$ with $std\_dev(time)$ for BSTree, SplayTree and STLTree.}
+  \includegraphics[width=0.8\textwidth]{out/rand_time_avg.pdf}
+  \includegraphics[width=0.8\textwidth]{out/rand_time_std.pdf}
+  \caption{$avg(time)$ with $std\_dev(time)$ for BSTree, SplayTree and STLTree. We could declare that STLTree outperformed BSTree which outperformed SplayTree. We observe that the text had a large impact on performance.}
   \label{fig:avg_std_time_plots}
 \end{figure}
 
-\begin{figure}[b]
+\begin{figure}[h]
   \centering
-  \includegraphics[width=0.9\textwidth]{out/rand_cmp_avg.pdf}
-  \includegraphics[width=0.9\textwidth]{out/rand_cmp_std.pdf}
-  \caption{$avg(time)$ with $std\_dev(time)$ for BSTree, SplayTree and STLTree.}
+  \includegraphics[width=0.8\textwidth]{out/rand_cmp_avg.pdf}
+  \includegraphics[width=0.8\textwidth]{out/rand_cmp_std.pdf}
+  \caption{$avg(comparison)$ with $std\_dev(comparison)$ for BSTree, SplayTree and STLTree. $avg(comparison)$ was comparable. We observe that BSTree $std(comparison)$ has a great variance. This could be contributed mostly to the unbalanced structure and a little to the initial position of the more frequent words.}
   \label{fig:avg_std_cmp_plots}
 \end{figure}
+
 
 \end{document}
 
