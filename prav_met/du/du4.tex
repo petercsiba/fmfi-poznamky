@@ -1,0 +1,65 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tabularx} 
+
+\usepackage{hyperref} 
+
+\usepackage{amsmath} 
+
+\lstset{
+language=sh
+,breaklines=true
+,basicstyle=\ttfamily
+, showstringspaces=false}
+
+\author{Peter Csiba}
+\textwidth 6.5in
+\oddsidemargin 0.0in
+\evensidemargin 0.0in
+
+\title{Pravdepodobnostné metódy - Domáca úloha \#4 - UNIQUE-CLIQUE}
+\date{10-04-2014}
+\author{Peter Csiba, csiba4@uniba.sk}
+
+\begin{document}
+\maketitle
+
+\section*{Zadanie}
+Hľadanie najväčšej kliky v grafe je NP-ťažký problém. Presnejšie, CLIQUE je nasledovný rozhodovací problém: pre daný graf G a číslo k - existuje klika veľkosti k v G? Tento problém je NP-úplný. Uvažujme teraz pozmenený problém UNIQUE-CLIQUE, v ktorom nás opäť zaujíma, či existuje klika veľkosti k v G, avšak máme zaručené, že taká klika buď neexistuje, alebo je práve jedna. (Algoritmus riešiaci túto úlohu musí odpovedať správne na vstupoch s 0 alebo 1 klikou veľkosti k; na ostatných vstupoch môže dať akúkoľvek odpoveď.) Dokážte, že toto nám veľmi nepomôže a problém UNIQUE-CLIQUE nie je oveľa ľahší ako CLIQUE. Presnejšie: ak by existoval polynomiálny algoritmus riešiaci UNIQUE-CLIQUE, tak existuje randomizovaný polynomiálny algoritmus riešiaci CLIQUE.
+
+\paragraph{Riešenie.}
+Na ďalšej strane. 
+
+\section*{Zdroje} 
+\begin{itemize} 
+\item \url{http://en.wikipedia.org/wiki/Isolation_lemma} 
+\item \url{http://http.cs.berkeley.edu/~vazirani/pubs/matching.pdf} 
+\end{itemize} 
+
+\newpage
+\section*{Riešenie}
+Nasledovný algoritmus s pravdepodobnosťou väčšou ako 1/2 a využitím UNIQUE-CLIQUE odpovie či $G(N,k) \in CLIQUE$:
+
+\begin{lstlisting} 
+(1) Ovahuj vrcholy w(v) nahodnymi vahami z <1,2n> 
+(2) Vytvor G' kde kazdy vrchol v' je klikou velkosti n^3 + w(v) 
+(3)   Pospajaj u' v' kompletnym bipartitnym grafom prave vtedy ged u-v je hranou v G
+(4) for r from 2nk to n:
+(5)   if (G',kn^2 + r) in UNIQUE-CLIQUE:
+(6)     return (G,k) in CLIQUE
+(7) return (G,k) not in CLIQUE
+\end{lstlisting} 
+
+Pre (1) z \emph{Isolation lema} od (Mulmuley, Vazirani, and Vazirani) platí, že s pravdepodobnosťou väčšou ako $1/2$ bude klika s najväčšou váhou jediná v grafe. Keďže máme len algoritmus pre neváhované grafy, tak potrebujem transformovať $G$ na $G'$ tak, aby algoritmus UNIQUE-CLIQUE našiel kliku veľkosti $k$ s najväčšou váhou. Vidíme, že ak mal graf $G$ kliku $K$ veľkosti $k$ s celkovou váhou $x$ tak $G'$ má kliku veľkosti $kn^2 + x$, lebo všetky vrcholy $K$ sú navzájom poprepájané v $G'$ a každý je veľkosti $n^2 + w(v)$. Takže najväčšia klika $G'$ bude jedinou najväčšou klikou $G'$ s pravdepodobnosťou väčšou ako $1/2$. 
+Keby $(G,k) \notin CLIQUE$ tak stačí nájsť najväčšiu kliku v $G'$. Akú môže mať najväčšiu možnú veľkosť? Predpokladajme, že $k$ je najväčšia klika v $G$ (ak nie, tak algoritmus môžeme spustiť najprv pre $n, n-1, \ldots, k+1$). Potom keby každý vrchol z $K$ mal maximálnu váhu $2n$ tak v $G'$ to znamená $kn^2 + 2nk$. 
+Keby $(G,k) \notin CLIQUE$ a tak náš algoritmus odpovie \emph{nie}, pretože súčet priradených váh nestačí na prekonanie $n^3$ veľkostí vrcholov. 
+Aká je časová zložitosť? Generovanie grafu $G'$ zaberie $O(n^8)$ a UNIQUE-CLIQUE spúšťame maximálne $n-k+1$ krát na grafe veľkosti $O(n^4)$. Celý náš pravdepodobnostný algortimus je preto polynomiálny.  
+
+\end{document}
+
