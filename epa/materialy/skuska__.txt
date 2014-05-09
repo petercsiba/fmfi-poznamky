@@ -1,0 +1,73 @@
+1) (5 bodov) Zafarbite vrcholy orientovaneho kruhu 3 farbami v paralelnom
+case O(log n) a v praci O(n), kde n je dlzka kruhu.  Kruh je tvoreny n
+vrcholmi ocislovanymi 1..n; kazdy vrchol ma jednu vstupnu a jednu vystupnu
+hranu.  Hrany su dane v poli S dlzky n, tak ze S[i]=j ak <i,j> je
+orientovana hrana v kruhu.  Aky PRAM model pouzivate ?
+
+2) (5 bodov) Su dane dve utriedene postupnosti A a B, obe dlzky n=k2.
+Napiste algoritmus, ktory spoji A, B do jednej utriedenej postupnosti v case
+O(log log n) s pouzitim O(n log log n) operacii na CREW PRAM modeli.
+
+3) (10 bodov) Uvazujte cyklus C=(v1,..,vn) a mnozinu hran E medzi vrcholmi z
+C taku, ze pre kazdy vrchol vi existuje najviac jedna hrana z E incidentna s
+vi.  Problem je urcit, ci sa daju vsetky hrany z E nacrtnut vnutri cyklu C
+tak, ze sa nepretinaju.  Uvedte EREW PRAM algoritmus na riesenie tohoto
+problemu v case O(log n) a praci O(n).
+
+4) (5 bodov) Je dana postupnost A=(a(1),..,a(n)) a boolovske pole B dlzky n
+take, ze plati b1=bn=1.  Pre kazde i1<i2 s vlastnostou bi1=bi2=1  a bj=0 pre
+kazde i1<j<i2 chceme vypocitat sucet prefixov podpola (a(i1+1),..,a(i2))
+[(..) == index].  Uvedte algoritmus na vypocet vsetkych zodpovedajucich
+prefixovych suctov  v case O(log n) s pouzitim O(n) operacii na EREW PRAM
+modeli.
+
+5) (5 bodov) Nech A je pole s n prvkami z mnoziny S a nech x je z S.  Urcte
+rank(x:A) v paralelnom case O(log n) a v praci O(n) na EREW PRAM modeli.
+
+========================================================
+celkovo je na to cas 2 hodiny
+
+1) 5 bodov
+
+Zafarbite vrcholy orientovaneho kruhu dlzky n 3 farbami v paralelnom
+case O(log* n) a v praci O(n log* n). Kruh je tvoreny n vrcholmi
+ocislovanymi 1...n; kazdy vrchol ma jednu vstupnu a jednu vystupnu
+hranu. Hrany su dane v poli S dlzky n tak, ze S[i] = j ak <i,j> je
+orientovana hrana v kruhu. Aky PRAM model pouzivate?
+
+2) 5 bodov
+
+Orcite maximum z n prvkov optimalne na common CRCW PRAM v case O(log log
+n).
+
+3) 10 bodov
+
+Je dane pole A = (a1, ... , an). Lavy zasah prvku ai je prvok ak (ak
+existuje) taky, ze k je maximalny index splnajuci 0<k<I, ak < ai.
+Podobne definujeme pravy zasah prvku ai. ANSV problem (ANSV - all
+nearest smaller values) je urcit prave aj lave zasahy vsetkych prvkov z
+A.
+
+4) 5 bodov
+
+Nech T = (V,E) je korenovy strom, specifikovany hranami (i,pi),
+1<=i<=|V| = n, kde pi je predchodca i. Treba ukazat, ze T sa da zafarbit
+2 farbami. Uvedte algoritmus, ktory najde 2-zafarbenie stromu T v case
+O(log n) na CREW PRAMe.
+
+5) 5 bodov
+
+Uvedte triediaci algoritmus, ktory utriedi n prvkov optimalne v case O(
+log n log log n) na CREW PRAMe.
+
+========================================================
+1) V rovine je danych n obdlznikov, ktorych hrany su rovnobezne so suradnicovymi osami (polia X, Y, A, B obsahuju v poradi ich suradnice laveho dolneho rohu, vysku a sirku). Najdite CREW PRAM algoritmus, ktory v case O(log n) a praci O(N^2) najde plochu ich zjednotenia.
+
+2) Uvazujme zakoreneny uplny (nie nutne vyvazeny) binarny strom (tj strom ktoreho kazdy vrchol je bud list alebo ma 2 synov) s n vrcholmi. Strom je zadany polom S tak, ze vrcholy su ocislovane cislami 1..n a hodnota S[i] udava cislo rodica vrcholu i.
+
+Vrcholove pokrytie grafu je taka mnozina vrcholov C z V, ze kazda hrana ma aspon jeden koncovy vrchol v C. Najdite CREW algoritmus, ktory v case O(log n) zisti velkost najmensieho vrcholoveho pokrytia stromu zadaneho polom S a zdovodnite jeho korektnost. Usilujte sa, aby vas algoritmus vykonal co najmenej operacii.
+
+3) Pre dane (konstantne) epsilon > 0 napiste commonCRCW algoritmus, ktory v konstantnom case a v praci O(n^(1+epsilon)) najde maximum z n prvkov.
+
+4) Majme dany kruh pozostavajuci z vrcholov (v_1.. v_n), vrchol v_i je navyse spojeny s vrcholom v_m[i] (a naopak). Napiste optimalny EREW algoritmus, ktory pre zadane pole m[1]...m[n] v case O(log n) zisti, ci sa niektore dve ciary pretinaju 
+
