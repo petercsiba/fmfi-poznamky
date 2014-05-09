@@ -1,0 +1,213 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tabularx} 
+
+\lstset{
+language=sh
+,breaklines=true
+,basicstyle=\ttfamily
+, showstringspaces=false}
+
+\author{Peter Csiba}
+\textwidth 6.5in
+\oddsidemargin 0.0in
+\evensidemargin 0.0in
+
+\title{Database systems 2 - Final}
+\date{09-May-2014}
+\author{Peter Csiba, petherz@gmail.com}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+\url{http://infolab.stanford.edu/~ullman/cs345-notes.html}
+ 
+ }
+
+\section{Uvodna prednaska}
+
+\subsection{Organizacia kurzu, system hodnotenia}
+
+\subsection{Odporucana literatura}
+
+\subsection{Moderne trendy v databazovych technologiach}
+
+\subsection{Funkcne symboly v Datalogu, suvis s XML}
+
+\subsection{Termy, Herbrandove univerzum, substitucie, matching, unifikacia}
+
+\subsection{Preklad Datalogu s funkcnymi symbolmi do relacnej algebry}
+
+\subsection{Operatory atov a vtoa}
+
+\subsection{Naivna a seminaivna iteracia programov bez negacie}
+
+\section{Negacia v databazach a logickom programovani}
+
+\subsection{Logika, princip vylucenia tretieho, protirecenia}
+
+\subsection{Formalne logicke systemy: propozicionalny kalkul, predikatovy kalkul, ...}
+
+\subsection{Teorie a modely}
+
+\subsection{Domenovo nezavisle formuly}
+
+\subsection{Vypocet najmensieho modelu programu bez negacie (semi-) naivnou evaluaciou}
+
+\subsection{Tarskeho veta o pevnom bode}
+
+\subsection{Problem naivnej evaluacie programov s negaciou: minimalny pevny bod nemusi existovat}
+
+\subsection{Stratifikovane a lokalne stratifikovane programy}
+
+\subsection{Stabilne modely}
+
+\subsection{Stabilne modely, Gelfond-Lifschitzova transformacia}
+
+\subsection{Trojhodnotove modely, well-founded model}
+
+\subsection{Metody vypoctu well-founded modelu: maximal unfounded set, alternujuci pevny bod}
+
+\subsection{Hierarchia semantik, priklady inych semantik}
+
+\subsection{Rozsirenie relacnej algebry o semijoin a antijoin}
+
+\subsection{Vstupne mnoziny, pseudokluce, bezpecnost programov so zabudovanymi (napr. aritmetickymi) predikatmi}
+
+\subsection{Vypocet programov s negaciou zdola nahor (Datalog) a zhora nadol (Prolog, SLD rezolucia)}
+
+\section{Vypocet logickych programov}
+
+\subsection{Datalog versus Prolog: vypocet zdola nahor vs zhora nadol}
+
+\subsection{Rule-Goal Tree (RGT)}
+
+\subsection{Sirenie vazieb a vysledkov: magicke a pomocne predikaty}
+
+\subsection{Vypocet RGT do hlbky: expand_goal, expand_rule}
+
+\subsection{Vypocet RGT do sirky: Queue-based RGT (QRGT)}
+
+\subsection{Ozdoby predikatov a pravidiel, Rule-Goal Graph (RGG)}
+
+\subsection{Usporiadanie podcielov v pravidle, zuniformnenie ozdob}
+
+\subsection{Rektifikacia programu}
+
+\subsection{Zabudovane podciele, dovolene ozdoby, realizovatelnost RGG}
+
+\subsection{Metody vypoctu well-founded modelu: maximal unfounded set, alternujuci pevny bod}
+
+\subsection{Hierarchia semantik, priklady inych semantik}
+
+\subsection{Rozsirenie relacnej algebry o semijoin a antijoin}
+
+\subsection{Vstupne mnoziny, pseudokluce, bezpecnost programov so zabudovanymi (napr. aritmetickymi) predikatmi}
+
+\subsection{Vypocet programov s negaciou zdola nahor (Datalog) a zhora nadol (Prolog, SLD rezolucia)}
+
+\section{Magicke transformacie}
+
+\subsection{Vzory toku dat}
+
+\subsection{Jednoducha magicka transformacia}
+
+\subsection{Zovseobecnena magicka transformacia}
+
+\subsection{Vypocet zovseobecnenych magickych programov}
+
+\subsection{Dosledna rektifikacia: rozbalovanie cyklov}
+
+\subsection{Problem s negaciou}
+
+\section{Optimalizacie na urovni relacnej algebry}
+
+\subsection{Reprezentacie algebraickych vyrazov: stromy, dagy, hypergrafy}
+
+\subsection{Reprezentacia hypergrafu}
+
+\subsection{GYO redukcia hypergrafu}
+
+\subsection{Trhanie usi hypergrafu}
+
+\subsection{Zakony relacnej algebry}
+
+\subsection{Pravidla pre konstrukciu planu vypoctu v relacnej algebre}
+
+\subsection{Optimalizacia poradia joinov}
+
+\subsection{Eliminacia spolocnych podvyrazov}
+
+\subsection{Semantika SQL}
+
+\subsection{Minimalizacia operatorov relacnej algebry}
+
+\subsection{Predpoklady na vypoctovy model, uskutocnitelnost operacii}
+
+\section{Optimalizacie zalozene na redukcii hypergrafu}
+
+\subsection{Reprezentacia dotazu hypergrafom}
+
+\subsection{Transformacia dotazu na standardny hypergraf}
+
+\subsection{Wong-Youssefiho algoritmus, preferencie na poradie ostranovanych hran}
+
+\subsection{Uplny reduktor}
+
+\subsection{Yannakakisov algoritmus}
+
+\subsection{Hypergrafy a nekonecne relacie}
+
+\section{Konjunktivne dotazy}
+
+\subsection{Subsumpcia (pohltenie)}
+
+\subsection{Pohlcujuce zobrazenia}
+
+\subsection{Petrifikovane dotazy}
+
+\subsection{Petrifikovane dotazy}
+
+\subsection{Kanonicke databazy}
+
+\subsection{Hladanie pohlteni, Sariayov algoritmus}
+
+\subsection{Test pohltenia zjednoteni konjunktivnych dotazov}
+
+\subsection{Pohltenie konjunktivneho dotazu programom a opacne}
+
+\subsection{Pohltenie dotazov s negaciou, Levy-Sagivov test}
+
+\subsection{Pohltenie dotazov so zabudovanymi predikatmi, Gupta-Zhang-Ozsoyoglu test}
+
+\section{Minimalizacia konjunktivnych dotazov}
+
+\subsection{Predpoklad univerzalnej relacie}
+
+\subsection{Slabe pohltenie, slaba ekvivalencia konjunktivnych dotazov}
+
+\subsection{Tableaux, konstrukcia tableaux}
+
+\subsection{Minimalizacia tableaux}
+
+\subsection{Uzatvaracia procedura (chase): vynutenie funkcnych zavislosti, multizavislosti, inkluznych zavislosti a joinovacich zavislosti}
+
+\subsection{Silna ekvivalencia konjunktivnych dotazov}
+
+\section{Vyssie normalne formy}
+
+\subsection{Multizavislosti, 4NF}
+
+\subsection{Joinovacie zavislosti, 5NF}
+
+\subsection{Inkluzne zavislosti}
+
+\subsection{Poloformalna metoda "spravneho" navrhu databazy}
+
+
+ 
+
+\end{document}
