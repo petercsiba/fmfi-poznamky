@@ -1,0 +1,1736 @@
+
+poznamky z 2-INF-231 Efektivne Paralelne Algoritmy (prednasa Rasto Kralovic)
+spoznamkoval Tomi Belan
+
+skripta: JaJa.pdf zo stranky predmetu
+
+
+
+[2013-02-14-A]------------------------------------------------------------------
+
+hodnotenie ako udda
+
+uvod do PRAM
+(PRAM je synchronny)
+
+algorithm 1.2 zo strany 13(12)
+a jeho T(n)=O(log n) a W(n)=O(n) cize hura
+(vo W(n) neratam synchronizacne "nopy", co je trochu podvod ale povedzme)
+
+strana 15(13): mody: EREW, CREW, CRCW (common|arbitrary|priority)
+ten algoritmus na hladanie prvej jednotky
+  (pomocou toho ze podvodom vieme robit rychly and/or)
+  ma T(n)=O(1), W(n)=O(n^2)
+  zlepsenie:
+  - v kazdom sqrt(n) useku spravime OR
+  - globalne najdem usek s prvou jednotkou
+  - najdem v ramci useku prvu jednotku
+  cim dostaneme T(n)=O(1), W(n)=O(n).
+
+
+
+[2013-02-14-B]------------------------------------------------------------------
+
+zdovodnenie preco si dovolujeme tvrdit ze mame az n procesov.
+[TODO, kde je v knihe?]
+[zatial najblizsie je 1.4 na strane 26(19), ale zda sa ze v knihe to netvrdia]
+
+Work/Time Framework.
+mame tam "pardo".
+priklad, ako sa scitanie vstupu zapise v pardo.
+priklad, ako sa hladanie prvej jednotky zapise v pardo.
+
+druha kapitola knihy.
+prefix sums. algoritmus 2.1 zo strany 44(28).
+
+riesime nieco take, ze: mame taketo nejake rekurzivne algoritmy, a v kazdom
+kroku vyriesime nejakych n/2 prvkov a zvysne prvky "ostanu" do dalsieho kola.
+ale tie ostavajuce tam su rozhadzane, vieme ze ich je n/2 ale nie kde su.
+co s tym?
+chceli by sme to rekurzivne volanie volat na kratsom poli, kam prekopirujeme
+tie nevybavene prvky.
+well, a na vyrobenie takeho pola toto mozme pouzit presne ten isty algoritmus,
+co vie riesit prefixove sumy. nevybavene prvky oznacime "1", spravime prefixove
+sumy a dozvieme sa poziciu v novom poli, kam sa ten nevybaveny prvok ma
+skopirovat. (a ked kopirujem, vsade si zapamatam povodny index.)
+
+divide and conquer (kapitola 2.3).
+hlavny problem je ten "conquer".
+
+
+
+[2013-02-21-A]------------------------------------------------------------------
+
+divide and conquer (kapitola 2.3). convex hull.
+
+K-arne vyhladavanie (myslim ze kapitola 2.4, ledaze by nie).
+T = O(log n / log k)
+1 procesor: T=O(log n), W=O(log n)
+n procesorov: T=O(1), W=O(n)
+sqrt(n) procesorov: T=O(1), W=O(sqrt(n))
+
+oni urcuju common tangent normalnym sekvencnym binsearchom (a nerozpisuju
+ako zistujem v binsearchi ci som trafil, ale to je vymyslitelne)
+- binsearchujes i tak, ze
+  - binsearchujes j tak, ze    [TODO - isto?]
+    - zisti ako sa i,j pretne s obalom S_2, co sa tyka j-1 a j+1
+    - ak su j-1 aj j+1 vonku, hura... inak podla toho ktory je nad a ktory pod
+      ciarou zistis ktorym smerom sa pohnut
+spravime so sqrt(n) procesormi takze O(1) cas, O(sqrt(n)) praca
+aha wait
+hento je binsearch pre j, ale i sa takto binsearchovat neda
+co s i?
+aha, tak predsa... v lavej casti vyhladavam pomocou sqrt(|S_1|) procesorov
+a v jednej iteracii i robim to ze najdem tangenty na tu druhu stranu pre i,i+1
+(podla toho ktora je lepsia mozem binsearchovat) a to robim pomocou "blackboxu"
+co vyhladava j. dokopy konstantny cas a
+O(sqrt(|S_1|)sqrt(|S_2|))<=O(sqrt(N)sqrt(N))=O(N) praca.
+
+merging.
+pre kazdy prvok a_i:
+  zisti rank(a_i:B) := kolko prvkov z B je mensich ako on
+  C[i-1 + rank(a_i:B)] <- A[a_i]
+zlozitost = zlozitost pocitania ranku + konstantny cas linearna praca
+pocitanie ranku:
+  naivne: pre kazdy prvok spravit binsearch
+  lepsie: Acko rozdelim na intervaly dlhe log n, a pre kazdy interval zistim
+    rank jeho prveho prvku s W=logn binsearchom. dokopy O((n/logn)*logn) praca.
+    B sa tymto rozkraja na chlieviky - veci mensie ako A[logn], ako A[2logn],
+    atd. teraz ked chcem vediet rank nejakeho a_i kde i neni nasobok logn,
+    viem v ktorom chlieviku to bude. keby tie chlieviky v B boli velke O(logn),
+    mohol by som proste ist sekvencne. ale co ak tam su dlhe chlieviky? to
+    vyriesime pridanim 1 levelu rekurzie - dlhe chlieviky mergujem rekurzivne
+    s tym, ze teraz B-chlieviky rozdelujem na logn kusocky. a mam zarucene, ze
+    dlzka v A je najviac logn. hura, a vsetko v T=O(logn),W=O(n).
+btw je to v section 4.2 na pdfstr 80. mozno iny algoritmus.
+
+
+
+[2013-02-21-B]------------------------------------------------------------------
+
+hladanie maxima v common CRCW.
+CREW malo T=O(log n), W=O(n) trivialne.
+common CRCW vie spravit T=O(1), W=O(n^2) rovnakym trikom ako ten and/or.
+(n^2 procesorov co hlasuje "nie, i nie je maximum, lebo j je vacsi ako i")
+a tiez vieme spravit T=O(?), W=O(n):
+  budeme robit "rozdeluj a panuj" na sqrt(n) usekov
+  ked mame hotovych sqrt(n) hodnot, vieme to conquernut v praci O(n) tym trikom
+  T(n) = T(sqrt(n)) + c
+  T(n) = ... = tc + T(n^(2^-t)) = ... = O(log log n)
+  W(n) = O(n log log n), lebo v kazdej vrstve spravim najviac O(n) prace.
+  ale zratajme ju aj poriadne:
+  W(n) = sqrt(n)W(sqrt(n)) + cn
+  w|a povedal: fakt je to O(n log log n)
+ale chceli by sme W(n)=O(n), ako sa zbavit toho log log n faktora?
+JaJa: "accelerated cascading" [TODO najst v knizke]
+  keby som namiesto A dlzky n vedel vyrobit pole A' dlzky n/loglogn, mali by
+  sme rovnaky cas a O(n) pracu. chceme to nejako predspracovat.
+  no tak A nakrajame na useky dlhe loglogn a v kazdom zistim maximum.
+  kludne aj sekvencne. hotovo.
+
+"legove tehlicky" na zoznamy [presumably kapitola 3].
+
+list ranking znamena vystriet zoznam do pola.
+respektive znamena to vyratat pre kazdy prvok jeho vzdialenost od konca, ale
+ked to vies tak to vies aj konstantne skopcit do pola.
+basically T=O(logn), W=O(nlogn), vzdy zistis +2sipku, +4sipku, +8sipku atd.
+(pri predlzenych sipkach si pamatam ich dlzku, nech rovno zistujem ten rank.)
+toto sa vola "pointer jumping".
+
+lepsi list ranking: skrz nejaku n/logn kompresiu.
+TODO, pdfstr 52.
+
+rozbijanie symetrie:
+mame linked list a chceme nezavislu mnozinu (co najvacsiu).
+TODO toto nemam spoznamkovane.
+
+
+
+[2013-02-28-A]------------------------------------------------------------------
+
+zase raz ten lepsi list ranking:
+(on je asi aj v knihe ale rozhadzany tak ked uz ho opakujeme tak poznamkujem)
+chceli by sme dosiahnut W=O(n).
+skratime pole na velkost n/logn.
+ale nejde "len tak" zobrat povedzme kazdy druhy prvok... treba nejako rozbit
+symetriu.
+povedzme ze mame kruhovy linkedlist a chceme najst vrcholove 3-farbenie (0/1/2).
+keby sme to vedeli, mohli by sme zobrat lokalne maxima a tie by mali od seba
+vzdialenost najviac 6 a aspon 2. (TODO overit.)
+tak kazdy vyhodi svojho naslednika a tym sa zoznam skrati o c*n prvkov. hura.
+to ked niekolkokrat spravime, skrati sa to na n/logn.
+ako spravit 3-farbenie:
+- forall i: C[i] := i
+- forall i: porovname C[i] a C[S[i]] - t.j. moja farba a naslednikova farba
+  pozrieme sa na ich bitovy zapis, nech k je prva pozicia sprava kde sa lisia
+  (nech vpravo od k maju obidva zapis alfa, a ja na k mam x a on ma !x)
+  a dame C[i] := 2k+x
+- preco to bude stale farbenie: keby mali dvaja susedia rovnaku farbu, znamena
+  to ze (x,k) v jednom je (x,k) v druhom - ale ved v k sa praveze lisia
+- ak doteraz bolo f farieb: teraz bude O(logf) farieb, a cena je T=O(1),W=O(n)
+- takze toto cele treba spravit O(log*n) krat. (iterovany logaritmus)
+  T=O(log*n), W=O(nlog*n).
+- kedy to zastane: pod 6 farieb sa hentym nedostanem. ak chcem farbit fakt 3
+  farbami, poslednym krokom to dotlacime. vyratame predchodcov. kazdy sa pozrie
+  na farby P[i] a S[i] - urcite existuje nejaka farba spomedzi 0,1,2 co oni
+  nemaju a on si ju moze dat, ale samozrejme nemozu si vsetci vyberat naraz.
+  tak to spravim postupne pre vrcholy s farbou 3, s farbou 4 a s 5. hura.
+iny 3-farbiaci algoritmus beziaci v T=O(logn), W=O(n):
+- algoritmus co zoradi n cisel z rozsahu 0..clogn V T=O(logn),W=O(n):
+  - counting sort
+  - zratam velkosti bucketov (county)
+    - rozdelime pole na chlieviky velke logn
+    - v kazdom chlieviku sekvencne zistime county: W=O(n/logn*logn)=O(n)
+    - pre kazdu hodnotu scitame county v chlievikoch: W=O(logn*n/logn)=O(n)
+  - spravim prefixove sumy countov
+  - parfor(kazdy bucket): parfor(kazdy index kam dat tu hodnotu): daj ju tam
+    (vdaka prefixovym sumam o kazdom buckete viem kde ma zacinat a koncit)
+  - teraz vlastne mame len logn bucketov, takze prefixove sumy nepotrebujeme a
+    ten vonkajsi cyklus by mohol byt sekvencny, ale aj takto to ide...
+- ok, ked mame sort... chceme algoritmus co z n farieb spravi 3 farby
+- prvy krok: z n farieb vyrobime logn farieb (1 krok toho stareho algoritmu)
+- potom spravime nieco ako to ako sme redukovali 6 (resp O(1)) farieb na 3
+  cize sekvencny cyklus kde vzdy v T=O(1) zrusime 1 farbu, a dokopy bude W=O(n)
+- ked chcem rusit farbu 7, nechcem sa ani pozriet na tie s inou farbou, to by
+  bola zbytocna praca
+- tak si ich usortim descending podla farby (uz ich mame len logn), a sekvencne
+  idem po tych farbach (z algoritmu si pamatam aj hranice chlievikov) a vzdy
+  danu farbu urvem (vsetky vyskyty nahradim 0/1/2)
+
+ako v countsorte sortit vrcholy (ktorych je vyse logn) podla farieb (ktorych
+je logn): ten dvojfazovy countsort ze najprv si teda zratas ktorej farby je
+kolko a potom analogicky zase pozeras na vrcholy a zistis o kazdom kam ho dat.
+
+
+
+[2013-02-28-B]------------------------------------------------------------------
+
+nas globalny plan je vyhodit nejake prvky aby zostalo iba n/logn, potom spustit
+ten pointer jumping algoritmus (ratajuci iba na nevyhodenych, ale s povodnymi
+vzdialenostami), a potom zase tie prvky pridat a sekvencne doratat. ak to
+budeme vediet rychlo vyhadzovat, zvysok tiez pojde rychlo.
+
+vyhadzovanie budeme robit tak iterativne, ze vzdy vyhodim nejake prvky az kym
+tych prvkov zostane iba n/logn. v jednej iteracii spravim to trojfarbenie a
+zostane nejakych nc prvkov (c je nieco vyse polovice). po t iteraciach to
+bude nc^t. vyriesime nc^t=n/logn a zistime t=loglogn.
+
+takze again, v kazdej iteracii najdem farbenie, a vyrazim zo zoznamu lokalne
+maxima v ramci farbenia. (lebo ich je zarucene Omega(n/f), kde mame f=3 farby.)
+ked zostane n/logn, spravim pointer jumping a potom postupne krok po kroku
+vraciam tie vyhodene. (musim krok po kroku. myslel som si ze mozem kazdy
+vyhodeny usek spravit sekvencne, ale o dlzke vyhodeneho useku nic nevieme, na
+konci sice zostane n/logn ale nemusia byt rovnomerne rozlozene.)
+
+v algoritme na vyhadzovanie miestami vyuzivam, ze indexy su continuous od 1 do
+n, takze ked ho chcem iterovat, musim to vzdy skompaktnit. to spravim tak, ze
+kazdemu prvku dam 0 ak bol vyhodeny a 1 ak nie, spravim z tohto prefixove sumy,
+a dostanem spravne indexy v novom kompaktnejsom poli. tak vyrobim nove S' a nove
+R' (najprv dlzky sipok a potom rank).
+ked sa potom "vynaram z rekurzie" (to jest zase tam krok po kroku davam tie
+vyhodene): v nevyhodenych vrcholoch je to proste R[i] := R'[I[i]] (kde I je to
+mapovanie indexov na kompaktnejsie), vo vyhodenych R[i] := R[i] + R'[I[S[i]]].
+
+zlozitost:
+jedna iteracia ma stoji T=O(logn), W=O(n), a mam loglogn iteracii
+cas bude T=O(logn*loglogn)
+praca je O(n+nc+nc^2+nc^3+...)=O(n(1+c+c^2+...))=O(n)
+dosiahli sme dobru pracu, ale mame horsi cas.
+(ani keby sme aj v case zaratali ze sa skracuje krat c, tak to nepomoze...
+vynechavam tu podrobnejsiu analyzu.)
+
+ako to zrychlit:
+pozrime sa ktore veci vlastne v tej iteracii trvaju logn.
+su to farbenie a skompaktnenie. skusime sa im nejako vyhnut.
+autori algoritmu: Anderson, Miller.
+pdfstr 55 onwards.
+cele je TODO.
+
+
+
+[2013-03-07-A]------------------------------------------------------------------
+
+???
+
+
+[2013-03-07-B]------------------------------------------------------------------
+
+???
+vraj nieco o Euler tours
+
+
+
+[2013-03-14-A]------------------------------------------------------------------
+
+Euler tour:
+mame nejaky strom, pomerne nevyvazeny
+a chceli by sme ho nejako traverzovat? nieco globalne ratat?
+pdfstr 60
+
+adjacency lists toho stromu chceme mat zapisane takto:
+pre kazdy vrchol budeme mat X,S = cyklicky spajany zoznam jeho susedov
+zaroven o kazdej hrane viem C = index (resp kvazi "memory lokaciu") opacnej
+
+pomocou tejto struktury vieme lahko spravit traversal pole
+to jest pole kde su postupne v (inorder?) prechodovom poradi vrcholy stromu
+vzdy "successor" hrany (cize dalsia hrana po ktorej mame ist) je S[C[hrana]]
+a to je to co sme chceli i guess?
+
+to potom unrollneme do pola (tj list ranking), spravime prefixove sumy (kde
+hrany smerom dole maju 0 a hore 1) a potom hrana iduca z vrchola v dohora
+urcuje v tych prefixovych sumach postorder cislo v-cka.
+a _toto_ je to co sme chceli i guess?
+
+a napr kebyze dolnym dame 1 a hornym -1, prefixove sumy nam povedia hlbku...
+
+ukazuju sa este algoritmy co povedia pocet descendantov, alebo vyhodnocuju
+aritmeticky vyraz ked v kazdom vrchole je ciselko alebo binop.
+(aby som ten vyraz co najviac sparalelizoval, idem podla "hlbky zdola".
+co najviac to ciastocne vyhodnocujem. idem pocuvat lebo zatial nerozumiem preco
+to ma byt rychlejsie.)
+radsej si to aj zapisem.
+ked mame vrchol A s parentom P a synmi B a C, a podstrom C sa nejako dlho
+vyhodnocuje a B uz je davno hotovy, tak to nejako odrezeme. B zapise do C
+informaciu "ku vysledku este pripocitaj cislo r" (resp prenasob, ak v A je *) a
+ako parenta C nastavi priamo P (B a A sa zo stromu odrezu).
+informacia moze vzdy byt v tvare "vysledok este prenasob p a pripocitaj q".
+ak A je scitavac, proste r pripocitame ku q. ak A je nasobic, proste r-kom
+prenasobime p aj q.
+aha, not quite, lebo treba dbat aj na p,q zapisane v A-cku. a samozrejme r
+treba upravit p,q-ckami v B-cku. ale to bude stale linearne...
+
+no a hento je operacia ktora utrhne jeden list a jeden vnutorny vrchol.
+ked sa listy minu, sme hotovi. otazka je ako to naschedulovat, ked mame tisic
+procesov "robotnikov" co trhaju listy tak ako zistia co trhat. chcem rychly
+pristup k listom a chcem vediet riesit konflikty.
+prepocul som riesenie [TODO].
+
+
+
+[2013-03-14-B]------------------------------------------------------------------
+
+cize mame tie aritmeticke vyrazy a vieme rychlo robit operaciu co odstrani
+jeden list a jeden vnutorny - hura.
+
+chcel by som zohnat pole listov, zoradenych zlava doprava. (nezoradenych uz
+mam na vstupe / viem lahko spravit, ale s tym zoradenim je problem.)
+no tak rovnako ako sme zistovali preorder/postorder cez Eulera to spravim.
+
+ako husto mozem spustit tych workerov?
+nemozem ich spustit na dva susedne listy, to by sa pobili. obidva by sa snazili
+trhat rodica a pisat do toho druheho listu a nebehalo by to.
+
+spravime pravidlo: neparne listy, ktore su lavi synovia.
+v takom pripade vsetky naraz operovane stvorice [A,B,P] su disjunktne, hura.
+teda P moze byt aj niekoho ineho P ale to mi nevadi.
+bla bla rozoberame kazdy mozny druh vadenia a overujeme ze fakt je to ok.
+
+a vzapati: tie, co boli neparne, ale su pravi synovia, mozu teraz rezat
+stale checkujeme ze je to ok [TODO].
+
+cize
+spravime pole listov
+iterujeme:
+- vyrezeme neparne prvky co su lavi synovia
+- vyrezeme neparne prvky co su pravi synovia
+- skompaktnime to [vyhodili sme prave tie s neparnym i takze je to rychle]
+
+jedna hentaka iteracia vyhodi polovicu listov takze ich treba logn
+a pracu ma n takze dokopy T=O(logn), W=O(nlogn) hura
+
+
+-----
+ok, teraz co ak mame na vstupe strom zadany nejako inak? a chcem z neho
+vyrobit hentaku eulerovsku linkedlistovitu strukturu. (ak to vobec treba.)
+
+well kebyze mam binarny strom a kazdy vrchol pozna cisla svojich Left a Right
+synov, tak ani nemusim ist cez eulera a rovno viem spravit Parentov aj ten
+euler route co cely strom prejde. (ked viem hranu tak je jasne po ktorej hrane
+chcem ist vzapati, este treba list ranking a mam pole prechodov.)
+
+ked mame vseobecny n-arny strom, a pozname vsade next_sibling a first_child...
+stale trivialne, nie?
+
+aha, ale patrilo by sa mat nielen traversal ale aj strom... to jest vediet C
+(ze ktora hrana je opacna ku ktorej) a P a linkedlist hran vychadzajucich
+z vrchola a taketo veci.
+a cele to ma byt v rozumnom case.
+
+treba vsetkym siblingom povedat akeho maju Parenta
+(v podstate list rankingom, vyzera to vymyslitelne)
+a Crosslinky uz nejako pojdu.
+ten list ranking:
+principialne to co chcem dosiahnut je vsetky next_sibling zoznamceky unrollnut
+do jedneho velkeho pola. potom parenta spravim lahko, aj viem svoj index medzi
+childami, atd.
+stale trochu [TODO]
+
+
+-----
+dalsia uloha: LCA
+
+mame strom, chceme predspracovat, a riesit queries ze kto je LCA 2 vrcholov.
+queries samozrejme stale chceme v sekvencnom T=O(1).
+otazka je ako to predspracovat rychlo.
+
+
+
+[2013-03-21-A]------------------------------------------------------------------
+
+hlupe predspracovanie je ze spravime maticu pre kazdu query, ale to je urcite
+aspon W=Omega(n^2).
+
+sekvencne predspracovanie O(n log n) cez RMQ.
+
+nieco dalsie.
+nakrajame pole na useky dlzky O(log n) a pre kazdy zratame minimum.
+ziskame pole X dlzky n/logn. na X spravime standardny RMQ.
+takze preprocessing dokopy trval cas O(n).
+potom ked pride query:
+query interval je nejakych vela blokov plus nejake okraje vlavo a vpravo co
+nie su cele bloky. takze potrebujem vediet zistovat minimum z useku blokov
+(co uz viem) a navyse ratat minimum z nejakeho useku co je cely vnutri 1 bloku.
+(ked odpovedam na usek co sa _cely_ zmesti do 1 bloku tak nemam "okraje" ale
+takcitak mi treba tie useky co su vnutri 1 bloku a vyhrali sme.)
+
+keby sme teraz tuto ideu chceli spravit sekvencne:
+mohli by sme kazdy blok predspracovat rovnakym pristupom,
+kedze kazdy blok je dlhy logn tak kazdy trva logn*loglogn
+takze dokopy O(n/logn*logn*loglogn) = O(n loglogn). lepsie...
+
+a teraz linearne.
+v tom LCA poli sa vsetko lisi len o +-1. na kazdom policku si mozem predstavit
+nejake "+" a nejake "-", a potom ked dostanem query na nejaky blok tak pozicia
+minima (odpoved na query) nezavisi od absolutnej urovne, len +iek a -iek v tom
+bloku.
+takze ked teraz mam tie bloky dlhe logn, skusim ich "znormalizovat" (zabudnut
+na ich absolutnu uroven) a asi sa mi nejake budu opakovat. pocet moznych blokov
+je najviac 2^logn. hmm radsej nech su bloky dlhe logn/2, to je ok to je
+konstanta. a teraz pocet blokov je 2^(logn/2) cize sqrt(n) roznych obsahov
+blokov, takze si mozem dovolit predratat kazdy z nich.
+sqrtn * logn * logn = O(n) takze zijeme.
+
+kebyze chceme rychlo robit vseobecny RMQ:
+prevedieme v O(n) vseobecny RMQ na LCA, a ten (uz znamym postupom) na +-1 RMQ.
+ako sa RMQ prevadza na LCA:
+vybudujeme kartezsky strom.
+ten je definovany tak ze v koreni je minimum, a ma label ze kde je pozicia
+toho minima. a rekurzivne vsetko vlavo od minima bude kartezsky strom co bude
+korenov lavy child, a ditto vpravo pravy child.
+navyse pre prvky pola si pamatame ktory vrchol k nim zodpoveda.
+potom RMQ odtial potial je: najdem v tom strome dane vrcholy a zistim LCA.
+
+a ako sa buduje ten strom linearne:
+idem zaradom zlava doprava a vzdy do stromu pridam vrchol.
+pritom si pamatam "najpravejsi okraj" (cestu z korena po pravych synoch).
+pridavam novy vrchol:
+  idem po tom najpravejsom okraji zdola az kym nenajdem mensi, a tam sa zaradim
+  ti co som preskocil budu teraz moj lavy syn, a nebudem mat praveho syna, cize
+  ti ktorych som preskocil z toho okraja vlastne odidu
+to je dokopy linearne, lebo kazdy vrchol do okraja raz pridam a raz odstranim.
+
+a teraz paralelne LCA:
+spravime Eulerovsky tah, zistime levely, atd
+pre kazdy vrchol zistime jeho prvy vyskyt a posledny vyskyt
+tym sme v T=O(logn) W=O(n) previedli problem na RMQ. uz len vyriesit ten.
+
+paralelny RMQ:
+apparently spravime si nad polom uplny binarny strom (ala intervalac apod)
+a v kazdom vrchole mam prefixove minima a suffixove minima pre svoje deti
+(pre kazdy list prefixove a suffixove minimum v ramci svojho potomstva).
+potom ked chcem RMQ od a po b, najdem ich LCA (to v uplnom bin strome viem
+lahko) a v jeho lavom synovi najdem suffixove minimum od a dalej, a v pravom
+prefixove minimum od b skorej, a z nich minimum je moje hladane minimum.
+teraz ako sa to vyraba:
+vsetky tie minima budu ulozene v matici n*logn. na najvyssom leveli je iba
+koren a patri k nemu n listov takze zaplni cely riadok. na kazdom dalsom leveli
+sa to rozdeli na dvakrat tolko dvakrat mensich vrcholov.
+takze strom realne "neexistuje", len to kreativne indexujem v matici.
+ked vhodne bitovo preskenujeme bity a a b, resp ich LCA (inorder cisla),
+zistime kde v matici to ma byt. to kedze je bitova operacia tak sa zase tvarime
+ze trva O(1) lebo ved aj scitanie ratame za O(1).
+(a teda matice budu dve, jedna prefixova a jedna suffixova, a kazda n*logn.)
+maticu vyratame takto:
+ked chcem zratat prefixove minima pre nejaky vrchol, a pozname v jeho synoch:
+minima z laveho syna proste skopirujeme (prefixy zostavaju) a minima z praveho
+syna sa kopiruju, s checkom ci nahodou minimum z laveho syna (tj posledny
+prvok z prefixovych minim laveho syna) neni mensie.
+zlozitost je T=O(logn) W=O(n logn) lebo kazde policko ratam rychlo.
+
+kralovic rozmysla preco by neslo sparalelizovat to normalne sekvencne RMQ.
+mozno je to proste novsie a hento vymysleli skorej? asi islo.
+ok, anyway henten algoritmus sa nam bude hodit na vysvetlovacie ucely.
+
+ako sa zbavit logn clenu:
+rovnako ako pri sekvencnom.
+nakrajame na useky dlzky logn.
+scvrknute bloky predspracujem v T=O(logn), W=O(n).
+pre kazdy chlievik: spustim na nom sekvencny algoritmus takze T=O(logn),
+a W=O(n/logn*logn). lebo uz mame sekvencny algoritmus v O(n).
+
+
+
+[2013-03-21-B]------------------------------------------------------------------
+
+podotknime ze nas algoritmus na paralelne RMQ sa nespolieha na +-1.
+(az na to ze sa to pouzije niekde hlboko v ramci sekvencneho subroutinu.)
+
+cvicenia.
+
+1) Prefix minimum.
+  mame common CRCW a chceme prefixove minima
+  a) v T=O(1) W=O(n^2)
+  b) v T=O(loglogn) W=O(n)
+2) Bitonicka postupnost.
+  je taka, ze ked si ju predstavime cyklicky (ze prvy a posledny susedia) tak
+  tam je jedine lokalne (a teda aj globalne) maximum.
+  mame common CRCW a chceme zistit, ci je postupnost bitonicka
+  v T=O(1) W=O(n)
+3) Mame v poli permutaciu a chceme zistit pocet cyklov. Standardny CREW.
+  v T=O(logn loglogn) W=O(n)
+4) Mame obdlzniky v rovine a chceme zistit plochu ich zjednotenia.
+  Su rovnobezne s osami. Mame dostupny sort v T=O(logn) W=O(n logn).
+  v T=O(logn) W=O(n^2)
+
+1a)
+  o kazdom prvku zistime, ci je mensi ako vsetky skorsie od neho
+  teraz kazdy co ma true by chcel vediet kde je najblizsie dalsie true vpravo
+  cize najst prvu jednotku vpravo od seba
+  ahaaaa, a to vieme
+  lebo vieme to spravit vo W=O(n^2) ale to je vela
+  a vieme to spravit s menej prace, ked rozdelime na sqrt useky a pustime na
+  kazdy a ked zistime v ktorom useku je prva jednotka tak zistime kde presne.
+  aaargh mam to hned na zaciatku tychto poznamok v prvej prednaske. sigh.
+
+1b)
+  asi to bude nejaka rekurzivna procedura co to deli na sqrt casti
+  zatial vymyslajme T=O(loglogn) W=O(n loglogn) a potom to pole snad skratime.
+  [TODO toto uz sa dialo v 2013-02-21-B, pripomenut si to]
+  stuff, nepisem detaily
+
+2)
+  o kazdom prvku zistim ci je to lokalne maximum (cyklicky vzate)
+  teraz vlastne chcem zistit ci je tam len jedno true alebo viacero true
+  zase najdem prve true (ako v 1a) a sme za vodou, kazdy true zisti ci je
+  prvy a ak nie tak su viacere.
+
+4)
+  spravime kompresiu suradnic
+  (pricom ked nejaku suradnicu pouzivam na viacerych miestach, napr jeden
+  obdlznik zacina tam isto kde iny konci, tak tam spravim minisliz siroky 0)
+  pre kazdy x-pasik:
+    z y-eventov spravim +1 a -1
+    tj pre kazdy obdlznik: ak sa nachadza v x-pasiku, pridam na dane miesto tu
+      +1 a -1 (kazdy obdlznik ma suradnice zvlast pre seba takze nebudu
+      konfliktovat)
+    spravim prefixove sumy
+    pre kazde okienko:
+      ak v nom je 0, necham 0, inak zapisem povodnu plochu okienka (pred kompr)
+    spravim sucet
+  spravim sucet
+  hura
+
+
+
+[2013-04-03-A]------------------------------------------------------------------
+
+riesime 1b)
+pracujeme v common CRCW
+zase raz spravime nejake nasekavanie na odmocniny
+
+def PM(A[1..n]):
+    for j = 1 to sqrt(n) pardo
+        X[j] := PM(A[ (j+1)sqrt(n)+1 .. j*sqrt(n) ])
+        # takze mam prefixove minima pre kazdy sqrt(n) chlievik
+        Omega[j] := X[j][sqrt(n)]
+        # to je posledny prvok chlievika cize minimum z neho celeho
+    POmega = PM'(Omega)
+    # PM' je stary kvadr algoritmus co sqrt(n) pole spravi v T=O(1) W=O(n)
+    # ten z 1a) z minulej prednasky
+    for j = 1 to n pardo
+        R[j] := min(POmega[j/sqrt(n)], X[j/sqrt(n)+1][j%sqrt(n)])
+        # plusminus jednotky... to druhe je prefixove minimum v ramci mojho
+        # chlievika a to prve je minimum zo vsetkych doterajsich chlievikov
+    return R
+
+pri zlozitosti (rekapitulacia, to uz tu bolo) dostavame rekurenciu:
+(resp chceme dostat rekurenciu)
+T(n) = T(sqrt(n)) + O(1)
+W(n) = sqrt(n)T(sqrt(n)) + O(n)
+takze spajanie chceme vybavit v konst case a lin praci.
+
+vyjde to T=O(loglogn) a W=O(nloglogn).
+tak ked chcem W=O(n), nakrajam to na kusky velke loglogn, a kazdy kusok
+na zaciatku spracujem sekvencne. (vyratam v nom prefixove minima, a potom na
+konci zase vsade zratam min(v mojom loglogn kusku, v doterajsich kuskoch)
+
+
+nove zadanie:
+5)
+  mame konvexny n-uholnik
+  chceme najst priemer - cize najkratsiu uhlopriecku
+  or something, zase nedavam pozor :(
+
+
+riesime 3)
+mozno by to islo cez nejaky union find
+permutacia je graf s vela kruznicami, na kazdej hrane spravime union a
+zratame pocet korenov (tych kde p==parent[p])
+len otazka znie ako spravit paralelny union...
+zda sa ze aj ak union find pojde, tato uloha je asi lahsia
+
+zratame maximum v kazdom komponente.
+spravime taky pointer jumping. najprv si kazdy zrata max(ja), potom max(ja a
+moj successor), max(4 vrcholy pocnuc mnou), max(8 vrcholov pocnuc mnou) atd.
+spravime to logn krat a mame max(vsetci co vidim), v T=O(logn) a W=O(n logn).
+
+potom zratam kolko existuje maximalnych (tych co sa rovnaju maximu komponentu)
+a mame pocet komponentov.
+
+otazka je ako dosiahnut pozadovanu zlozitost T=O(logn loglogn), W=O(n).
+
+niekolko krat spravime:
+  ofarbime P nejakym konst poctom farieb, napr 5, v T=O(logn) W=O(n).
+  (vid vyssie.) zoberieme lokalne maxima, to je nezavisla mnozina pricom
+  vzdialenosti medzi prvkami su najviac 10.
+  kruznice s jedinym vrcholom vyhodim a pripocitam si za kazdu ku vysledku 1.
+  potom vyhodim vsetky lokalne maxima (cize v kazdej kruznici aspon 10% vrchl)
+
+ziterujem to logn krat, vdaka comu sa vsetky kruznice svrknu na 1vrcholove.
+(praca je stale linearna lebo sa to skracuje geometrickym radom.)
+takze mame T=O(logn logn) a W=O(n).
+
+kedze chceme lepsi cas, nebudeme ich svrkavat az na jediny vrchol, ale kazdy
+svrknem na logn dlzku, takze chcem loglogn iteracii (vid rovnica
+v 2013-02-28-B, tam sa riesia velmi podobne veci) a potom pointerjumpingom
+(tym T=O(logn) W=O(n logn) algoritmom vyssie) dorazim zvysok.
+
+
+
+[2013-04-03-B]------------------------------------------------------------------
+
+ideme zacat nejaku pripravu na sorting.
+chceme aby nakoniec islo v T=O(logn) W=O(n logn).
+bude to nejaky merge sort.
+
+ked chceme robit merge:
+
+o kazdom prvku pola A[i] (a podobne B) chceme zistit, na ktorom mieste bude
+v mergnutom C. urcite pred nim budu tych i-1 co ho predbehlo v A, a navyse
+nejake v B co su mensie ako on.
+takze chceme vediet ratat rank(x, B) tj pocet Bckovych mensich ako x.
+
+niekedy (2013-02-21-A) sme robili taky nejaky divide and conquer.
+rozdelili sme si A na chlieviky velke logn. v kazdom chlieviku sme zistili rank
+posledneho prvku (binsearchom). rank ostatnych prvkov sa zisti ako rank toho
+posledneho chlievikooddelovaca, plus nejaky zvysok, ktory doratam sekvencne,
+aspon ak dany usek v B-cku nie je prilis dlhy (dlhsi ako logn). ak je, tak si
+praveze ten Bckovy usek rozdelim na logn chlieviky a najdem ich ranky v Acku,
+kde uz nemozu byt daleko od seba lebo su v jednom Ackovom logn chlieviku.
+tento merge fungoval v T=O(logn) a W=O(n).
+
+ako urobit rychlejsi merge?
+
+pouzijeme p-arne vyhladavanie (mozno tiez v 2013-02-21-A, unsure).
+ked mam p procesorov, beha to v case log_{p+1}(n) = logn/logp.
+postup: nakrajam to na p (ci p+1?) usekov, kazdy procesor zisti ci je to v jeho
+useku, ak hej tak sa rekurzivne ide na ten usek
+
+ked zvolime napr. p=sqrt(n), stoji ma to konst cas.
+lebo logn/log(sqrt(n)) = 1/2.
+(praca je samozrejme maximalne p krat cas, takze urcite bude O(sqrt(n)).)
+
+takze v A mame chlieviky velke logn, o ich oddelovacoch vieme ich rank v B
+zistit v T=O(1) W=O(n). (v B teraz tiez mame chlieviky ale roznych dlzok.)
+tak sa na kazdom A-chlieviku rekurzivne spustime.
+
+def merge(A, B):
+  n := len(A)
+  m := len(B)
+  for i = 1 to sqrt(n) pardo
+    r[i] := rank hodnoty A[i*sqrt(n)] zisteny tym p-arnym vyhladavanim
+    # to malo pracu sqrt(m)
+  for i = 1 to sqrt(n) pardo
+    R'[i] := merge(A[i*sqrt(n) .. (i+1)*sqrt(n)], B[r[i], r[i+1]])
+  for j := 1 to n pardo
+    R[j] := r[j/sqrt(n)] + R'[j/sqrt(n)][j%sqrt(n)]
+  return R
+
+vyjde:
+T(n) = T(sqrt(n)) + O(1)
+W(n) = sqrt(n+m)*W(sqrt(n)) + O(n)
+co vyjde ako:
+T = O(loglogn)
+W = O((n+m) loglogn)
+
+no a toho posledneho loglogu sa zbavime rovnako ako v 2013-04-03-A v 1b...
+na zaciatku A aj B nakrajam na chlieviky loglogn. pre kazdy koncovy bod
+A-chlievika mi merge() povie, kolko koncovych bodov B-chlievikov je mensich.
+pre kazdy doratam presny rank v B (sekvencne prejdem ten loglogn B-chlievik).
+tym vzniknu nerovnomerne B-kusky.
+tak kratke B-kusky vybavim sekvencne, a na dlhe spustim jeden level rekurzie.
+
+cize:
+1. nasekame
+2. spustime merge() na poliach velkych n/loglogn
+   to bude trvat T=O(loglogn) W=O(n)
+3. doratame pre A-koncove body konkretne B-ranky
+   to bude trvat T=O(loglogn) W=O(n)
+4. sekvencny tentok
+   T=O(loglogn) W=O(n)
+5. jeden level rekurzie
+   tu sa riesilo ci to naozaj bude mat dobru pracu, lebo merge() ma pracu
+   O(n loglogn) takze ked mam vela malych usekov s celkovou dlzkou n (vlastne
+   n/loglogn), je otazne ci sa celkova praca merge()-ov na nich stale zmesti
+   do n. odpoved: zmesti. ale dokaz tu nemam.
+dokopy T=O(loglogn) a W=O(n), hura.
+
+len aj ked v mergesorte pouzijeme tento merge, stale je pomaly.
+
+zrychlime to tak, ze pouzijeme taky nejaky pipelining:
+
+flow dat v mergesorte ma taku nejaku stromovitu strukturu...
+
+AAAAAAAAAAAAAAAA
+BBBBBBBBCCCCCCCC
+DDDDEEEEFFFFGGGG
+...
+ten strom si rozlozime do velkeho pomocneho pola dlheho nlogn.
+(no proste normalne ako ked sa kodi intervalac apod a uklada sa v pamati.)
+
+do listov (vrcholov levelu 0) nakopirujem vstupne pole.
+vrcholy levelu 1 sa pozru na svojich 2 synov, mergne ich a skopci do svojho
+pola. (tu merge je iba swap...)
+a tak dalej, toto zatial nie je rychlejsie, len to pouziva viac pamate.
+
+ako to chceme zlepsit:
+doteraz akonahle bol hotovy level L, zobudili sa vrcholy levelu L+1 a zacali
+mergovat svojich synov.
+zmenim to, ze vrcholom zvolnim kedy maju byt hotove (napr nie v case L ale 3L),
+ale zato sa zobudia skorej, a zacnu sa pozerat na svojich synov.
+
+bude invarnant:
+vrchol v levelu s je aktivny v case <s, 3s>
+a po 3s uz je v jeho poli vysledok (usortena ta cast vstupu co mu zodpoveda)
+
+
+
+[2013-04-11-A]------------------------------------------------------------------
+
+prepasol som zaciatok... TODO
+
+deju sa nejake covery
+X je c-cover A <=>^def.  | {a_j|x_i<=a_j<=x_i+1} | <= c
+
+ako uz sa spominalo <s, 3s>, pojdeme v casovych taktoch:
+
+for S = 1 to 3logn do     # globalny cyklus urcujuci "kolko je hodin" (stages)
+  for h = S/3 to S pardo    # aktivne vrstvy v tomto case
+    for i = 1 to n/2^h pardo    # vrcholy na tejto vrstve
+      zobud vrchol (h,i) - to jest i-ty vrchol na hlbke h
+
+aby nam to preslo, potrebujeme aby praca vo vrchole bola
+T=O(1) W=O(pocet mojich listov). vid nizsie.
+
+L_s[v] znamena: sortene pole, vo vrchole v, v case s
+(nepamatame si v pamati celu historiu, toto je len v ramci dokazovania)
+
+v case s+1:
+vrchol v sa pozrie na svojich synov u,w a vyberie si z ich L_s nejake sample.
+tie sample oznacime L'_s+1[u], L'_s+1[w].
+to jest L'_s+1[u] = sample_s(L_s[u])
+potom spravi L_s+1[v] = merge(L'_s+1[u], L'_s+1[w]).
+
+chceme zarucit, aby po 3s uz boli vrcholy usortene.
+vhodne definujeme tie sample co vyberame.
+pre s <= 3h: sample_S(pole) = kazdy stvrty prvok toho pola
+pre s = 3h+1: sample_S(pole) = kazdy druhy prvok
+pre s = 3h+2: sample_S(pole) = kazdy prvok
+
+tvrdime ze ten merge spravime v T=O(1) W=O(n).
+
+a navyse tvrdime ze to bude fakt triedit.
+invariant: s >= 3 alt(v) => L_s[v] je utriedene pole
+dokazeme si ze bude dodrzany.
+pozrime sa na niektory v vo vyske h+1.
+pozrime sa na cas 3(h+1) cize cas kedy v zaspi.
+vtedy uz su L_s[u] aj L_s[w] utriedene podpolia.
+v 3h+2 boli tiez utriedene, a sample poslal cele ich podpolia, takze
+ked ich mergneme, budeme mat utriedeneho seba.
+proste, ak to mergovanie fakt funguje, a fakt tak rychlo, tak nepotrebujeme
+vsetku tu magiu a clockticky a vsetko. (ale treba ju aby merge bol rychly...)
+
+zlozitost?
+(zatial predpokladajuc ten pekny rychly merge)
+T=O(logn)
+W=Sum_{pre vsetky zobudene v} |L_s[v]|
+pre najspodnejsiu zobudenu uroven je suma dlzok n.
+ta nad nou ma n/2.
+ale potom uz berieme iba kazdy stvrty prvok.
+takze dalsia uroven ma sucet dlzok n/8, dalsia n/32, atd.
+takze sucet |L| zobudenych vrcholov v jednom clockticku je vlastne iba O(n).
+dokopy W=O(n logn)
+hura
+
+note: ano, dlzky L sa mozu menit.
+mam ten strom ulozeny v pamati, a kazdy ma "alokovany" maximalny priestor co
+bude potrebovat (ked uz L bude najvacsie ako kedy bude) ale vacsinu casu
+pouziva len malu cast toho priestoru.
+
+zostava vyriesit co s tym mergom.
+pointa cca bude ze v kazdej dalsej iteracii sa to trochu zahusti, ale nie
+prilis. ak si zapamatam stary L_s[v], medzi kazde dva prvky vojde len
+konstantne vela novych.
+
+Lema: L'_s[v] je 4-cover L'_s+1[v]
+D: indukcia od s, pomocou silnejsieho tvrdenia.
+  Claim: forall a,b in L'_s[v]:
+          |<a,b> cap L'_s[v]| = k  =>  |<a,b> cap |L'_s+1[v]| <= 2k
+  Z neho tvrdenie lemy vyplyva jednoducho, ked zoberieme nejake dva prvky a,b
+  co su v L'_s[v] vedla seba, tak k=2 takze potom v <a,b> budu moct byt max 4
+  prvky (mozu medzi nich pribudnut najviac dva).
+  1^deg:
+    pre nizke S je L'_s[v]=0 (este sa nezobudili)
+  2^deg:
+    fixnime v, S (kde pre S-1 to plati)
+    ak S > 3alt(v): L_s-1[v]=L_s[v]
+      tak bud oba 4-samplujeme, alebo oba 2-samplujeme, alebo oba 1-samplujeme
+      alebo prvy 4-samplujeme a druhy 2-samplujeme (ak S=3alt(v)+1)
+      alebo prvy 2-samplujeme a treti 1-samplujeme (ak S=3alt(v)+1)
+      a vo vsetych tych pripadoch ten claim splneny
+    dalej nech S <= 3alt(v)
+      z definicie L'_s[v] = sample(L_s-1[v])
+      a kedze v este zije, je to stvorsample (kazdy stvrty prvok)
+      takze a,b sa v povodnom poli vyskytovali na vhodnych indexoch
+      L_s-1[v] vzniklo ako merge nejakych dvoch nizsich samplov
+      vsimnime si interval <a,b> v nich
+      ak |<a,b> cap L'_s-1[u]|=p a |<a,b> cap L'_s-1[w]|=q, tak p+q=4k-1
+      najdem nejake <a_u,b_u> aby obsahoval <a,b> a pritom kraje boli clenmi.
+      podobne v tom w poli. tam moze byt up to p+2 resp. q+2.
+      pouzijuc indukcny predpoklad:
+      |<a_u,b_u> cap L'_s[u]|<=2(p+2)   podobne w
+      potom pride
+      L_s+1[v] := merge(L'_s[u], L'_s[w])
+      pozerajuc sa na L_s+1[v], vyberuc (tie iste?) a,b...
+      bude to radovo <=2k, suhlasim, aj ked este moc neverim tej konstante
+      ale tak dokaz autoritou ze to vyjde...
+
+Dosledok:
+  Nech v je vrchol a s>=alt(v) cize v vtedy zije.
+  Potom L_s[v] je 4-cover L'_s+1[u] a L'_s+1[v].
+D: Vsimnime si nejake za sebou iduce a_i, a_i+1 v L_s[v].
+  BUNV nech a_i prislo z L'_s[u].
+  Dalsi prvok za a_i v L'_s[u], oznacme si ho x,
+  je mozno priamo a_i+1, alebo nejaky dalsi.
+  Ale podla tej lemy v L'_s+1[u] su medzi a_i a x najviac 4 vrcholy.
+  Prvky z <a_i,a_i+1> cap L'_s+1[u] su...
+  ...iba tie, co su medzi a_i a x. Takze su najviac 4. QED.
+
+Takze ked robim ten merge, a pamatam si stare pole, viem ze je to 4-cover
+oboch svojich argumentov co mam mergovat. To mi pomoze.
+
+Ked mame dve polia A,B, a mame nejaky ich spolocny cover X:
+Staci mergovat tie konstantne velke useky co su medzi x_i a x_i+1.
+Otazka je ako najst kde v A,B sa tie useky nachadzaju (ako zistim tie ranky).
+
+merge algoritmus:
+  pozna rank(L'_s[u] : L'_s[w])
+  pozna rank(L'_s[w] : L'_s[u])
+  (lebo ich mergoval a pritom potreboval zistit ranky "Acok" v ramci "B")
+  pozna rank(L'_s[v] : L'_s+1[v])
+  chce zratat rank(L'_s+1[u] : L'_s+1[w])
+  chce zratat rank(L'_s+1[w] : L'_s+1[u])
+  chce zratat rank(L'_s+1[v] : L'_s+2[v])
+
+  pozname aj rank(L'_s[u] : L'_s+1[u]) - je to ulozene vo vrchole u
+  pozname aj rank(L'_s[w] : L'_s+1[w])
+  a vieme ze to su 4-covery
+  takze: L'_s+1[u] <-- L'_s[u] --> L'_s[w] --> L'_s+1[w]
+  pre kazdy prvok z L'_s+1[u] chceme zistit, kam sa zarankuje v L'_s+1[w]
+  takze pardo cyklus cez L'_s[u]:
+    paralelne pre kazdy prvok v L'_s+1[u] co ku mne patri:
+      vyhladaj kde v L'_s[w] lezi ten prvok
+      mozno hladame vo velkom useku, ale spravime to parallel searchom
+      v T=O(1) a W=O(dlzka intervalu)
+      ergo v kazdom intervale z L'_s[w] spustime vyhladavanie up to 4-krat
+      (lebo prvkov v L'_s+1[u] co ku mne patria je najviac 4)
+      takze zatial mame W=O(n), hura...
+      a potom vyhladaj v L'_s+1[w] co uz je 4cover takze konstantne
+
+  podobne zistime ten opacny
+  zostava zistit rank(L'_s+1[v] : L'_s+2[v])
+  pozname: L'_s+1[v] <-- L_s[v] == L'_s[u]+L's[w]
+  (ta <-- plati lebo je to proste 4-sample)
+  pardo cez kazdy prvok L'_s[u]:   (a potom symetricky pre w)
+    pozname jeho rank v L'_s[w] (plusminus jedna)
+    takze pozname jeho rank v L_s[v]
+    takze pozname jeho rank v L'_s+1[v]
+    pozname jeho rank v L'_s+1[u]
+    pozname jeho rank v L'_s+1[w] (sekvencne dohladam, podla lemy je 4-sample)
+    takze pozname jeho rank v L_s+1[v]
+    takze pozname jeho rank v L'_s+2[v] (to je proste 4-sample)
+  tym sme zistili rank pre vsetky prvky L'_s+1[v], ktore prisli z u
+  (a prezili decimovanie)... vzapati to spustime vo w a sme hotovi.
+
+
+
+[2013-04-11-B]------------------------------------------------------------------
+
+ked uz sortime, vyriesme aj k-ty najmensi prvok.
+
+sekvencne riesenie je O(n). nakrajame na 5ice atd.
+
+skusme to pole skratit na n/logn, potom si uz mozme dovolit sort a vybrat
+hladany prvok.
+pouzijuc podobne ako sme predtym sekali na 5ice... nasekame na logn-tice.
+
+mame n/logn slizov dlzky logn.
+v kazdom najdeme sekvencne median (v case aj praci logn)
+a potom tie mediany usortime (dokopy stale T=O(logn) W=O(n))
+najdeme stredny (p), zratame kolko prvkov je >p a kolko <p
+(tie "kolko prvkov" teraz nie su iba z medianov slizov, ale zo vsetkych prvkov)
+to v logn case a n praci - standardne ratanie sumy
+obe skupiny tvoria aspon stvrtinu n
+kedze poznam pocty, viem zistit ci je k-ty najmensi prvok >p alebo <p
+a podla toho tie nevyhovujuce mozem hned vyhodit
+zvysne skompaktnim do noveho pola (ktore ma najviac 3/4 velkost)
+
+kolkokrat to treba ziterovat, aby sme dostali pole dlzky n/logn?
+staci loglogn iteracii (vid vyssie).
+preco: po loglogn iteraciach dostanem
+pole dlzky n/((4/3)^loglogn) +-= n/(2^loglogn) = n/logn
+
+na zaver to usortim.
+
+T=O(logn loglogn)
+W=O(n)
+
+
+nejaky geometricky algoritmus.
+mam horizontalne usecky po ktorych padaju lemmingovia.
+pre kazdy koniec segmentu chcem zistit, ktory segment je pod nim.
+
+sekvencne: zametame zlava doprava, v T=O(n logn).
+eventy delia priestor na pasiky.
+
+teraz by sme chceli mat W=O(n logn), takze nejde to iste ako v cviceni 4) hore.
+takze nejde uz ani "for each pasik, for each segment co z neho prechadza, ..."
+
+radsej si nad pasikmi postavim nejaky strom.
+(vyzera trochu ako intervalac.)
+(samozrejme uklada sa stale ako jedno dlhe pole, as always...)
+
+navyse to chce byt nieco ako lazyloading ale naopak.
+kratke usecky chceme mat blizko listov, ale dlhe chcem odsuvat ku korenu.
+basically, ak nejaky moj segment prechadza aj cez celeho mojho rodica, posuniem
+ho do rodica.
+vlastne proste segment tree :-| kazda usecka je "nasekana" do O(logn) vrcholov.
+
+az tak nestiham, takze radsej TODO pozriet si to.
+
+no proste chcem budovat v kazdom vrchole pole H -
+zoznam segmentov co ide cez celeho v ale nie celeho parent[v].
+spravit H je tazke.
+spravme aspon W_v - zoznam segmentov co ma vo v aspon jeden koncovy bod.
+
+ked som vo v so synmi u,w: W_v = W_u + W_w.
+(a chceme ich mat utriedene podla y... takze vlastne W_v = merge(W_u, W_w).)
+
+no, tak na to cele spustim mergesort a dostanem v kazdom vrchole hotovy W_v.
+
+
+
+[2013-04-18-B]------------------------------------------------------------------
+
+Zabudol som si adapter :-( 
+Lemingovia
+Segmentovy strom (kazda usecka sa rozpadne na o logn)
+H = cisla useciek co pokryvaju pasik ale nie rodica
+Naco je:
+Btw predp ze x su vsetky rozne
+Pre kazdy koncovy bod chcem zistit, kam padne
+A kazda usecka iduca cez uzky pasik je v niektorom H na ceste do rodica
+Ak navyse H budu utriedene podla y, staci binsrch vsade az do korena, a zijeme, aj ked w bude n log^2n namiesto n logn.
+To este zlepsime.
+Ako zratat H:
+W = tie s konc bodom v tomto pasiku, ale zasahuju donho nielen tym konc ale aspon 2 bodmi
+Co su v mojom H, musia byt vo W mojho rodica.
+Foreach parent: zistim H svojich deti: vyfiltrujem z W tie co pokryvaju celeho laveho a skompaktnim, ditto vpravo. Cas logn, w nlogn.
+Co s tym ^2:
+Actually netreba binsearch v kazdom vrchole... Ked robim to skompaktnenie, zapamatam si aj opacne sipky, cize pre vsetko z H ze odkial z W to prislo. Rad by som miesto bsr rychlo vo W nasiel toho s najblizsim mensim y.
+Tie W vznikli mergom W deti... Ala mergesort. Takze mam zratane ranky. Navyse pri vs W mam flagy ci ma ist do laveho H a ci praveho.
+Aha, robim sekvencny updatovany "bsrch" so to say. V liste, v prvom H, fakt spravim bsrch, ale potom vzdy updatujem kde v H som podla toho predosleho.
+Pozrem kde som vo W, cez ranky prejdem do rodica, pojdem nazad do H. Pozor na +-1.
+
+Next task
+Mame n useciek, nepretinaju sa, povedzme rozne x.
+Chcem o kazdom x zistit, ktoru usecku vidno z dolneho nekonecna (ktora sa prva pretne s polpriamkou zdola). Chcem dostat pasiky kde v celom pasiku je odpoved rovnaka a susedne maju roznu. Well tak zoberiem vsetky pasiky (zametaco) a potom to skompaktnim.
+V kazdom pasiku hladam uscku s minimalnym y.
+To budem postupne ratat pre kazdy vrchol mergestromu. Vsade bude pole ze ja som vrchol zlozeny z tychto pasikov a toto su tie minima.
+Triediaci alg triedi zoznam xov.
+Aha wait. Vrchol nezodpoveda pasiku ale niektorym useckam s nedakekymi indexami.
+V kazdom vrchole si pamatame odpoved "keby na vstupe neboli ziafne ine usecky".
+Takze zrobim utriedene x, a potom esye chcem zratat viditelnost. To neni take tazke. Trochu TODO. Zzzzzz
+For each pasik x,x': dva casy, bud x a x' su z rovnakeho syna alebo z roznych. Stuff. Vyuzojeme rank. Stuff stuff.
+
+Dalsi task:
+Mame body, mame slusne obdlzniky, chceme pre kazdy vediet kolko bodov je v nom.
+Chceme nieco prefixovosuctovite, ale normalna kompresia suradnic stale spravi n^2. Kazdopadne budeme to robit pomocou 4 queries ze kolko je vlavo dole odo mna. Queries poznam "vopred".
+No a to nejakym zametanim.
+
+
+
+[2013-04-18-B]------------------------------------------------------------------
+
+takze mame kopu "normalnych" (o) bodov a kopu "query" (x) bodov, a o kazdom
+query bode chcem vediet kolko je normalnych bodov vlavo dole od neho.
+tak to nasekame na horizontalne slize a spravime stromcek, a v kazdom vrchole
+chceme mat body zoradene podla x. (ten zoznam bodov volajme L_v.)
+Z_v bude pole co pre kazdy bod v L_v povie kolko je o-bodov vlavodole od neho.
+(v ramci tohto vrcholu teda.) (ked ten bod samotny je o-bod tak ho tiez ratam.)
+merge:
+L vyrobime proste pomergovanim synovskych L (zase si zapamatame z ktoreho
+syna kazdy prisiel)
+Z: tie co prisli z prveho syna (z toho dolneho) proste skopirujem, tie sa
+nemenili (odpoved kolko je vlavo dole od nich je stale rovnaka)
+pre tie zhora je to ta hodnota zo syna (pocet o-bodov v hornej polke sliza)
+plus pocet o-bodov z dolneho syna co maju x < moj_x.
+respektive najdem najblizsi bod v dolnom synovi co je vlavo od moj_x
+(ci uz je to x-bod alebo o-bod) a zistim kolko je bodov vlavo od neho.
+ok, tak chcem okrem L_v a Z_v aj Q_v, co je ako Z_v ale s/vlavodole/vlavo/g.
+ak sa nam nechce ratat ho mergovanim, proste spravime prefixovu sumu L_v.
+(teda nie priamo L_v ale variacie kde o-body maju 1 a x-body maju 0.)
+robit tie prefixove sumy nie je pomalsie ako zvysok mergovania,
+cele to dokopy stale vyjde T=O(logn) W=O(nlogn).
+co so Z:
+ako zistim "najblizsi bod v dolnom synovi": nastastie viem ranky z mergesortu.
+takze hura, viem vsetko.
+
+hrame sa s takymi tymi triediacimi sietami.
+take ze ide kopa dratov zlava doprava (so vstupnymi datami) a miestami je
+medzi dvoma komparator.
+cize ala program kde mozes robit if(x>y)swap(x,y) ale ziaden iny controlflow.
+hlbka DAGu = cas
+pocet krabiciek = velkost = praca
+Q: da sa stale spravit triediaci algoritmus v T=O(logn) W=O(nlogn)?
+napodiv ano.
+v JaJovi je slabsia ale elegantnejsia verzia.
+
+ako to bude vyzerat:
+pozrime si bitonicke postupnosti ("skoro utriedene", na ktore ked sa pozriem
+cyklicky tak maju len 1 lok max)
+budeme sa zatial hrat len s dlzkami 2^k, aby pekne vysla rekurz konstrukcia.
+Lema: mame postupnost x_1,...,x_n/2,x_n/2+1,...,x_n
+potom existuje deliaca ciara (index), ze
+ A            B
+x_1      x_n/2+1
+x_2  <=  x_n/2+2
+...          ...
+^| ---------- v|
+...          ...
+x_n/2   >=   x_n
+  C           D
+tie porovnania platia o kazdej dvojici. vsetky x_1,... <= all x_n/2+1,... atd.
+
+Tak zacnem komparatormi co swapnu x1 s x_n/2+1, x2 s x_n/2+2, ..., x_n/2 s x_n.
+zo A,C,B,D sa stalo A,D,B,C. a skutocne, A,D < B,C (pairwise).
+tak tam hentych n/2 komparatorov a potom rekurzivne usortim horny
+blok a dolny blok a som hotovy (budem vediet sortit bitonicke postupnosti).
+zostava dokazat ci ta lema plati.
+
+tusim dokazujeme ze ked zacnem z postupnosti kde platia tie nerovnosti medzi
+A,B,C,D tak ich cyklicky shift o 1 zachovava.
+TODO.
+tak staci dokazat, ze to plati, o vhodnom normalnom tvare.
+a to takomto: najprv rastie, potom je maximum, a potom klesa.
+v pripade ze maximum je za polovicou:
+  A->C->B je cele monotonny rastovy usek
+  kresliac rastove/klesajuce sipky: (zatial assuming ze ciara je v maxime)
+
+  vA <= Bv
+  v      v
+  --------
+  v      ^
+  vC    D^
+
+  no len co s tym D.
+  zatial neplati C >= D. pod ciarou este moze byt skupina takych kde C <= D.
+  tak tu ciaru posuniem dole, kym sa da. nepokazil som si A<=C, C<=B.
+  henta skupina bude urcite len jedna skupina, lebo ked uz najdem prvy
+  riadok kde je >= (to jest C_i >= D_i so to say, presnejsie x_j>=x_n/2+j)
+  tak uz to dalej bude len lepsie, lebo C smerom dole rastie a D klesa.
+
+  a tym padom bude platit aj B >= D, lebo vieme C>=D a v B su len vacsie
+  (alebo tie co tam prisli tak ze som ich z D urval).
+
+hlbka teraz bude logn (lebo ta jedna vrstva komparatorov sa da spravit naraz)
+a velkost bude nlogn, lebo jedna vrstva ma n/2 komparatorov a vrstiev je
+samozrejme logn.
+takze vieme dobre triedit "skoro utriedene" postupnosti.
+
+ked chcem triedit lubovolne postupnosti:
+vyuzijuc novy "bitonicky triedic" co utriedi svoj vstup ak je bitonicky.
+x1 - ^ -- ^ -- ^ -
+x2 - C -- B -- B -
+x3 -- C - B -- B -
+x4 -- v - B -- B -
+x5 - ^ --- B - B -
+x6 - C --- B - B -
+x7 -- C -- B - B -
+x8 -- v -- v - B -
+lebo ked spojim vzostupnu a zostupnu postupnost, urcite dostanem bitonicku.
+zlozitost:
+hlbka(n) = 1 + 2 + 3 + ... + logn = O((logn)^2)
+velkost(n) = B(n) + 2B(n/2) + 4B(n/4) + ... = nlogn + 2(n/2)log(n/2) + ... =
+  = n(logn + logn-2 + logn-4 + ... logn-(zhruba n)) = O(n logn logn)
+
+tu siet co to robi bez kvadratickych clenov si neukazeme, lebo je hnusna.
+
+
+
+[2013-04-25-A]------------------------------------------------------------------
+
+grafy
+
+suvisle komponenty: chceme kazdy komponent ofarbit nejakou farbou
+(konkretne napr najmensim idckom z vrcholov toho komponentu)
+
+optimalny sekvencny je T=O(n+m) (ked graf mame ako zoznamy susedov)
+
+ked graf mame ako maticu susednosti:
+optimalny sekvencny je T=O(n^2), my by sme chceli W=O(n^2)
+
+nejako to budem prevadzat na graf s outdegree 1 tym ze zrusim nejake hrany
+veci co potom budu spolu v komponente urcite boli aj predtym (aj ked niektore
+povodne komponenty sa mozno rozpadli).
+
+ako zvolit ten outdegree: spravime C[v] = najmensi moj sused
+(cize pozicia prvej jednotky v mojom riadku matice susednosti)
+(hladat prvu jednotku uz vieme)
+to zatial trvalo T=O(logn) W=O(n) per vertex, takze T=O(n logn) W=O(n^2)
+
+v takto vzniknutom grafe urcite nebudu dlhsie cykly ako 2
+(inak by nesedela ta minimalnost spomedzi susedov, vyslo by ze v<v)
+
+na tychto stromoch spravim kompletny pointer jumping (takze logn iteracii)
+T=O(logn) W=O(n logn), to sa strati.
+zostane len ten "korenovy" dvojcyklus a kopa vrcholov co do neho (postupne) ide
+potom minimum v ramci nasho stromceka je urcite jeden z tych vo dvojcykle.
+(lahko dokazat...)
+(pricom C[v] je teraz rovne povodnemu C[C[...[v]...] s C zopakovanym n-krat,
+takze to na ktory vrchol dvojcyklu budem nakoniec ukazovat urcuje v podstate
+aj parita dlzky cesty do dvojcyklu...)
+takze kazdy vrchol sa moze pozriet na C[v] a C[C[v]], cize (po PJ) tych dvoch
+"sefov" vo dvojcykle, vyberie minimum a pozna minimum.
+takze pre ten graf s odstranenou kopou hran sme nasli suvislost, super.
+
+skomprimujeme vsetky tie stromceky do velkych vrcholov.
+uz len najst suvisle komponenty v tomto vacsom grafe a vyhrali sme.
+dufajme ze ten skomprimovany graf ma menej vrcholov...
+(aj by mal, len treba nieco spravit s izolovanymi vrcholmi, tie sa
+skomprimovanim nezmenia)
+
+ergo, program bude vyzerat cca takto...
+def komponenty_suvislosti(A):
+  sprav C
+  D := vyrataj komponenty hladiac iba na hrany v C    (ozn.: D volam aj "root")
+  A' := skomprimuj(A)
+  D' := komponenty_suvislosti(A')
+  uprav D podla D'
+  return D
+
+ako funguje skomprimovanie:
+vyratam si pre kazdy vrchol bool ze ci som sef komponentu (v==D[v])
+a pritom mam nejakeho suseda, nie som len izolovany vrchol.
+spravim si na tom prefixove sumy, co mi povie "kompresiu suradnic" - ze ake
+idcka budu tie vrcholy mat v novom skomprimovanom grafe. (ozn "kompr")
+takze ako spravit tu novu maticu susednosti:
+chcem na A'[1][2] dat 1 <=> exists u,v: root(u)=1 & root(v)=2 & A[u,v]=1.
+budeme teraz predpokladat common CRCW... (ale vid v minimalnej kostre.)
+takze proste paralelne pre kazdy i a kazdy j:
+  if A[i,j]==1 and root[i]!=root[j]: A'[kompr[root[i]],kompr[root[j]]]:=1
+to je T=O(1) W=O(n^2).
+
+ako upravim D podla D':
+foreach v co ma >0 susedov: novyD[v] := dekompr[D'[kompr[root[v]]]]
+(dekompr by som mohol vynechat ak mi je jedno ako farby ocislujem)
+
+celkova zlozitost:
+jedna iteracia ma stoji T=O(logn) W=O(n^2).
+po kompresii vrcholov vzdy zostane najviac polovica.
+(izolovane vrcholy sa tam nedostanu, a tie dvojcyklove stromceky maju >1 vr.)
+takze iteracii staci logn...
+rekurzia ma dokopy T=O((logn)^2) W=O(n^2)
+lebo cas je logn + log(n/2) + log(n/4) + ... = logn + logn-2 + logn-4 + ...
+a praca je n^2 + (n/2)^2 + (n/4)^2 + ... = n^2 (1+1/4+1/16+...) <= 2 n^2.
+
+
+dalsi task:
+
+minimalna kostra
+
+kazdy minimalny rez obsahuje nejaku kostrovu hranu [TODO dobre som pocul?]
+skor nieco ako: pre kazdy rez minimalna hrana toho rezu je sucastou minkostry?
+
+majme teda maticu susednosti (resp vah hran), kde vsade je bud vaha alebo inf.
+reprezentacia vyslednej kostry: povedzme pre kazdeho vrchola chceme rodica.
+
+z kazdeho vrchola zoberiem najlacnejsiu odchadzajucu hranu, a ta hrana urcite
+musi byt v kostre. (lebo inak ju pridaj a vyhod tu druhu susednu hranu v-cka
+co je na kruznici co tym vznikla.)
+
+takze zase mam nieco ako C, s takymi podobnymi stromcekmi.
+tak zase spravim ten pointer jumping.
+
+tvrdim ze ked teraz stromceky scvrknem (tie nove velke vrcholy teraz mozu mat
+multihrany...) a najdem min kostru na A', spolu to bude min kostra na A.
+(lebo pre velky vrchol tiez spravim rez a musi tam byt dana min hrana)
+
+ked chcem vyrobit mensiu maticu A' z A:
+v tej mensej matici zrazu nebudu 0 a 1, ale cisla :(
+(samozrejme nechcem ozajstne multihrany ale vzdy vyberam najmensiu)
+however, uz sa nemozem spolahnut na common CRCW.
+
+tak nez budem robit A'...
+spravim A*, ktora je rovnako velka ako A, ale stlpce su spermutovane tak,
+aby boli u-cka s rovnakym root(u) pri sebe. to jest zoradim stlpce podla
+key=(root(u),u). (sort ma stal T=O(logn) W=O(n logn).)
+teraz, pre kazdy riadok v, pre kazdy "chlievik" (tj skupinu co ma rovnaky
+root(u)) zratam minimum toho chlievika.
+to znamena: pre kazdy vrchol v, a pre kazdy stromcek, najdem najmensiu hranu co
+ide z toho vrchola do toho stromceka.
+teraz si to utriedim podla riadkov a spravim to iste. takze pre kazdy chlievik
+a kazdy chlievik zistim najmensiu hranu co ide z toho do toho chlievika. ==A'.
+na zaver este fixnem reflexivnost A'[k,k]:=inf.
+zlozitost sa stale zmesti pod T=O(logn) W=O(n^2).
+
+(also! tym padom aj tie suvisle komponenty viem spravit v CREW.)
+
+zvysok je rovnaky ako pri suvislych komp, takze stale T=O((logn)^2) W=O(n^2).
+
+
+
+[2013-04-25-B]------------------------------------------------------------------
+
+kralovic rekapituluje co rano vsetci prespali.
+
+teraz by sme chceli v suvislych komponentoch zmensit ten cas z (logn)^2.
+
+chceme robit logn iteracii, ale tak, aby kazda iteracia stala len konst cas.
+nemozme robit dlhy pointer jumping (ani kopu dalsich veci).
+mozem robit "kratky" pointer jumping, daju sa tie stromceky trosku scapit.
+
+ked uvidim hranu medzi dvoma stromcekmi, chcel by som tie stromceky pomergovat,
+ale dlhy union find si nemozem dovolit... budem robit union find vtedy ked
+stiham, a inak to odlozim.
+
+v iteraciach sa bude diat take postupne scapovanie toho stromu, taky "lenivy"
+union find, a pocas toho sa navyse budu tie stromceky pod seba podvesovat.
+
+na tomto jednom mieste kurzu pouzijeme *arbitrary CRCW*.
+
+cele to bude stromovite s union findom and stuff. na zaciatku D[v]=v.
+
+v kazdej iteracii spravim dva kroky:
+
+1) podvesenie
+    pre kazdu hranu e spajajucu u,v:
+    ak u aj v je koren alebo syn korena, t.j. D[D[u]]==D[u]:
+    (takze korene su D[u] a D[v].)
+    tak spravim D[D[u]] := D[v].
+    (je mi jedno ktory zavesim pod ktory, oni sa aj tak casom scapia.)
+2) pointer jumping
+    foreach vrchol: D[u] := D[D[u]]
+
+preco ta podmienka ze koren alebo syn korena: lebo nie z kazdeho vrchola bude
+koren, ale pointer jumpingom sa z kazdeho vrchola raz stane aspon syn korena.
+takze casom spracujem kazdu hranu e.
+
+lenze tu sa moze stat ze naraz podvesim u pod v aj v pod u, takze au.
+no tak rozbijem symetriu, pridam podmienku if D[u]>D[v].
+
+vdaka arbitrary CRCW nevadi, ak sa pokusim nejakeho sefa podvesit pod
+viacerych. a stale to bude strom, vdaka rozbitiu symetrie. ani nevadi ked
+niekoho niekam podvesim a kohosi dalsieho podvesim pod toho niekoho.
+
+funguje to, len kto vie ci bude stacit logn iteracii.
+riesi sa nejaky konkretny kontrapriklad... TODO.
+
+tak medzi tie kroky vlozime
+1a) hviezdickove podvesenie
+    pre kazdu hranu e spajajucu u,v:
+    ak u je v hviezdicke (strome hlbky <=2), D[D[u]]:=D[v].
+
+tu uz nemusim rozbijat symetriu - v 1a sa nevyskytne ze by som chcel spajat
+dve hviezdicky, lebo take pripady by sa uz vybavili v 1). TODO.
+
+toto zda sa fixuje len ten hviezdickovy kontrapriklad, ale v konecnom dosledku
+sa zo vsetkeho stanu hviezdicky, takze je to ok.
+
+ako zistujem, co je hviezdicka:
+  spravim si pomocne pole S, na zaciatku tam maju vsetci true (su hviezdicky)
+  foreach u: ak D[u]!=D[D[u]], u je hlboko, takze dosvedci pre u,D[u],D[D[u]]
+    ze nie su vo hviezdicke (nastavi S[u], S[D[u]], S[D[D[u]]] na false)
+  ked to skonci, v strome co nie je hviezda to budu mat vsetci false, okrem
+    takych co su priami synovia korena co nemaju synov
+  takze navyse na zaver: foreach u: S[u]:=S[D[u]]
+
+korektnost: kazdy komponent (casom) skonci ako hviezdicka.
+D: well nemoze sa to nijak zaseknut. kazda iteracia spravi nejaky progress.
+
+kolko iteracii bude treba?
+
+lema: ak je po 1a) nejaky komponent C hviezdicka, je to komponent suvislosti.
+  (to jest uz je vybaveny, uz nanho kaslem.)
+
+to je prijemne, lebo pre vsetky ostatne stromceky robi pointer jumping pokrok.
+
+pozrime sa na niektory komponent suvislosti C po kroku 1a.
+sklada sa z mnohych stromcekov. (ak je tam nejaka hviezdicka, je tam iba ona
+a C ma nezaujima.) o kolko znizi pointer jumping vysku tych stromcekov?
+cca o polovicu, ale zavisi ci meriam vysku podla poctu hran alebo vrcholov...
+moze to byt +-1 alebo 1/2 alebo co ja viem co.
+whatever, proste vzdy to skrati aspon na (2/3)h, pri dostatocne vysokych sa to
+blizi ku h/2 ale staci mi 2/3 h.
+
+ked zoberem nejaky C, nech z(C) je sucet vysok jeho stromcekov.
+v kroku 1:
+  ak su oba stromy vysoke aspon 2, tak sa z(C) len znizi alebo zachova...
+  aby som zabranil existencii stromov vysokych 1 (izolovanych vrcholov):
+    budem to cele robit na upravenom grafe, kde z kazdeho vrchola v ide este
+    hrana do virtualneho vrchola v'
+    a na zacitatku nebudem mat stromceky vysoke 1, ale vysoke 2 lebo kazdemu v
+    dam hned ako sefa v'...
+v kroku 1a: ditto
+v kroku 2: z(C) sa zmensi zhruba na 2/3
+  (to by som bez kroku 1a nemohol povedat, lebo hviezdicky by sa zachovali)
+
+takze bude fakt stacit zhruba log_(3/2)n iteracii.
+
+
+dvojsuvislost:
+
+dve definicie
+- graf bude suvisly aj ked vyhodim lubovolny vrchol
+- pre kazde dve hrany existuje kruznica na ktorej lezia
+
+<= je obvious (ked existuje artikulacia tak zober dve hrany co idu do roznych
+komponentov), => je zlozitejsie
+
+anyway chcem hladat dvojsuvisle komponenty
+takze vlastne chcem hladat artikulacie
+alternately, mozem tu dvojsuvislost interpretovat ako triedu ekviv na hranach
+(ze ktore hrany su v rovnakom komp) a budovat taku tabulku
+vystup bude zafarbovanie hran (podobne ako vrcholov pri komponentoch suvisl)
+
+sekvencne: DFS
+paralelne:
+
+ta relacia ekvivalencie sa da predstavit ako graf (kde vrcholy su hrany)
+je tranzitivna, ale mozme si ju predstavit ako tranzitivny uzaver jednoduchsej
+relacie... naco budeme konstruovat cely ten graf.
+
+na tu jednoduchsiu relaciu pouzijeme priestor cyklov grafu.
+vystacime si s relaciou R', v ktorej su hrany <=> su na spolocnej _bazovej_
+kruznici.
+plati ze e,f su na spolocnej kruznici <=> existuje taky chain e=e1,e2,...,en=f
+ktore su v R'. lebo priestor cyklov.
+
+lenze to nestaci. ked je cely graf jeden velky cyklus, on sam je svoja bazova
+kruznica, takze R' bude stale O(n^2) a nijako sme si nepomohli.
+
+
+
+[2013-05-02-A]------------------------------------------------------------------
+
+tak spravime R'', co je nejaka podmnozina ale stale ma rovaky tranz uv R''*=R*.
+
+spravime teda tu kostru (co mi povie ktore hrany su bazove a ktore nie)
+a mame teda strom, a tie mimokostrove hrany su tie urcujuce kostru
+
+R'' naplnime takto:
+1) pre kazdy nekoren u, z ktoreho ide do parenta hrana e a navyse niekam
+   mimokostrova hrana f, dame e R'' f.
+2) ked su v tom strome dve za sebou iduce parenthrany
+   (to jest mame nejaky vrchol u, jeho rodica a jeho rodica)
+   a {u,p(u)} neni most (cize z toho podstromu ide mimokostrova hrana vonku)
+   tak ich pridam do R''.
+
+R'' je uz velky O(m), hura.
+
+takze high level plan implementacie...
+mame graf G
+1) najdeme nejaku kostru T (output = pole parentov P[v])
+2) zostrojime G'' (graf relacie R'')
+3) najdem suvisle komponenty
+
+ako rychlo zostrojit G'':
+
+tie "1)" hrany idu najst rychlo
+potreboval by som vediet zistovat pre kazdy podstrom, ci z neho vychadza nejaka
+nekostrova hrana.
+keby som mal na tej kostre nejake preorder cislovanie:
+tak sa pytam, ked mam vrchol v, ze ci z niektoreho jeho potomka ide hrana von
+(cize ta hrana ide do vrchola s cislom <v alebo >v+size(v))
+takze...
+pre kazdy vrchol v si chcem zratat low(v) a high(v) cize najmensie a najvacsie
+cislo kam ide niekto z mojho podstromu
+co pripomina problem Eulerovskych tahov (zvlast size(v) sa tym dalo ratat).
+takze spravime tu datovu strukturu co Euler chce - usortime podla P[v] (chceme
+pracu n logn takze si to mozme dovolit), atd.
+[TODO, malo sa chytam]
+
+ked mam Eulera (takze uz aj size):
+usortim si tie hrany (sipy) podla toho, odkial vychadzaju (v tom preorder
+poradi), takze vsetci moji susedia su vedla seba - takze zistim minimum a
+maximum z nich, a mam "lokalny" low a high
+takze teraz chcem spravit minimum z tych low vsetkych mojich deti
+pouzijem algoritmus na vyhodnocovanie aritmetickych vyrazov (aj ked teraz
+nemam plus a krat, ale min resp. max)
+hento fungovalo sice na binarnom strome ale mozme sa tvarit ze vrchol s velkym
+stupnom je akoze taky maly binarny stromcek (to nejako handwavneme).
+
+
+cvicenie:
+
+dobre uzatvorkovane vyrazy.
+mame na vstupe pole lavych a pravych zatvoriek, ktore je dobre uzatvorkovane,
+a uloha je najst pre kazdu zatvorku tu druhu co k nej patri.
+chceli by sme polylogaritmicky cas (najlepsie logn) a pracu ak sa da linearnu,
+ale n logn tiez prezijeme.
+
+pomocou prefixovych sum zratame level kazdej zatvorky.
+potom (stabilne) usortime vsetko podla levelu, takze pre kazdu lavu zatvorku
+hned vzapati je patricna prava. to uz len paralelne preleziem (aby som vyrobil
+vystupne pole v spravnom formate) a som hotovy. T=O(logn) W=O(n logn), hura.
+(stabilny sort: kluc = make_pair(moj level, moja pozicia). ale tusim ze aj
+keby sme spravili najprv sort podla levelu a potom kazdy bucket usortili podla
+povodnej pozicie, stale by sa to zmestilo do n logn.)
+
+otazka je ci to nejde lepsie.
+skusme to tak, ze to nasekame na nejake bloky
+a v kazdom bloku su jednak nejake zatvorky co uz maju svoj par v ramci toho
+bloku, a druhak nejake "externe" ktore idu von. (externe koncove su _pred_
+externymi zaciatocnymi, keby bola externa zaciatocna a potom externa koncova
+tak nie su externe ale interne.) takze kazdy blok ma dve cisla l a r udavajuce
+ich pocty. bloky teraz vieme mergovat a pocitat nove l, r. (r_1 a l_2 sa
+poparuju a odidu, a znovu zostane niekolko lavych a niekolko pravych.)
+
+ked som vsade poratal l,r do takeho stromceka, preleziem vsetko druhykrat, ale
+tentoraz nebudem mergovat len cisla, ale zoznamy (chcem povedat polia)
+externych. chcem ich pritom rovno vybavovat a pisat do outputu co patri kam.
+hm, len to zabera v kazdom vrchole stromceka pracu l+r co je stale privela.
+
+iny algoritmus, stale s pracou n logn: ked mam poratane l,r, vieme pre kazdu
+zatvorku sekvencne ist do korena a pozerat sa ci uz sa mergla alebo nie. ked
+sa mergne, pojdeme zase dole a najdeme jej par.
+
+takze pre danu zatvorku vieme v T=O(logn) W=O(logn) najst par. rozdelime
+vstupne pole na useky dlhe logn, a pre kazdu n/logn-tu zatvorku najdeme par.
+a pozreme ze ako daleko su tie pary od seba. ked su tiez vzdialene iba logn,
+hura, viem to vybavit rychlo. ak nie, ten usek medzi nimi zase nasekam na veci
+dlhe logn a pre hentie najdem par a tie uz sa zarucene zmestia do logn useku.
+
+akonahle o kratkom useku viem, ze sa namapuje na kratky usek, mozem oba useky
+sekvencne preiterovat (jeden zlava, druhy zprava) a hura.
+
+este sa riesi ze ked ten dlhy usek nasekavam, moze sa stat ze bohuzial tam aj
+tak budu vsetky interne, takze ten usek neviem rozumne skratit, or something.
+az tak sa nechytam, trochu TODO. proste este neviem efektivne preiterovat ten
+dlhy usek.
+
+
+
+[2013-05-02-B]------------------------------------------------------------------
+
+takze
+- nakrajam vsetko na logn kusky
+- kazdy kusok sekvencne prejdem a pomatchujem interne (dalej na nich kaslem)
+  (takze kusok uz je iba niekolko ")" a potom niekolko "(")
+- v kazdom kusku najdem niektore vyznacne - poslednu ")", prvu "("
+- pre kazdu z nich najdem ten par (a oznacime ich "F", ze uz su matchnute)
+- tie "(" co nasleduju za F"(" (ale sami nie su F), kam sa mozu namatchovat?
+  - ak tesne za mnou otvaracou je dalsia "(" a tesne pred mojim parom je ")",
+    a nie su F, tak na seba musia matchovat
+  - lebo ked mam ((.......)), mohlo sa stat ze to v skutocnosti bolo
+    ((...)(...))? nemohlo, pretoze tie ")(" co su vnutri by tiez boli F
+    takze aj my by sme boli F
+- takze co robim je ze pre kazdy F-par "(" ... ")" idem sekvencne dovnutra
+  a kym je kurzor zlava na ne-F "(" a sprava na ne-F ")" tak ich sparujem
+  (a idem sice sekvencne ale bude to max 1 chlievik takze logn)
+- takze hura
+
+
+dalsie cvicenie (pisomkove priklady):
+
+1) mame pole bitov, pre kazdu 1 chceme najst najblizsiu 1 zlava
+   na common CRCW, v T=O(loglogn) W=O(n)
+2) ukaz ze forall eps>0:
+   vieme najst maximum pola v common CRCW v T=O(1) W=(n^(1+eps))
+3) chceme najst vrcholove 2-farbenie, G je zadane ako matica susednosti
+   v W=O(n^2) a T=O(co najlepsie)
+
+1)
+  pri 2013-03-21-B 1b) uz sa riesilo prefixove minimum v takomto case...
+  takze namiesto 0 vsade das -1, namiesto 1 vsade das poziciu tej 1, zratas
+  prefixove minima, a potom sa pre kazdu 1 pozries ake je prefixove minimum
+  v poli pred nou.
+
+  ale v tomto pripade to ide aj jednoduchsie:
+  ked to rozdelime na sqrt(n) useky, pre kazdy usek sa pozrieme ci je prazdny
+  (plny nul) alebo neprazdny. (pouzijeme kladivo co vie hladat index prvej
+  jednotky v konst case a n^2 praci, ale kedze na poli sqrt(n) tak n praci...
+  ci n^1.5? gah, len n, vid uplny zaciatok suboru.) potom pre kazdu 1 najdem
+  minulu 1 v ramci useku, a ked neni tak najblizsi usek co je plny, a poslednu
+  jednotku v nom.
+  takze to bude taka rekurzia kde T(n)=T(sqrt(n))+O(1), W(n)=sqrt(n)W(n)+O(n).
+
+3)
+  ergo chcem vlastne zistit ci je G bipartitny, a najst particie ak hej
+  vieme robit maticovu suvislost pre T=O((logn)^2) W=O(n) common CRCW
+  spravime G', kde su dva vrcholy v jednom komponente <=> urcite musia mat
+  rovnaku farbu
+  (pre kazdy vrchol v by som chcel navzajom spojit vsetkych jeho susedov...
+  ale to je vela, tak vyberiem niektoreho z jeho susedov a spojim ho
+  s ostatnymi z jeho susedov.)
+  najdem na G' komponenty... teraz sa paralelne pozriem na kazdu hranu a ak
+  su tie vrcholy v G' v rovnakom komponente, poviem impossible (lebo o dvoch
+  spojenych vrcholoch som zistil ze musia mat rovnaku farbu). inak: sa kazdy
+  komponent G rozpadol na najviac dva komponenty G' (resp prave dva ledaze by
+  to bol ojedinely vrchol) - tak na G najdem komponenty a kazdemu vyberiem
+  nejakeho reprezentanta (napr min index) a jeho (tj cely komponent G' kam
+  patri) ofarbim jednou farbou a jeho susedov druhou.
+  stale mame T=O((logn)^2) W=O(n^2).
+
+2)
+  ked mame algoritmus s W=O(n^(1+eps)) a T=O(1), chceme najst lepsi.
+  chcem to nejako rozdelit na vhodne male dieliky tak aby to sadlo.
+  rozdelim pole na dieliky velke n^(e/(2e+1)), ich pocet je n^(1-e/(2e+1))=
+  =n^(e+1/(2e+1)).
+  v kazdom najdem maximum
+  co ma stalo pracu n^((e+1)/(2e+1)) * [n^(e/(2e+1))]^(1+e) =
+  (to bolo pocet dielikov krat praca na dielik, kde IP=> W je velkost ^(1+e))
+  = n^( (e+1)/(2e+1) + e(1+e)/(2e+1) ) = n^((1+e)^2/(2e+1))
+  potom najdem maximum spomedzi nich
+  co je n^((1+e)/(2e+1))^(1+e) = tiez n^((1+e)^2/(2e+1))
+  takze W = 2 n^((1+e)^2/(2e+1)) = 2 n^((1+2e+e^2)/(2e+1)) =
+  = 2 n^(1 + e^2/(2e+1))
+  co sa nejakou dalsou matikou ukaze ze je menej ako povodna praca, hura.
+
+
+
+[2013-05-09-B]------------------------------------------------------------------
+
+pattern matching
+(uz to moc neni v sylaboch ale why not)
+(asi nebude na skuske)
+
+mame pattern a text a chceme najst tie miesta textu kde je pattern.
+sekvencne: KMP.
+
+pattern su jamy a lemingovia su medzi jamami (takze pozicie su 0 az M)
+a pre kazdu poziciu si pamatam ze ked je tam leming tak kde je posledny vlavo
+(aspon v sekvencnom)
+
+nieco prepocute :(
+zapiseme si pattern ako X = P^k P'
+kde P' je prefix P, a k je co najvacsie
+potom |P| je "perioda X"
+t.j. plati X[i] = X[i+p-1]
+
+co by som teraz rad je vediet o vacsine pozicii rychlo povedat ze tu ten
+pattern nie je.
+
+nech p je najmensia perioda... tak pre mensie periody zratam
+"witness" = svedok o neperiodicite
+pole W[2...min(p, m/2)] (oznacime si pi:=min(p, m/2)):
+W[i] = k <=> P[k] != P[k+i-1]
+cize k je ten kvoli ktoremu ja, i, nie som perioda
+to ako sa zrata W si ukazeme neskor.
+
+preco je tam m/2: lebo aj keby som nasiel periodu dlhsiu ako m/2, je mi "nanic"
+(tam bude k=1, takze X = P P', a zaujimaju nas iba periody kde k>=2, vraj sa
+neskor uvidi preco - TODO).
+
+ked mam witness: ak mam dve pozicie i<j vzdialene menej ako pi,
+nemoze byt pattern matchnuty na oboch z nich. mozu zohrat "duel":
+ked W[j-i+1]=k, v patterne su na poziciach k a k+j-i rozne pismenka, takze
+sa pozriem na A[j+k] (cize A[i+(k+j-i)]) ze ake je v texte pismenko a zistim
+ake pismenko by tam malo byt keby sa pattern matchol na i a ake keby j. a aspon
+jeden umre. (pre jednoduchost nech umre prave jeden, aj keby sme ako vitaza
+vyhlasili niekoho nevalidneho tak ho niekedy neskor kilneme...)
+
+pre uplnost brutforc: ked mame common CRCW, vieme trivialne T=O(1) W=O(NM).
+
+teraz spravme nejaku analyzu textu a ocaseujme...
+ked uz pozname text (pre zmenu nie A ale T), pattern, a pole W (takze aj pi):
+
+1) v pripade pi = m/2
+  tak ked nakrajame text na 2n/m chlievikov velkych m/2, v kazdom chlieviku
+  bude max jeden kandidat. (lebo ked dvaja v chlieviku zohraju duel, 1 umre.)
+  spravime nad chlievikom binarny stromcek a v kazdom vnutornom vrchole
+  zohrame duel, zostane len jeden vitaz.
+  pre kazdy chlievik to bude T=O(log(m/2)) W=O(2*(m/2)) cize T=O(logm) W=O(m).
+  takze
+  zostalo uz len 2n/m kandidatov, na nich uz mozem spravit brutforc.
+  dokopy T=O(logm) W=O(n)
+
+2) v pripade pi < m/2
+  sa moze stat ze by tym postupom z 1) vzniklo privela chlievikov.
+  pattern teraz vyzera nejako U U U ... U V, kde V je prefixom U.
+  tak hladajme novy pattern P' := U+U[0:-1] ktory ma dlzku 2pi-1.
+  witnessovia stale platia.
+  na tom spustim postup 1) a najdem vsetky pozicie, na ktorych zacina P'.
+  (vsetci najdeni su vzdialeni aspon pi, takze ich je najviac n/pi.)
+  potom brutforcom zistim, na ktorych z nich matchuje U+U+V.
+  (to je W=O(n/pi*pi), lebo uz staci na kazdom checknut iba
+  len(U+U+V)-len(P') < pi znakov, takze sme stale ok.)
+  now, aby niekde matchovalo cele P=U^k+V tak musi byt za sebou k matchov P' a
+  potom matchovat U+U+V. (plusminus...)
+  TODO. (v podstate cvicenie.)
+
+teraz ako zratat to W.
+
+ak poznam W[i] pre kazde i od 2 po t:
+tak pre lubovolne dva indexy i<j vzdialene menej ako t (tj j-i<=t)
+viem vyratat bud W[i] alebo W[j].
+lebo nech k:=W[j-i+1], potom P[k]!=P[k+j-i] takze
+uhh je tam takyto obrazok, TODO pochopit/spracovat a sformulovat pismenkovo
+
+                               k
+             P ---------A------X----------
+     P -----------A------------Y--
+P ----------------X-----Y----
+     i       j    k     ^
+                      k+j-i
+
+(also ak to horne k sa zmesti este pred koniec dolneho (povodneho) patternu
+tak ten obrazok vyzera trochu inak, augh)
+
+potom zase spravime taky "strom" z chlievikov
+na spodnej vrstve su same kratke chlieviky, pre jedneho viem zratat W
+stale asi nerozumiem (TODO)
+
+
+
+cvicenia
+
+1)
+  na vstupe je K
+  N := 2^K
+  chceme vyratat pole A[i] = floor(log_2(i))
+  mame CREW, chceme T=O(loglogn) W=O(n)
+  atomicke O(1) fcie su take C-ckove
+
+2)
+  mame A[1..n] kde vsetky prvky su rozne.
+  chcceme ich pomatchovat
+  M[1..n] kde m[i] in {1,...,n,bottom} kde
+  m_i != i
+  m_i = j != bottom  <=>  m_j = i    // symetricke
+  i < j && m_i = j  =>  a_i < a_j    // musi byt lavy < pravy
+  i < j && m_i = m_j = bottom  =>  a_i > a_j   // nezvacsitelne
+  tiez CREW
+
+
+1)
+  spravim pole "som druha mocnina? (ak ano, ktora?)" v T=O(1) W=O(logn)
+  a potom uz len prefixove maximum
+  keby sme boli CRCW tak vid 2013-03-21-B a sme hotovi... ale nie sme.
+  aha, samozrejme:
+  for i = 1 to k pardo
+    for j = 2^i to 2^(i+1)-1 pardo    // tj 1<<i to 2<<i-1
+      R[j] := i
+  dokonca mame T=O(1) W=O(n)
+  hura Imp
+
+2)
+  TODO
+
+
+
+[2013-05-16-B]------------------------------------------------------------------
+
+casovy dolny odhad pre p-arne (binarne, ternarne, ...) vyhladavanie
+
+= logn / logp
+
+preco: ked ma algoritmus za ulohu najst hodnotu a
+my budeme adversary... (tj ideme podla rozhodovacich stromov algoritmu)
+pouzijeme PRAM model, nie work-time model (takze mame pocet procesorov ale
+prilis nas nezaujima ked je praca vyrazne mensia ako p * cas).
+algoritmus sa v prvom kroku spytal na nejakych p policok.
+pozrieme sa na velkosti medzier medzi tymi polickami, urcite nejaka je velka
+aspon n/p. tak mu odpovieme ze vsetky pred tou medzerou su <a a za nou su >a.
+
+v dalsom kroku sa nema preco spytat na cokolvek mimo tej medzery... takze mu
+vlastne zostal vstup velky n/p. pocet krokov "/p" kym nedosiahneme konstantne
+velke pole je prave log_p(n).
+
+
+pre common CRCW algoritmus na maximum (s T=O(loglogn) W=O(n)) ze je najlepsi:
+presnejsie, hladame optimalny cas pre p procesorov:
+
+algoritmus v kazdom kroku moze porovnat nejakych p dvojic.
+ja ako adversary vlastne mam N^2 graf ze ktory prvok je vacsi ako ktory. na
+zaciatku je prazdny a postupne ako adversary doplnam hrany. pri doplnani musim
+byt konzistentny a zachovavat tranzitivitu atd.
+
+v prvom kroku si algoritmus vypytal p porovnani takze v grafe pribudlo p hran.
+|V|=n a |E|=p. ja, adversary, sa musim rozhodnut ako odpovedat.
+spravim to tak ze v grafe najdem nejaku najvacsiu nezavislu mnozinu (IS) a tu
+naplnim "velkymi" hodnotami - to jest pre hranu co ide do IS ten v IS urcim ze
+je _vacsi_ ako ten mimo IS. (ostatne hrany urcim lubovolne konzistentne.
+napriklad tym vrcholom uz dam konkretne cisla, iduc od 1, a naozaj porovnam.)
+o pare dvoch vrcholov v IS sa algoritmus zatial nedozvedel nic.
+
+ukazeme ze IS bude velke aspon n^2/(2n+m). (kde n=|V|, m=|E|...)
+
+ako sa pocita IS (pomaly):
+repeat: najdem vrchol s min stupnom, poviem ze je v IS a vyhodim ho z grafu.
+(a aj jeho susedov vyhodim, lebo uz nemozu byt v IS.)
+
+velkost IS = kolkokrat som to zvladol spravit. oznacme |IS| = t.
+nech d_i = kolko mal susedov ten vrchol vybraty v i-tej iteracii.
+vidno ze: Sum_{i=1}^t 1+d_i = n
+(lebo algoritmus skonci ked sa mu minu vrcholy)
+
+tiez plati: Sum_{i=1}^t d_i (d_i+1) <= 2m
+(to jest: v kazdej iteracii urcite vyhodim aspon "d_i (d_i+1) / 2" hran.
+to preto, ze kazdy sused toho vyhodeneho vrchola ma urcite stupen >= d_i,
+kedze som vyhadzoval ten s minimalnym stupnom. takze mam (d_i+1) vrcholov
+a z kazdeho vyhodim d_i polhran.)
+(urcite nemozem pocas behu algoritmu vyhodit viac polhran, ako je v grafe.)
+(ale mozno takto nezaratam vsetky - kebyze nejaka polhrana ide niekde "von",
+algoritmus vyhodi celu hranu ale tu druhu stranu tej polhrany som nezaratal
+v ziadnom kroku.)
+
+( Sum_{i=1}^t (1/sqrt(t))^2 ) ( Sum_{i=1}^t (1+d_i)^2 ) <= 2m + n
+       v|
+( Sum_{i=1}^t 1/sqrt(t) (1+di) )^2 = 1/t ( Sum_{i=1}^t 1+d_i )^2 = n^2/t
+vraj to nejako vyplyva z Cauchy-Schwartzova nerovnosti
+
+takze naozaj n^2/t <= 2m+n, takze t >. n^2 / (2m+n)
+
+no a kedze o paroch v IS algoritmus nevie nic, musi o nich stale vsetko zistit.
+takze "postupuju do dalsieho kola" a mame rekurenciu...
+n_0 = n
+n_{i+1} = n_i^2 / (2p+n_i)
+
+co odhadneme
+n_{i+1} = n_i^2 / (2p+n_i) >= n_i^2 / (2n+n_i) >= n_i^2 / 3n
+z coho vylezie nieco ako
+n_z >= n / 3^(2^z-1)
+
+z coho vylezie ze aby som sa dostal na konstantu, potrebujem loglogn krokov.
+
+
+problem s tymto modelom je ze je dost slaby.
+ked pouzivam taketo rozhodovacie stromy, nemozem rozlisovat ci je to CREW alebo
+CRCW alebo co. ten dolny odhad co z toho vylezie bude platit pre vsetky.
+
+deje sa nejaka formalizacia CREWu. TODO.
+ale uz sa az tak nedeje odhad casu vypoctu, ako skor casu komunikacie.
+argumentuje sa skor ze veci trvaju dlho lebo ukladanie do premennych trva dlho.
+informacia sa "siri najviac exponencialnou rychlostou".
+(spomina sa dolny odhad CREW-oveho "or". ale vraj pomerne technicky dokaz.)
