@@ -1,0 +1,4 @@
+ake su problemy pri LL parsovani a podrobne ako sa riesi lava rekurzia
+ako vyriesit dangling else
+rozdiely medzi SLR, LALR, CLR (to je LR(1))
+data flow pre zive premenne
