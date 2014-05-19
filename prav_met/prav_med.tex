@@ -1,0 +1,50 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tabularx} 
+
+\lstset{
+language=sh
+,breaklines=true
+,basicstyle=\ttfamily
+, showstringspaces=false}
+
+\author{Peter Csiba}
+\textwidth 6.5in
+\oddsidemargin 0.0in
+\evensidemargin 0.0in
+
+\title{Pravdepodobnostné metódy - Poznámky}
+\date{19th of May, 2013}
+\author{Peter Csiba, petherz@gmail.com}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+\section{Definície}
+\begin{itemize} 
+  \item cdf - cumulative distribution function $f(x) = Pr[X < x]$. 
+  \item iid - independent and identically distributed random variables. 
+  \item Markovova nerovnosť. Ak náhodná premenná $X$ nadobúda iba nezáporné hodnoty, tak $\forall k > 0 \, Pr[X \geq k] \leq E[x]/k$.
+  \item Čebyševova nerovnosť $\forall k>0$ platí $Pr[|X-E[X]| \geq k] \leq Var[X]/k^2$. Dosadením do Markovovej nerovnosti. 
+  \item Vyššie momenty. $Pr[(X-\mu)^m \geq t^m] \leq E[(X - \mu)^m]/t^m$. 
+  \item Poissonove pokusy. $X_i$ sú iid nadobúdajúce 0,1. Potom platí $\forall \delta > 0 : Pr[X \geq (1 + \delta)\mu] < (e^\delta/(1 + \delta)^{(1+\delta)})^\mu$. Napr. pre hádzanie guličiek do krabíc získame pre $Pr[X \geq 2\mu]$ postupne $1/2$, $1/\mu$, $O(1/\mu^2)$ a Poissonove pokusy $e^{-\mu/3}$.
+  \item Martingale. Postupnosť náhodných premenných $E[X_i | X_0, \ldots, X_{i-1}] = X_{i-1}$.
+    \begin{itemize} 
+      \item Bounded difference condition ak platí $|X_i - X_{i-1}| \leq c_i$.
+      \item Azuma. Martingale $X$ tak $Pr[|X_n - X_0| > t] \leq 2 \exp{-t^2 / 2c}$ kde $c=\sum_i c_i^2$. TODO 
+      \item Doobova postupnosť. Ak $X_i$ sú n.p. tak $Y_i = E_{X_{i+1}, \ldots, X_{n}}[f(X) | \overrightarrow{X_i}]$. TODO 
+    \end{itemize} 
+  \item (Weak) law of big numbers $lim_{n \Rightarrow \infty} Pr[|X - \mu| > \epsilon] = 0$. 
+  \item Central limit theorem. $\sqrt{n}\bigg(\bigg(\frac{1}{n}\sum_{i=1}^n X_i\bigg) - \mu\bigg)\ \xrightarrow{d}\ N(0,\;\sigma^2).$ 
+\end{itemize} 
+
+\section{TODO}
+
+\section{Conclusion} 
+
+\end{document}
+
