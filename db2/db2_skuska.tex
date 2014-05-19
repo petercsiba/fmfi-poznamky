@@ -3,6 +3,7 @@
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{tabularx} 
+\usepackage{hyperref} 
 
 \lstset{
 language=sh
@@ -23,27 +24,42 @@ language=sh
 \maketitle
 
 \section{Introduction}
-\url{http://infolab.stanford.edu/~ullman/cs345-notes.html}
- 
- }
+Keyword badly defined + "ullman" or \url{cseweb.ucsd.edu/classes/sp14/.../} leads to explanation. 
+
+\begin{itemize} 
+\item \url{http:// infolab.stanford.edu/~ullman/.../slides01-14.pdf} 
+\item \url{http://infolab.stanford.edu/~ullman/cs345-notes.html}
+\item \url{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/RLDB2014/index.html} 
+\end{itemize} 
 
 \section{Uvodna prednaska}
 
-\subsection{Organizacia kurzu, system hodnotenia}
-
-\subsection{Odporucana literatura}
-
-\subsection{Moderne trendy v databazovych technologiach}
-
 \subsection{Funkcne symboly v Datalogu, suvis s XML}
+\begin{itemize} 
+\item $n$-ary function returns any type. Nullary function = constant. 
+\item \emph{Characteristic predicate} $P(x_1,\ldots,x_n, Y) \equiv \left(f(x_1, \ldots, x_n) = Y\right)$
+\item \emph{Functor} := functional symbol in datalog. 
+\end{itemize} 
 
 \subsection{Termy, Herbrandove univerzum, substitucie, matching, unifikacia}
+\begin{itemize} 
+\item \emph{Term} je premenná, alebo funkcia zložená z termov a konštánt. Term je \emph{základný} ak neobsahuje premenné. Terms as data structures a(p(s(Baker\_Street), nr(221B)), c(London, pc(NW1\_6XE))). 
+\item \emph{Herbrandove univerzum} := všetky termy potrebné na výpočet daného programu. 
+\item \emph{Substitúcia} := $\tau = [\{X_i \Rightarrow t_i\}]$. Substitúcia prebieha paralelne a zapisuje sa $s = t \tau$. 
+\item \emph{Usporiadanie termov} $t \sqsupseteq s \equiv \exists \Tau : s = t\Tau$. Minimálne termy sú konštanty a maximálne premenné. Dva termy sú rovnaké ak sa líšia len v pomenovaní premenných.
+\item \emph{Usporiadanie substitúcií} - substitúcia $\tau \sqsubseteq \sigma$ ak $\exists \phi : \sigma = \tau \circ \phi$. Dve substitúcie sú \emph{ekvivalentné} ak ide o permutácie premenných. Ak nie sú ekvivalentné, tak $\sigma$ je \emph{špecializáciou} $\tau$. 
+\item \emph{Term matching} - je daný ľubovoľný term $t$ a základný term $s$. Existuje $\tau : s = t\tau$? Priamočiarim riešením je \emph{recursive descent}. 
+\item \emph{Unifikácia} (viacero variant, mi používame túto). Nájdite najvšeobecnejšiu substitúciu $t\sigma = s\sigma$. Spravíme si stromy pre oba termy $s$ a $t$, korene sú ekvivalentné, synovia ekvivaletných termov sú v poradí ekvivalentné. Urobíme reflexívno-tranzitívny uzáver a vzniknutá relácia ekvivalencie je hľadaná substitúcia. Poznáma: do premennej môže byť priradený ľubovoľný term. Dá sa to zrýchliť (Prívara, Ruzicka 1989). 
+\end{itemize} 
 
 \subsection{Preklad Datalogu s funkcnymi symbolmi do relacnej algebry}
 
+
 \subsection{Operatory atov a vtoa}
+Datalog rule \emph{head}s can accept any terms. Therefore when translating to relational algebra value sets satisfying these terms must be selected. 
 
 \subsection{Naivna a seminaivna iteracia programov bez negacie}
+Rekurzivne predikaty sa vyhodnocuju iterativne, kym je nejaka zmena. Tento porces skonci kvoli Tarskeho vete o pevnom bode. Semi-naivna pocita iba s rozdielmy a tak setri cas. Zalezi na poradi. 
 
 \section{Negacia v databazach a logickom programovani}
 
@@ -61,13 +77,22 @@ language=sh
 
 \subsection{Problem naivnej evaluacie programov s negaciou: minimalny pevny bod nemusi existovat}
 
+TODO: Stratifikovany pevny bod
+Stratified database: Nema rekurziu s negaciou \url{cseweb.ucsd.edu/classes/sp14/.../Datalog-neg09.pdf}.
+(viac v K.R. Apt, H.A. Blair, and A. Walker, ‘‘Towards a theory of declarative knowledge,’’ in Foundations of Deductive Databases and Logic Programming, J. Minker, Ed., Morgan Kaufman, Los Altos, CA, 1988, pp. 89–148.)
+
 \subsection{Stratifikovane a lokalne stratifikovane programy}
+TODO: WAT? 
 
 \subsection{Stabilne modely}
 
 \subsection{Stabilne modely, Gelfond-Lifschitzova transformacia}
 
 \subsection{Trojhodnotove modely, well-founded model}
+Unfounded sets: \url{www.cs.uni-potsdam.de/wv/.../unfounded-anim.pdf} 
+T.j. pravidla, ktore su bud SPOLU nepravdive, alebo nedokazatelne. Inymi slovami, ak je pravidlo v unfounded set, tak za predpokladu nepravdivosti ostatnych pravidiel v unfounded set a vsetkych implikacii v teorii je toto pravidlo nepravdive / nedokzatelne. 
+
+\emph{Partial model} <T,F> je mnozina true, false. 
 
 \subsection{Metody vypoctu well-founded modelu: maximal unfounded set, alternujuci pevny bod}
 
@@ -76,6 +101,15 @@ language=sh
 \subsection{Rozsirenie relacnej algebry o semijoin a antijoin}
 
 \subsection{Vstupne mnoziny, pseudokluce, bezpecnost programov so zabudovanymi (napr. aritmetickymi) predikatmi}
+ 
+\emph{Safe Datalog rule}: A Datalog rule $p :- q_1, ..., q_n.$ is safe
+\begin{itemize} 
+\item if every variable that occurs in a negated subgoal also
+appears in a positive subgoal and
+\item if every variable that appears in the head of the rule also
+appears in the body of the rule.
+\end{itemize} 
+
 
 \subsection{Vypocet programov s negaciou zdola nahor (Datalog) a zhora nadol (Prolog, SLD rezolucia)}
 
@@ -87,7 +121,7 @@ language=sh
 
 \subsection{Sirenie vazieb a vysledkov: magicke a pomocne predikaty}
 
-\subsection{Vypocet RGT do hlbky: expand_goal, expand_rule}
+\subsection{Vypocet RGT do hlbky: expand\_goal, expand\_rule}
 
 \subsection{Vypocet RGT do sirky: Queue-based RGT (QRGT)}
 
@@ -156,6 +190,11 @@ language=sh
 \subsection{Wong-Youssefiho algoritmus, preferencie na poradie ostranovanych hran}
 
 \subsection{Uplny reduktor}
+TODO: Bezstratove spojenia: 
+$$
+\forall i (R_i = \Pi_{R+i}(R_1 \join \ldots \join R_n))
+$$
+T.j. univerzalna relacia, globalna konzistencia. 
 
 \subsection{Yannakakisov algoritmus}
 
