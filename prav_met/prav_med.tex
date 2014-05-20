@@ -1,8 +1,12 @@
 \documentclass[12pt,a4paper]{article}
 
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{tabularx} 
+\usepackage{amsmath} 
+\usepackage{amssymb} 
 
 \lstset{
 language=sh
@@ -22,7 +26,6 @@ language=sh
 \begin{document}
 \maketitle
 
-\section{Introduction}
 
 \section{Definície}
 \begin{itemize} 
@@ -31,7 +34,7 @@ language=sh
   \item Markovova nerovnosť. Ak náhodná premenná $X$ nadobúda iba nezáporné hodnoty, tak $\forall k > 0 \, Pr[X \geq k] \leq E[x]/k$.
   \item Čebyševova nerovnosť $\forall k>0$ platí $Pr[|X-E[X]| \geq k] \leq Var[X]/k^2$. Dosadením do Markovovej nerovnosti. 
   \item Vyššie momenty. $Pr[(X-\mu)^m \geq t^m] \leq E[(X - \mu)^m]/t^m$. 
-  \item Poissonove pokusy. $X_i$ sú iid nadobúdajúce 0,1. Potom platí $\forall \delta > 0 : Pr[X \geq (1 + \delta)\mu] < (e^\delta/(1 + \delta)^{(1+\delta)})^\mu$. Napr. pre hádzanie guličiek do krabíc získame pre $Pr[X \geq 2\mu]$ postupne $1/2$, $1/\mu$, $O(1/\mu^2)$ a Poissonove pokusy $e^{-\mu/3}$.
+  \item Chernoff a Poissonove pokusy. $X_i$ sú iid nadobúdajúce 0,1. Potom platí $\forall \delta > 0 : Pr[X \geq (1 + \delta)\mu] < (e^\delta/(1 + \delta)^{(1+\delta)})^\mu$. Napr. pre hádzanie guličiek do krabíc získame pre $Pr[X \geq 2\mu]$ postupne $1/2$, $1/\mu$, $O(1/\mu^2)$ a Poissonove pokusy $e^{-\mu/3}$.
   \item Martingale. Postupnosť náhodných premenných $E[X_i | X_0, \ldots, X_{i-1}] = X_{i-1}$.
     \begin{itemize} 
       \item Bounded difference condition ak platí $|X_i - X_{i-1}| \leq c_i$.
@@ -39,12 +42,141 @@ language=sh
       \item Doobova postupnosť. Ak $X_i$ sú n.p. tak $Y_i = E_{X_{i+1}, \ldots, X_{n}}[f(X) | \overrightarrow{X_i}]$. TODO 
     \end{itemize} 
   \item (Weak) law of big numbers $lim_{n \Rightarrow \infty} Pr[|X - \mu| > \epsilon] = 0$. 
-  \item Central limit theorem. $\sqrt{n}\bigg(\bigg(\frac{1}{n}\sum_{i=1}^n X_i\bigg) - \mu\bigg)\ \xrightarrow{d}\ N(0,\;\sigma^2).$ 
+  \item Central limit theorem. $\sqrt{n}((\frac{1}{n}\sum_{i=1}^n X_i) - \mu)\ \rightarrow^d\ N(0,\;\sigma^2).$ 
+  \item Randomizácia. Premena priemerného prípadu na očakávaný. Napr. pri hešovaní vyberieme náhodnú hešovaciu funkciu. 
 \end{itemize} 
 
-\section{TODO}
+\section{Pravdepodobnostné triky}
+\begin{itemize} 
+  \item Linearita strednej hodnoty $E[X + Y] = E[X] + E[Y]$. 
+\end{itemize} 
 
-\section{Conclusion} 
+\section{Ochutnávka pravdepodobnostných algoritmov}
+pravdepodobnostné konečné automaty, testovanie násobenia matíc, hľadanie minimálneho rezu
+   
+Jeden z pohľadov na pp algoritmy: vieme medzi dvoma počítačmi vymieňať informácie iba draho a chceme skoro istú odpoveď. 
+   
+Ďalším delením modelov pp. alg: 
+  \begin{itemize} 
+    \item I. nederministicky vyberáme z deterministických stratégií. Algoritmy $S_{A,w} = \{A_1, \ldots, m\}$ a výpočty $C_i = A_i(w)$ so časovou zložitosťou $Time(C_i)$. Z toho odvodíme ExpTime, Time, výsledok $X$ a pp korektnosti $E[X]$. Napr. randomized max SAT. 
+    \item II. simulujeme NTS. Napr. randomizovaný quicksort (keď je jeden z prvkov $i$,$j$ porovnaný - je vybraný ako pivot). 
+  \end{itemize} 
+
+  \subsection{Las Vegas a Monte Carlo} 
+  \begin{itemize} 
+    \item Las Vegas (LV). Keď odpovie, tak pravdivo, inak odpovie "nie som si istý". 
+      \begin{itemize}
+        \item $Pr[A(x) = F(x)] \geq 1/2$, 
+        \item $Pr[A(x) = "?"] = 1 - Pr[A(x) = F(x)]$. 
+      \end{itemize} 
+      Táto definícia je ekvivalentná s $Pr[A(x) = F(x)] = 1$ a označuje sa LV* - ako potenciálne nekonečná.
+      Napr. či $\exists i : a_i = b_i$. 
+    \item Monte Carlo (MC). 
+    \begin{itemize} 
+      \item Jednosmerné (1MC) - istotu odmietne a možno (aspoň s pp 1/2) hovorí pravdu. Napr. porovnanie matíc. 
+      \item S ohraničenou chybou (2MC) rátajúci funkciu $F(x)$ ak $$
+        \exists 0 < \epsilon \leq 1/2 \, \forall x \, Prob[A(x) = F(x)] \geq 1/2 + \epsilon
+      $$
+      V tomto prípade opakovaním behu vyberieme najčastejšiu odpoveď, ktorá nastala aspon v $t/2$ prípadoch. 
+      \item S {\bf ne}ohraničenou chybou (UMC) ak $Prob[A(x) = F(x)] > 1/2$. Prakticky 2MC s dynamickým parametrom $e_x$ ktorý môže byť exponenciálne malý od počtu vstupov čo vyžaduje exponenciálne veľa behov algoritmu pri opakovaní. V prípade $e_x = \frac{1}{log|x|}$ je to v pohode. Zaujímavosťou je, že v prípade "neviem" algoritmus vracia pravdepodobnosť "áno", t.j. zvyšných prípadov. 
+    \end{itemize} 
+  \end{itemize} 
+  
+  \subsection{Optimalizačné problémy} 
+  Def: $U = (\Sigma_I, \Sigma_O, L, L_I, M, cena, ciel)$ kde 
+  \begin{itemize}
+    \item $\Sigma_I$ je vstupná abeceda.
+    \item $\Sigma_O$ je výstupná abeceda.
+    \item $L \subseteq \Sigma_I^{*}$ je jazyk prípustných vstupov.
+    \item $L_I \subseteq L$ je jazyk aktuálnych vstupov.
+    \item $M$ je jazyk potenciálnych riešení.
+    \item $cena(x,M(x)) \in \mathbb{R}$ je účelová funkcia.
+    \item $ciel \in \{min, max\}$.
+    \item $OPT_U(x)$ je optimálne riešenie.
+    \item Algoritmus $A$ je \emph{konzistentný} ak $A(x) \in M(x)$. 
+    \item $Ratio_A(x) = max\{\frac{OPT(x)/A(x)}{A(x)/OPT(x)}\}$ - definícia kvôli rôznym cieľom. 
+    \item $E[\delta]$-aproximačný ak $Prob[A(x) \in M(x)] = 1 \wedge \forall x \in L \, E[Ratio_A(x)] \leq \delta$. 
+    \item $\delta$-aproximačný ak $Prob[A(x) \in M(x)] = 1 \wedge \forall x \in L \, Prob[Ratio_A(x) \leq \delta] \geq 1/2$. 
+  \end{itemize} 
+  
+  {\bf Lema 2.4} Z Čebyševa dostávame, že ak $A$ je $E[\delta]$ aproximačný, tak je aj $2 \delta$ aproximačný. 
+
+\section{Analýza pravdepodobnostných algoritmov}
+ - Markov, Čebyšev, Chernoff (aj s dôkazmi; v Chernoffovi stačí dokázať to najsilnejšie tvrdenie), vyššie momenty netreba
+ 
+
+\section{Triedenie a vyhľadávanie}
+ - s.v.p. analýza quicksortu (dôkaz); treap, skiplist - vedieť, ako fungujú a myšlienky dôkazov
+ 
+
+\section{Hľadanie mediánu}
+ - algoritmus a jeho analýza
+ 
+
+\section{Hešovanie}
+ - univerzálne rodiny hešovacích funkcií (def.), perfektné hešovanie, lineárne sondovanie (aj s dôkazom očak. zložitosti)
+ 
+
+\section{Testovanie prvočíselnosti}
+ - Fermatov test (dôkaz Fermatovej vety, dôkaz, že ne-Carmichaelove zložené čísla majú veľa svedkov) a Miller-Rabinov test (ako funguje, že zložené čísla majú viac odmocnín z 1; dôkaz, že svedkov je veľa netreba)
+ 
+
+\section{Konvexné obaly (a veľa iného)}
+ - randomizovaný inkrementálny algoritmus pre konvexný obal v 2D a spätná analýza; pre viacrozmerný KO a súvis s Delaunayho trianguláciou, Voronoiovym diagramom stačí myšlienku, dôkaz netreba
+ 
+
+\section{Lineárne programovanie}
+ - Seidelov algoritmus (aj s dôkazom zložitosti), MSW a Clarksonove algoritmy vedieť ako fungujú, dôkaz netreba
+ 
+
+\section{Hľadanie minimálneho rezu}
+ - jednoduchý kontrahovací algoritmus a jeho zrýchlenia; sparsifikátory len myšlienku, vedieť čo to je, na čo to je...
+ 
+
+\section{Hľadanie najlacnejšej kostry}
+ - lineárny samplovací algoritmus pre hľadanie najlacnejšej kostry
+ 
+
+\section{Perfektné párovania}
+ - perfektné párovania, Tutteova veta (aj dôkaz), testovanie rovnosti polynómov, Schwartz-Zippelova lema (aj dôkaz), izolačná lema (aj dôkaz)
+ 
+
+\section{Hľadanie najkratších ciest}
+ - Seidelov algoritmus a hľadanie svedkov Booleovského násobenia matíc
+ 
+
+\section{Náhodné prechádzky}
+ - def. Markovove reťazce, prechodové matice a stacionárne distribúcie; hlavná veta MR (bez dôkazu); súvis s vlastnými číslami, súvis s elektrinou (efektívny odpor a "pendlovací čas", horný a dolný odhad pre čas pokrytia - aj s dôkazmi)
+ 
+
+\section{Problém splniteľnosti}
+ - Schöningov algoritmus na riešenie 3-SATu (aj s dôkazom zložitosti)
+ 
+
+\section{Markov Chain Monte Carlo (MCMC)}
+ - samplovanie pomocou náhodných prechádzok (náhodné grafy s predpísanými stupňami, náhodné riešenia knapsacku), reverzibilné MR a Metropolisov-Hastingsov algoritmus (ako vyrobiť MR s danou stacionárnou distribúciou); bayesovská inferencia a MrBayes (myšlienka)
+ 
+
+\section{Náhodnosť a zložitosť}
+ - pravdepodobnostné triedy zložitosti (ZPP, RP, coRP, BPP, PP), Adlemanova veta (BPP a boolovské obvody), Sipser-Gacsova veta (BPP a polynomiálna hierarchia)
+ 
+
+\section{Arturove Merlinove hry}
+ - triedy MA a AM, protokol pre grafový neizomorfizmus so súkromnou a verejnou mincou (t.j. GNI je v IP[2] aj v AM), protokoly v MA a AM sa dajú upraviť tak, aby mali perfektnú úplnosť; zosilnenie Sipser-Gacsovej vety: $MA \subseteq \Sigma 2P$; $MA \subseteq AM \subseteq \Pi 2P$
+ 
+
+\section{Interaktívne dôkazy}
+ - \# $P \subseteq IP \subseteq PSPACE$; myšlienka $IP = PSPACE$
+ 
+
+\section{Pravdepodobnostne overiteľné dôkazy}
+ - NP = PCP[n3, 1] (dôkaz)
+ 
+
+\section{Derandomizácia} 
+- derandomizácia pomocou pseudonáhodných generátorov (kap. 20.1. z Aroru); Nisan-Wigdersonov generátor (ako funguje, čo sú dizajny; dôkaz netreba)
+
+
 
 \end{document}
 
