@@ -191,6 +191,8 @@ Pri porovnaní objektov $X_1$ a $X_2$ porovnávame iba hodnoty $f(X_1)$ a $f(X_2
 
 SKIP Interaktivne dokazy 4.2.4 str.56 - 57 (Krypto) 
 
+Viď test prvočíselnosti \ref{sec:prime-test}. 
+
 \subsubsection{Freivaldsova metóda}
 Namiesto zvyšku po delení prvočíslom používame hodnotu polynómu, matice alebo funkcie. Napr. $AB=C$ pomocou náhodného vektoru $x$. Pri porovnaní polynómov môže byť normálny tvar exponenciálne dlhý, pričom zápis je lineárny $(x_1 + x_2)(x_1 + x_3) \cdots (x_2 + x_4)$. 
 \paragraph{Schwartz-Zippel} Nech $Q(x_1, x_2, \ldots, x_n) \in F[x_1, x_2, \ldots, x_n]$ je polynóm viacerých premenných celkového stupňa $d$. Nech $S \subseteq F$ a $r_1, r_2, \ldots, r_n$ sú náhodne vybraté z $S$. Potom 
@@ -231,8 +233,32 @@ $$
 Napr. jednou triedou takých funkcií sú všetky funkcie $U \mapsto T$. Alebo $h_{a,b} = ((ax + b) \pmod p) \pmod m$ pre $U = \{0, 1, \ldots, p-1\}$. Alebo skalárny súčin pre $r$-rozmerné vektory. 
 
 \section{Testovanie prvočíselnosti}
+\label{sec:prime-test} 
  - Fermatov test (dôkaz Fermatovej vety, dôkaz, že ne-Carmichaelove zložené čísla majú veľa svedkov) a Miller-Rabinov test (ako funguje, že zložené čísla majú viac odmocnín z 1; dôkaz, že svedkov je veľa netreba)
- 
+
+(Metóda svedkov) 
+Malá fermatová veta, O čínskych zvyškoch, Lagrangeova of grupách $|A| = |\{H \circ a | a \in H\}||H|$ kde $H$ je podgrupa $A$.  
+
+\paragraph{Veta 4.29} Nech $p > 2$ je nepárne. Potom 
+$$
+  p \in \mathbb{P} \Leftrightarrow a^{\frac{p-1}{2}} \pmod p \in \{1, p-1\} \forall Z_p - \{0\}
+$$
+
+\paragraph{Algoritmus 21 - Zjednodušený Solovay-Strassen} je polytime 1MC algoritmus pre rozpoznávanie zložených čísel. 
+\begin{itemize}
+  \item náhodne $a \in \{1,\ldots,n-1\}$
+  \item $A \Leftarrow a^{(n-1)/2} \pmod n$
+  \item {\bf if} $A \in \{1, -1\}$ {\bf then} return($n \in \mathbb{P}$)
+  \item {\bf else} return($n \not\in \mathbb{P}$)
+\end{itemize} 
+Rozšírený používa {\bf Jakobián} $n \geq 3$ je nepárne, potom $a \in \{1,\ldots,n-1\}$ je {\bf Jac-svedok} pre $n \not\in PRIM$, ak 
+\begin{itemize} 
+  \item $gcd(a,n) \neq 1$, alebo
+  \item $gcd(a,n) = 1$ a $Jac[\frac{a}{n}] \neq a^{(n-1)/2} \pmod n$
+\end{itemize} 
+TODO co je Jakobian 
+
+\paragraph{PrimGen($l$,$k$)}. Opakujeme $l^2$ krát vygenerujeme $l$ bitové číslo a $k$-krát naň spustíme Solovay-Strassen. Zaujímavosťou je, že zložitosť počítame vzhľadom na veľkosť výstupu. 
 
 \section{Konvexné obaly (a veľa iného)}
  - randomizovaný inkrementálny algoritmus pre konvexný obal v 2D a spätná analýza; pre viacrozmerný KO a súvis s Delaunayho trianguláciou, Voronoiovym diagramom stačí myšlienku, dôkaz netreba
@@ -241,6 +267,20 @@ Napr. jednou triedou takých funkcií sú všetky funkcie $U \mapsto T$. Alebo $
 \section{Lineárne programovanie}
  - Seidelov algoritmus (aj s dôkazom zložitosti), MSW a Clarksonove algoritmy vedieť ako fungujú, dôkaz netreba
  
+\paragraph{Definícia 4.8} 
+\begin{itemize} 
+  \item vstup matica $A = [a_{ij}]$, $i = 1,\ldots,m$; $j=1,\ldots,n$
+  \item vstup vektor $b \in \mathbb{R}^m$
+  \item vstup vektor $c \in \mathbb{R}^n$
+  \item ohraničenia $M(A,b,c) = \{X \in (\mathbb{R}^{0,+} | AX = b\}$
+  \item cena $cost(X, (A,b,c)) = c^TX = \sum_i c_ix_i$
+  \item cieľom je minimalizácia ceny pri dodržaní ohraničení
+\end{itemize} 
+Pre obor hodnôt riešení $X$, ak je $\mathbb{R}$ tak existuje polynomiálny algoritmus, ak je $\mathbb{Z}$ (integer LP = ILP)( tak je exponenciálny. Preto existuje trieda aproximačných algoritmov, ktoré najprv zrelaxujú problém na $\mathbb{R}$, vyriešia v polytime a transformujú na prípustné riešenie pôvodného problému. Používa sa napr. {\bf náhodné zaokrúhľovanie}. 
+
+Demonštrácia na probléme {\bf vrcholového pokrytia}. Minimalizovať $\sum_i x_i$ pričom $x_i + x_j \geq 1 \forall (v_i, v_j) \in E$. Vzniká tak 2-aproximačný algoritmus. 
+
+Podobným spôsobom vieme aproximovať aj MaxSAT v polynomiálnom čase a $E[\frac{e}{e-1}]$ aproximáciou. TODO dôkaz. 
 
 \section{Hľadanie minimálneho rezu}
 \label{sec:min-cut} 
@@ -256,6 +296,8 @@ Zlepšíme tak, že po $l(n)$ krokoch kontrakciu zastavíme a dopočítame deter
 \paragraph{Veta 4.21} Časová zložitosť algoritmu $RepTree$ je $O(n^logn)$ s pravdepodobnosťou úspechu aspoň $\frac{1}{\Theta(log n)}$. Algoritmus paralelne simuluje opakované behy pôvodného kontrakčného algoritmuk pričom sa vetví, t.j. vytvorí dve rôzne kontrakcie a tak počet simulácií zdvojnásobí, vždy po $1 + \frac{n}{\sqrt{2}}$ krokoch.  
 
 TODO dôkaz. 
+
+Dá sa nejak aj pomocou semidefinitného programovania (SKIP 4.6.). 
 
 \section{Hľadanie najlacnejšej kostry}
  - lineárny samplovací algoritmus pre hľadanie najlacnejšej kostry
@@ -299,6 +341,10 @@ $$
   \binom{j + 2i - 1}{i} - \binom{j + 2i - 1}{i - 1} = \binom{j + 2i}{i}\frac{1}{j + 2i}
 $$
 kde $i$ je počet oddialení a $j$ počet priblížení (Pripomína Catalanove čísla). Už nám len stačí zrátať sumu cez $i$ a využiť Stirlingovu formulu $r! \approx \sqrt{2\pi r}(\frac{r}{e})^r$. 
+
+Dá sa aj pomocou relaxácie ILP. 
+
+Keďže máme viacero algoritmov na riešenie MaxSAT, tak sa ich oplatí skombinovať a zobrať lepší výsledok. Konkrétne RSAM (náhodný vektor a jeho okolie) a RRR (relaxácia ILP) a dostaneme tak $E[4/3]$-aproximačný algoritmus. TODO dôkaz. 
 
 \section{Markov Chain Monte Carlo (MCMC)}
  - samplovanie pomocou náhodných prechádzok (náhodné grafy s predpísanými stupňami, náhodné riešenia knapsacku), reverzibilné MR a Metropolisov-Hastingsov algoritmus (ako vyrobiť MR s danou stacionárnou distribúciou); bayesovská inferencia a MrBayes (myšlienka)
