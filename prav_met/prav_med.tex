@@ -86,6 +86,8 @@ Jeden z pohľadov na pp algoritmy: vieme medzi dvoma počítačmi vymieňať inf
       V tomto prípade opakovaním behu vyberieme najčastejšiu odpoveď, ktorá nastala aspon v $t/2$ prípadoch. 
       \item S {\bf ne}ohraničenou chybou (UMC) ak $Prob[A(x) = F(x)] > 1/2$. Prakticky 2MC s dynamickým parametrom $e_x$ ktorý môže byť exponenciálne malý od počtu vstupov čo vyžaduje exponenciálne veľa behov algoritmu pri opakovaní. V prípade $e_x = \frac{1}{log|x|}$ je to v pohode. Zaujímavosťou je, že v prípade "neviem" algoritmus vracia pravdepodobnosť "áno", t.j. zvyšných prípadov. 
     \end{itemize} 
+    
+    \item {\bf Izolačná lema 5.11} Nech $(X,F)$ je systém podmnožín rozmeru $m$, $w : X \mapsto \{1,\ldots,2m\}$ je kladná celočíselná váhovacia funkcia. Potom $Pr[\exists \mbox{jedina mnozina minimalnej vahy v} F] \geq 1/2$. Napr. perfektné párovanie - aby sme našli unikátne. 
   \end{itemize} 
   
   \subsection{Optimalizačné problémy} 
@@ -317,6 +319,16 @@ A[i,j] = \left\{
 \end{align*} 
 Definujeme polynóm $Q(x_{11}, \ldots, x_{nn}) = det(A)$. Potom $G$ má úplne párovanie práve vtedy ak $Q \not\equiv 0$. 
 
+\paragraph{Veta 5.9 Tutte} Nech $A$ je matica, ktorá vznikla z grafu $G = (V,E)$: 
+\begin{itemize} 
+  \item každej hrane $(v_i, v_j) \in E$ priradíme premennú $x_{i,j}$, $i < j$
+  \item hodnota matice je 0 ak tam nie je hrana, $x_{i,j}$ ak $i < j$ a $-x_{i,j}$ ak $j < i$. 
+\end{itemize} 
+Potom $G$ obsahuje úplné párovanie práve vtedy, keď determinant matice $A$ je nenulový. 
+TODO RNC algoritmus. 
+
+\paragraph{P-Match} Existuje podmienka pre hranu, či je súčasťou perfektného párovania (je závislá od determinantu upravenej Tutteho matice $x_{i,j} \mapsto 2^{w(i,j)}$. Tento algoritmus potrebuje $O(log^2n$ paralelné a $O(n^{3.5}m)$ práce. 
+
 \section{Hľadanie najkratších ciest}
  - Seidelov algoritmus a hľadanie svedkov Booleovského násobenia matíc
  
@@ -353,6 +365,8 @@ Keďže máme viacero algoritmov na riešenie MaxSAT, tak sa ich oplatí skombin
 \section{Náhodnosť a zložitosť}
  - pravdepodobnostné triedy zložitosti (ZPP, RP, coRP, BPP, PP), Adlemanova veta (BPP a boolovské obvody), Sipser-Gacsova veta (BPP a polynomiálna hierarchia)
  
+ 
+SKIP: Paralelne a distribuovane vypocty 
 
 \section{Arturove Merlinove hry}
  - triedy MA a AM, protokol pre grafový neizomorfizmus so súkromnou a verejnou mincou (t.j. GNI je v IP[2] aj v AM), protokoly v MA a AM sa dajú upraviť tak, aby mali perfektnú úplnosť; zosilnenie Sipser-Gacsovej vety: $MA \subseteq \Sigma 2P$; $MA \subseteq AM \subseteq \Pi 2P$
@@ -368,6 +382,15 @@ Keďže máme viacero algoritmov na riešenie MaxSAT, tak sa ich oplatí skombin
 
 \section{Derandomizácia} 
 - derandomizácia pomocou pseudonáhodných generátorov (kap. 20.1. z Aroru); Nisan-Wigdersonov generátor (ako funguje, čo sú dizajny; dôkaz netreba)
+
+\section{Ostatné}
+Problém koordinácie - každý procesor chce načítať rovnakú hodnotu "*". Deterministické riešenie $O(n^{1/3})$ (TODO nechápem ako môže byť menej ako $O(n)$). Pravdepodobnostné konštantné s pravdepodobnosťou $1 - 2^{\Theta(c)}$. Podobne sa dá zlepšiť problém byzantíjskej dohody, kde sa procesory môžu správať náhodne (avšak to vyžaduje prídavný register s global read a synchronizáciu, ktorý náhodne generuje bity). 
+
+TODO dôkazy a definície
+
+TODO voľba šéfa
+
+TODO section 5.2 - Formálne jazyky a automaty 
 
 
 
