@@ -1,0 +1,19 @@
+co bolo dneska:
+1, na obojsmernom kruhu je dany sef a niekde tam je jedna chybna linka ktora neprepusta nijake spravy, na O(n log n) sprav zistit medzi ktorymi dvoma vrcholmi je, model je asynchronny t.j. sprava moze meskat lub. dlho
+
+2,volba sefa na k-chodovom obojsmernom kruhu -t.j. vies poslat priamo nielen susedovy ale rovno k susedom na kazdu stranu, sprav najviac O(n+ n/k log n/k)
+
+3, na mriezke n x n nahodne sa narodia pakety, dok. ze pr. existencie vrchola kam ide viac ako 3ln n / ln ln n sprav je mala, tj pre n iduce do nekonecna rovna nule
+
+4, bol zadany modifikovany alg. na volbu sefa na upl. grafoch, trebalo dok. ze minie v najh. pripade az n^2 sprav
+
+zatial (asi) viem jednotku a dvojku, skusim to sem dat. komenty su vytane Smile
+
+1,
+sef posle do oboch smerov spravu do vzdialenosti n/2. ak tam dorazi, tak sa ma vratit. z (presne) jednej strany sa to vrati, takze vie v ktorej polovici je chyba. potom posle spravu do polovice tej casti v ktorej je chyba (z oboch stran), a toto robi kym nenajde. kazdy cyklus je O(n) sprav, a po log n kolach by to mal najst, takze O(n log n)
+
+2,
+dve fazy:
+1. najprv sa snazi kazdy obsadit uzemie kam dosiahne na jeden krok. objavuje susedov po jednom. ak je ten objaveny mensi, tak si ho oznaci a ide dalej (ak ten uz mal nejakych obsadenych tak tych preskoci). ak narazi na objaveny (na jeden hop) zisti kto je jeho sef, ak je vacsi tak skape, inak ho zabije. tiez ak narazi na niekoho co uz robi fazu dva tak skape. Takto by malo vzniknut max ~n/k takychto casti
+spravy: asi to je planarne, tak by to mohlo byt O(n)
+2. ide obsadzovat tieto zakladne. kazdy si najde praveho suseda (cesta tam a naspat, suma n/k, robi to po k-krokoch), mensi skape (takto odpadne aspon polovica). potom sa posle zase sprava doprava.. je log n/k kol, takze sprav je O(n/k log n/k) (zaroven si kazdy pamata, ze kolkate kolo je, ak narazi na niekoho s mensim cislom, tak pocka) 

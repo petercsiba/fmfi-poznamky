@@ -1,0 +1,9 @@
+{\em $k$-chordový kruh} na $n$ vrcholoch je graf $CR_k(n)=({\mathbb Z}_n,E)$, pričom $(i,j)\in E\iff 0<|i-j|\le k$ (t.j. graf má $n$ vrcholov
+rozmiestnených na kruhu, pričom každý vrchol ``vidí'' najbližších $k$
+susedov každým smerom).  Uvažujme graf $CR_k(n)$ so zmyslom pre orientáciu
+ako pri úplnom grafe, t.j. každý vrchol $v$ má svojich $2k$ susedných hrán
+označených číslami $\in\langle-k,k\rangle-\{0\}$, pričom hrana s číslom $l$
+vedie do vrchola $v\oplus l$ (kde $\oplus$ je sčítanie modulo $n$).
+Nájdite algoritmus, ktorý zvolí šéfa na grafe $CR_k(n)$ s použitím
+$O\left(n+\frac{n}{k}\log\frac{n}{k}\right)$ správ.
+

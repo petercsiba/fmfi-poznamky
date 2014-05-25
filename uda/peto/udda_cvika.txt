@@ -1,0 +1,63 @@
+
+Mriezka NxN, routuje sa tak, ze prednost ma lubovolny paket
+v najhorsom pripade treba viac ako 2N krokov
+	v prvych dvoch riadkoch, lava polka kazdeho chce ist do praveho stlpca
+	lavy horny chce ist do praveho dolneho
+	vie sa zdrzat a spravit 5N/2 krokov
+ale aj tak staci O(n) krokov
+	na riadku sa nezdrzi nikto
+	v stlpci ho mozu zdrzat iba pakety do toho stlpca
+	tych je ale najviac N-1
+	
+mriezka NxN, v kazdom vrchole sprava do nahodneho
+w.h.p. do kazdeho vrchola ide max 3log(NxN)/log(log(NxN)) sprav
+
+cesta z N procesorov, kazdy ma dva pakety (cerveny a modry), ktory chce dorucit
+cervene a modre tvoria permutaciu
+ukazte, ze staci N krokov
+	staci nam uvazovat jeden smer
+	uprednostnujeme vzdy ten s max cestou (resp. modry ak maju rovnaku?)
+	
+	sporom, nech mame paket, ktory isiel viac ako N krokov?
+	oznacim a resp. b pocet vrcholov pred startom resp. za cielom
+	dlzka cesty paketu je K <= (N-a-b-1)+(2b+1-c)
+		(N-a-b-1) je skutocna dlzka cesty paketu
+		(2b+1) je pocet tych, co koncia za mojim cielom
+		c je dlzka suvisleho useku paketov s neskorsim cielom, ktore su za mnou
+			(preusporiadame pakety tak, ze budu vsetky v suvislom useku, tym im iba predlzim cestu)
+		(2b+1-c) je teda max pocet tych, ktore ma mozu este zdrzat
+	zaroven plati (2a+2c+1) >= (2b+1)
+		teda ti, co ma mozu zdrzat (2b+1),
+		su v najhorsom pripade vsetci natlaceni vlavo (2a+2c+1)
+		cize a+b >= c dosadim
+		
+		
+	v k-tom kroku kazdemu chyba n-k-1 modremu, n-k cervenemu
+	routujem najprv modrych
+	
+	kazdy modry to zvladne v n-1
+	v prvom kroku kazdemu modremu chyba max n-1 krokov, nikto ho nemoze zdrzat
+	
+	akonahle sa cerveny pohne, uz ho nic nezdrzi?
+	
+	
+hyperkocka, sense of direction
+dvaja iniciatori, chcu id toho druheho
+	obaja poslu svoje id vsetkym vrcholom, ktori sa lisia prvou polkou bitov
+	a zaroven vsetkym, ktori sa lisia druhou polkou
+	vrcholy preposielaju tak, ze flipnu niektory bit za tym, ktory bol flipnuty ako posledny
+	takto sa to preposle 4krat po strome velkosti 2^(d/2), co je O(sqrt(n))
+	
+	inak, tu polovicu viem zafloodovat takouto postupnostou portov
+	121312141213121... (teda Grayov kod)
+	
+anonymny kruh, pocitam funkciu, alebo zistit 
+
+
+flood set na f kol? dokazat ze sa neda
+	
+	
+	
+	
+	
+	

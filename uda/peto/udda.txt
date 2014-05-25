@@ -1,0 +1,187 @@
+
+
+
+Prehladavanie
+
+	Shout-and-echo
+		4m sprav, 2diam(G) cas
+
+		
+Traverzovanie
+	Prehladavanie do hlbky
+		cas aj spravy 2m
+		
+	Awerbuch
+		spravy 4m, cas 4n-2
+		
+	Prehladavanie do sirky
+		Cheung: kubicka komunikacia, linearny cas
+		Cheung,Zhu: kvaraticka komunikacia a cas
+	
+Volba sefa na mriezke
+	simulujeme sense of direction - viem posielat jednym smerom spravy
+	parna mriezka - robim rebriky
+	linearny cas aj komunikacia
+	anonymna parna mriezka asi nejde
+	
+Volba sefa uplne grafy
+	naivny sposob
+		kazdy posle svoje id susedom, ti odpovedaju ak je vyssie ako ich
+		kvadraticka komunikacia, konstantny cas
+		
+	lepsi sposob
+		capture - accept/help
+			help - victory/defeat
+		zoradeni podla <level, id>
+		cas O(n), sprav O(n log n)
+		
+	dolny odhad pre volbu sefa v kompletnom grafe
+	(resp. pre lubovolny algoritmus vyrabajuci spanning tree)
+		Omega(n log n) sprav
+		vyuzijem e(k) = pocet sprav, ktore viem vynutit v k-komponente
+		e(2k+1) = 2e(k) + k + 1
+	
+Volba sefa jednosmerne kruhy
+	naivny sposob
+		kazdy posle svoje id, kazdy v pakete zmeni na svoje ak ma lepsie,
+		ak sa mi vrati moje id, som sef
+		O(n^2) sprav
+		
+	Chang Roberts
+		nebudu sa preposielat spravy, iba ak pride lepsie id
+		O(n^2) sprav
+		v priemernom pripade O(n log n)
+			kruty kombat
+			
+Volba sefa dvojsmerne kruhy
+	Hirchberg-Sinclair
+		vrchol na leveli l dobyva uzemie 2^l
+		posle spravu oboma smermi, skor ci neskor sa vrati s odpovedou
+		ak na oboch stranach ok, zvysi si level, inak umrie
+		sef je ten, koho capture sprava obisla cely kruh
+		O(n log n) sprav
+		O(n) casu
+		
+	Franklin
+		synchronizacia na kola
+		kazdy posle na dve strany idecko svoje, pobiju sa, prezije max
+		v kazdom kole umrie aspon polovica
+		O(n log n) sprav
+		
+	Dolev
+		simulacia na jednosmernom kruhu
+		namiesto 2^l doprava aj dolava bude 2*2^l doprava
+		zaroven sa presunu idecka o 2^l doprava
+	
+	dolny odhad pre volbu sefa na two-way rings
+		Omega(n log n)
+		
+Volba sefa v lubovolnej topologii
+	po kazdej hrane musi prejst sprava
+	teda Omega(m + n log n), take nieco chceme
+	
+	GHS
+		najlacnejsia hrana vychadzajuca z komponentu je v najlacnejsej kostre
+		vahy hran [id1, id2], id1 < id2
+		fragmenty
+		vsetky procesy vedia sefa fragmentu
+		procesy fragmentu testuju, ci je hrana vnutorna alebo vonkajsia podla id sefa
+		spajanie fragmentov po najlacnejsej vychadzajucej hrane
+		
+		fragment na leveli l ma aspon 2^l vrcholov
+		zvysenie levelu k-fragmentu potrebuje iba linearny pocet sprav
+		O(m + n log n) // 5 n log n + 2m
+		
+	KKM
+		kruhy, kliky, tory
+		nahananie, cakanie, zabijanie, pripajanie
+		f(x)-traverzovanie
+		O((n + f(n))log n)
+		
+	volba sefa na hyperkocke rozmeru d v O(n), n=2^d
+		1. na zaciatku mam podkocky rozmeru 0 (vrcholy), tie vedia svojho sefa (seba)
+		2. spajam d-podkocky, ktore sa lisia na d+1 suradnici
+			1. sefovia poslu dosusednej kocky spravu, prebuble k jej sefovi, radovo d sprav
+			2. vacsi sef posle spravu mensiemu, radovo d^2 sprav, uklada dimenzie po ktorych ide
+			3. mensi sef si vyrobi najkratsiu cestu k vacsiemu sefovi, dlzky max d a zapamata si ju
+		problem - sef sefovi na d^2 sprav bez toho, ze by poznal najkratsiu cestu
+			sprava pride do nejakeho vrcholu, ten bol svojho casu sef, az kym ho niekto zajal,
+			k nemu pozna cestu na max d, kde d je dimenzia mesej kocky, ked bol zajaty
+			teda ked to vsetci posuvaju svojmu sefovi, k najvyssiemu to pride v SUM(i^2) teda d^2 max
+			sefovia si spravia cestu na max d medzi sebou, teda mame splneny IP
+		celkova zlozitost
+			n / 2^d je podkociek rozmeru d so sefom
+			d^2 radovo sprav pre spajanie
+			SUM(n.d^2 / 2^d) pre d = 1 az nase d, da to nejake O(n)
+		
+Sense of direction
+	vrcholy usporiadane do hamiltonovskej kruznice
+	porty ocislovane vzdialenostou vrcholu na tejto kruznici
+	
+	volba sefa na K_n so sense of direction
+		i[1..k] nech su vrcholy na porte 1, 2, ..., k
+		vrchol i chce capturnut i[1..k], i[n/k], i[2n/k], ..., i[n-k]
+		prve kolo
+			posle capture a ak dostane accept, zvysi si level o level toho, co akceptoval + 1
+			ked dostane capture, ak ma mensi <level, id>, posle accept a svoj level, inak ignoruje
+			ked ma k capturnutych, ide do druheho kola
+		druhe kolo
+			posielam elect vrcholom i[2n/k] atd
+			ti mi vratia accept, ak mam vacsie id ako ich owner, alebo ak nemaju ownera
+			ak bol niekto electnuty v druhej faze, uz sa nenecha capturnut niekym v prvej
+		sprav O(n) prve, kolo O(nn/kk), pre k:=n je to O(n)
+		cas O(k+n/k), cize O(n) ak su zoradeni
+		ak sa prida wakeup faza pre vrcholy kazdych k, tak cas O(sqrt(n))
+		
+	volba sefa na K_n vylepsenie pre cas
+		prve kolo
+			zajat i[k], i[2k], ..., i[n-k] sekvencne
+			tym vzniknu nezavisle kruhy
+		druha faza
+			zajat i[1..k-1] postupne v log(k) krokoch
+		cas O(k log n), pre k:=n/log(n) je to cas O(log n)
+	
+Vplyv synchronnosti
+	na kruhu v O(n), bohvie ako
+	nejake odhady bohvie coho
+	
+	
+Routovanie
+	distribuovany Floyd-Warshall
+		vsetky vrcholy vyberaju v rovnakom poradi vrcholy, cez ktore sa ide hladat cesta
+	
+	Touegov algoritmus
+		to iste, akurat ten vrchol w cez ktory sa hlada posle svoju tabulku po strome
+		kazdy vrchol povie your-son k susedovi na najkratsej ceste k w
+		-> kto nema cestu k w, tomu sa ta tabulka ani nedostane
+		
+	Netchange algoritmus (Tell, p.122)
+		optimalny vzhladom na hop-count measure
+		kazdy ma routovaciu tabulku, inicializovanu na inf
+		ak sa riadok tabulky zmeni, tuto zmenu oznami susedom
+		vyhody - mozu sa dynamicky pridavat a uberat hrany 
+	
+Packet routing
+	permutation routing na ceste dlzky n
+		posielam dobrym smerom, ukladam do buffera, uprednostnujem tie s dlhsou cestou
+		po n-1 krokoch algoritmu su vsetky dorucene
+
+	permutation routing na mriezke
+		velkost buffera v najhorsom pripade 2n/3 - 3
+		v priemernom pripade konst?
+		
+
+Problem dohody
+	Flood set algoritmus
+		kazdy ma na zaciatku svoju hodnotu
+		kazdy si udrzuje set hodnot, ktore videl
+		v kazdom kole kazdy broadcastne svoj set
+		ked dostane set, spravi union so svojim
+		ked moze umriet najviac f procesorov, po max f+1 kolach sa ostatni dohodnu
+		
+
+
+
+
+
+	
