@@ -1,0 +1,5 @@
+Rekurzívne, čiastočne rekurzívne, primitívne funkcie, ekvivalencia s TS
+0-1 Knapsack, dobrá aproximovateľnosť pre 0-1 knapsack
+Niečo s pravdepodobnostnými alg. (minimálne to, že ak niečo akceptuje s chybou <1/2 v T(n), potom v O(T(n)) existuje akcepovateľnoasť s ľubovoľne malou chybou)
+RAM počitače, ekvivalencia s TS, zložistosť (RAM modelu v ekvivalentnom TS a pod.)
+Registrové stroje (ekvivalencia s TS,...)

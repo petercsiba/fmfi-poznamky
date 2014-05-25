@@ -1,0 +1,100 @@
+1. ASPACE(S(n)) (= DTIME(k^S(n))
+2. O redukciach a uplnosti.
+3. Teologicke otazky okolo NC a P.
+
+
+1. Simulovat NSpace pomocou ATime
+2. Dokazat, ze CVP je p-uplny.
+
+
+1. Horny odhad pre cas sekvencneho g-systemu pre jazyk L, ktory sa da 
+   generovat paralelnym g-systemom v case T(n) a v priestore S(n)
+   { Veta L = Time (Time(n,G)*Space(n,G)) + chcel aj prerobenie vseobecneho g-systemu na sekvencny }
+2. BO <-> ATS (vyslovit vetu + urobit obidve simulacie)
+
+
+1. Alternujuce konecne automaty
+2. L je 0L jazyk  =>  L-uzaver je 0L (azda prva veta z prednasok) 
+
+
+1. def CDGS, dokaz L(CD*CF) je podmnozina L(CD3CF)
+2. simulacia det.TS s 1 paskou Boolovskym obvodom.
+
+
+1. Uzaverove vlastnosti pre L(PCGS*CF). t.j. priennik,
+   zretazenie,.....
+2. L patri BO Size S(n) => L patri do DTIME(poly(S(n))).
+   t.j. simulacia BO na DTS v case S(n)^k
+   { vyjde to S(n)^3.log n }
+
+
+1. Zistit kam v Chomskeho hierarchii patria Indicke paralelne gramatiky
+   { pod kontextove , nad linearne bezkontextove }
+2. Zistit casovu zlozitost determenistickeho T.S. ktory simuluje pamatovo
+   ohraniceny Alternujuci T.S.
+
+
+1. Vztah centr PCGS*REG a linearnych jazykov.
+   {najdes aj jazyk patriaci tam a nepatriaci onam aj opacne}
+2. V akom case pracuje bool. obvod simulujuci nedeterministicky TS
+   SPACE (S(n)).
+   { odpoved (S(n))^2 }
+
+
+1. Charakterizovat TIMEg (f(n)) pomocou sekv. priestoru.
+2. V akom priestore vie ATM simulovat DTM pracujuci v case T(n).
+
+
+1. Urcte polohu Lindemayerovych systemov v Chomskeho hierarchii.
+2. V akom case vie ATM simulovat DTM prac v priestore S(n).
+
+
+1. Charakterizovat 0L jazyky nad 1-pismenkovymi abecedami.
+2. Charakt. vypoctovu silu AFA (Alt. kon. automaty)
+
+
+1. Definovat Paralelne komunikujuce systemy gramatik (vsetko co k tomu
+   patri) + najst vztah(najlepsie aj konkretne priklady) tj.porovnat
+                  L(PCGSn REG) a Llin
+2. Genericky problem sim. TS
+
+
+1. Charakterizacia TIME_G (f(n))  (bolo tym myslene =1NSPACE(f(n)))
+2. Simulacia casovo ohraniceneho deterministickeho TS pomocou
+   alternujuceho TS s ohranicenym priestorom  (t.j. DTIME(T(n)) je pod
+   ASPACE(log(T(n)))).
+
+
+1. Uzaverove vlastnosti L(PCGS*CF)
+2. Simulacia booleovskych obvodov na det. turingovych strojoch
+
+
+1. charakterizujte GTIME(f(n)) pomocou sekvencneho priestoru
+   (ostatne som si mal domysliet. boli to vety: GTIME(f(n)) je pod
+   1NSPACE(f(n)) a obratene)
+2. simulujte TM s casom T(n) na ATM priestore
+   (teda DTIME(T(n)) je pod ASPACE(log T(n)))
+
+
+1. Zaradit triedu jazykov generovanych indickymi paralelnymi gramatikami do
+   Chomskeho hierarchie.
+   { L(IP) je pod ECS }
+2. V akom case mozno simulovat alternujuci turingov stroj s ohranicenym
+   priestorom S(n) na deterministickom TS.
+   { veta z prednasky : ASPACE(S(n)) je pod U DTIME(c^(S(n))) c>0 }
+
+
+1. Dokazte, ze pre kazdy bezkontextovy jazyk L existuje 0L jazyk L' a
+   regularny jazyk R taky, ze L je prienikom L' a R.
+2. Aky je vztah mezi ATIME a DSPACE ?
+
+
+1. Vztah NSPACE a hlbky booleovskych obvodov
+   { NSPACE(f(n)) pod Depth(f^2(n)), veta z prednasky }
+2. V akom case(priestore) sa daju simulovat tree-PCGS*REG
+   { v case O(log(n)), priestore O(n), tazko naraz (asi nemozne),
+    pravdepodobne veta z prednasok, nie som si isty }
+
+
+1. DTIME(T(n)) \subseteq U_BC-Size(T^2(n))
+2. P-uplne problemy, teda redukovatelnost a definicia, genericky problem simulacie TS dokazat ze je P-uplny

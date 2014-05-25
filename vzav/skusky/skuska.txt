@@ -1,0 +1,17 @@
+simulacia NTM na DTM napisat zlozitosti a dokazat
+NTIME(T(n)) \subseteq DSPACE(T(n))
+NSPACE(S(N)) \subseteq DTIME(c^(log n + S(n)))
+
+vyslovit turngovu tezu, ake poznam ekvivalentne modely k rekurzivnym funkciam
+
+potom sa ma spytal na simulaciu TS na registrovych strojov a tak
+
+
+
+
+kubovi uhrikovi dal aproximacne algoritmy
+
+
+
+
+ ruhalovsky alebo kapisinsky mal cook-levinovu vetu, neviem ako moc do hlbky ale mal z toho Acko

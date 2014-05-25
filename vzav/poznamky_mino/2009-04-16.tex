@@ -1,0 +1,131 @@
+\documentclass{article}
+\usepackage{slovak}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\begin{document}
+
+\paragraph{Definícia} Logický obvod s $n$ vstupmi $x_1, \ldots, x_m$ a
+$1$ výstupom je orientovaný acyklický graf taký, že:
+\begin{itemize}
+	\item v každom vrchole je buď niektore $x_i$ (vrchol bez vstupných hrán)
+	alebo $AND$, $OR$ (vrchol s $2$ vstupnými hranami) alebo $NOT$ (vrchol s
+	$1$ vstupnou hranou), počet výstupných hrán je neobmedzený.
+	\item jeden z vrcholov je výstupný
+\end{itemize}
+
+\paragraph{Definícia} \emph {Charakteristické} funkcia pre množinu $D \subseteq
+\{ 0,1 \}^n$ je booleovská funkcia $f(x_1,\ldots ,x_n$, taká, že $f(x_1, \ldots,
+x_n) = 1 \iff x_1, \ldots,x_n \in D$.
+
+\paragraph{Veta} Nech $L \in BPP$, $L\subseteq \{0,1\}^*$, Potom platia
+nasledovné dve tvrdenia:
+\begin{enumerate}
+	\item Pre jazykk $L$ existuje polynóm $p(x)$ a pravdepodobnostný
+	polynomiálny algoritmus $B$ s vlatnosťou:
+	$$ \forall n \exists y_n \in \{ 0, 1\}^{p(n)} \mbox{ taký, že }  \forall
+	x \in \{0,1\}^n \mbox{ platí }:$$
+	výpočet $B$ na $x$ s hodnotami $brand$ určenými reťazcom $y_n$ je
+	správny (teda algoritmus $B$ poznajúc $y_n$ neurobí chybu na žiadnom
+	vstupe $x \in \{ 0,1 \}^n$.
+	\item Pre $L$ existuje polynóm $q(n)$ taký, že $\forall n$ existuje
+	logický obvod s $n$ vstupmi, 1 výstupom a najviac $q(n)$ vrcholmi, ktorý
+	počíta charakteristickú funkciu pre $L \cap \{0,1\}^n$.
+\end{enumerate}
+
+\paragraph{Dôkaz} Veta o vylepšovaní $\implies$ existuje pravdepodobnostný
+algoritmus $A$ akceptujúci $L$ v nejakom polynomiálnom čae $s(n)$ s chybou
+$\frac{1}{7}$ ( $= \Sigma'$ ).
+
+\paragraph{Dôsledok (dôkazu)} Existuje pravdepodobnostný algoritmus $A'$, ktorý
+v čase $O(nS(n))$ akceptuje slová patriace do $L \cap \{0,1\}^n$ s chybou
+$\frac{1}{2}(s(1-\frac{1}{7})\frac{1}{7})^{n+\frac{1}{2}} =
+\frac{1}{2}\left(\frac{24}{49}\right)^{n+\frac{1}{2}} <
+\left(\frac{1}{2}\right)^{n+\frac{3}{2}} \forall n$.
+
+\paragraph{Fakt} Nech $C_1, \ldots, C_r$ sú všetky nesprávne výpočty $A'$ na $x$
+s počtom $l_1, \ldots, l_r$ volaní procedúry $brand$. Potom $\sum_{i=1}^{r}
+2^{-l_i} = $ pravdepodobnosť chyby  $A'$ na $x$ (lebo $A'$ vykoná $c_i$ s
+pravdepodobnosťou $2^{-l_i}$.
+\begin{figure}
+nesprávny výpočet ($x\notin L$): $C_1, C_2, C_3$
+$ l_1 = 2, l_2 = 3, l_3 = 4 $
+%pic1
+\end{figure}
+
+Upravme $A'$ tak, aby po zistení výsledku (akceptuj/zamietni) vykonal na $x$
+dĺžky $n$ ešte toľko volaní $brand$, aby ich celkový počet bol $(2n+1)s(n)$.
+Nech $A''$ označuje upravený $A'$.
+
+$\forall x \in \{0,1\}^n: Y_x^n = \{ y \in \{ 0,1 \}^{(2n+1)s(n)} |
+\mbox{výpočet A' na $x$ určený reťazcom  $y$ je nesprávny}\}$
+
+$|Y_x^n| = $ počet nesprávnych výpočtov na $A''$  na $x$ je $\sim_{i=1}^{r}
+2^{(2n-1)s(n) - l_i} = 2^{(2n+1)s(n)}$ (pravdepodobnosť chyby $A''$ na $x$)
+$\leq$ (*) $2^{(2n+1)s(n)}\cdot (\frac{1}{2})^{n+\frac{3}{2})}$ (**).
+
+$$ |Z^n| \geq - \sum_{x\in\{0,1\}^n} |Y_x^n| \geq (**) 2^{(2n+1)s(n)}
+(1-2^n(\frac{1}{2}^{n+\frac{3}{2}})$$
+$$ = 2^{(2n+1)s(n)(\underbrace{\geq
+\frac{1}{2}}{1-(\frac{1}{2}^{\frac{3}{2}}})} \geq 1$$ 
+$$ \implies Z^n \neq \emptyset \implies \forall n \exists y_n \implies$$ výpočet
+$A''$ na $x$ určený reťazcom $y_n$ je správny $\forall s \in \{0,1\}^n$
+$\implies$
+(a) platí pre $B = A''$ a $p(n)  = (2n+1)s(n)$.
+
+\paragraph{Dôkaz (2)} Idea: Logický obvod počítajúci charakteristickoú funkciu
+pre $l \cap \{0,1\}^n$ zostrojíme tak, aby simuloval výpočty agoritmu $B$ (pre
+jednoduchosť deterministický Turingov stroj $M$ simulujúceho $B$) na $x \in
+\{0,1\}^n$ určené reťazcom $y_n$.
+
+\begin{figure}[h]
+\begin{verbatim}
+             |<---n--->|
+	|cent|   x     |#|   y_n   | ... 
+               ^
+	       |
+	       q 	M = (\Sigma, Q, q_, \delta, F)                
+\end{verbatim}
+\caption{T-Stroj $M$}
+\end{figure}
+Štruktúra obvodu:
+(chýba obrázok)
+%\begin{figure}
+%        \vdots          \vdots
+%    ... D_{i-1,j}       D_{i,j}        D_{i+1,j}
+%            |     \
+%            v      \--\
+%    ... D_{i-1,j+1}     D_{i,j+1}      D_{i+1,j+1}
+%    (z ľubovoľného stvroca na i-tej vrstve ide sipka do kazdeho stvorca na
+%    (i+1)-vej.
+%\end{figure}
+
+$\forall i,j D_{i,j}$ má na vstupe binárne kódované nasledovné informácie pre
+$j$-ty krok výpočtu stroja $M$:
+\begin{itemize}
+	\item obsaho $i$-teho políčka  ($\lceil \log |\Sigma| \rceil$ bitov).
+	\item či je $i$-te políčko čítané (1 bit)
+	\item stav $q \in Q$ (ak je $i$-te políčko čítané ( $\lceil \log
+	|Q|\rceil$ bitov).
+	\item pohyb hlavy  (ak je $i$-te políčko čítané) 1/0/-1 (2 bity)
+\end{itemize}
+
+Bloky $D_{i,j}$ majú $3k$ bitov na vstupe a $k$  bitov na výstupe. Každý blok
+$D_{i,j}$ treba nahradiť pomocou $k$ logických obvodov s $3k$ vstupmi a $1$
+výstupom. Výsledný logický obvod  počíta charakteristickú funkciu pre $L \cap
+\{0,1\}^n$ a má polynomiálne veľa vrcholov.
+
+\begin{verbatim}
+procedure Freivalds (A,B,C,r) {
+// overí rovnosť AB=C s pravdepodobnosťou omylu $2^{-r}$
+// A,B,C sú matice rádu $n*n$
+náhodne vyber bin. bektory z_1, z_2, \ldots z_r dĺžky n
+if (z_i, A)B = z_i C \forall i then return "yes"  (s pravdepodobnosťou omylu
+\leq 2^{-r})
+else return "no" (bez omylu)
+}
+\end{verbatim}
+
+Časová zložitosť $O(rn^2)$.
+
+\end{document}
