@@ -1,0 +1,8 @@
+Janacek skusa svoju sietovu cast, v oblube mal dnes TCP (routovanie na linkovej vrstve, sliding windows), porovnanie switch a hub. 
+Plachetka rozdava otazky z Paralelnych architektur a programovania. Mne sa podarilo vytiahnut si presne rovnaku otazku ako minuly semester (este som sa aj ako debo priznal) a aj tak mi ju nezmenili   Takze ja som mal distribuovane databazy - transakcie (priklad neserioveho rozvrhu, distrib. deadlocku), deadlock v distrib. dat. a otazku na to, ci transakcia moze v danom systeme abortovat, ak uz ziada uzol o commit a ten uzol nespadol. Kolegynka,ktoru netreba menovat, si vytiahla cosi o synchronizacii hodin v distrib. databazach a skoncila pri debate o tom, ako sa da navigovat na sirom mori bez GPS
+Pozeram tie plachetk stranky a pamat mi uz nesluzi....co vlastne prednasal? Boli thready, distribuovane db (hlavne teda ten E3PC a pod., distrib. cas) a potom este daco dake linky, kanaly... su k tomu dake slide/matarialy? (paralelne arh. a programovanie som nemal) 
+
+Este na daco som zabudol?
+http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DISTRSYS2010/index.html Nic viac, nic menej... tie kanaly su pod Message Passing, z distribuovanych hlavne oba commity, synch. hodin, deadlocky a myslim ze este aj tie databazy s replikovanymi datami treba vediet (R/W locky...), plus zakladne veci ako ACID, seriovatelnost, obnova po vypadku a pod. Thready bude chciet iba pomerne minimalne ,tam velmi niet co povedat... Celkovo odporucam tahat papiere vacsich rozmerov - maju viac textu ale lahsie otazky, aspon z mojej skusenosti
+a som pozeral tie jeho slajdy k Message Passing Interface...a okrem toho ze to je cele zle, ze polling je satanizmus a jeho TomasPlachetkaLibrary je state-of-the-art som sa nedozvedel...
+to je vsetko
