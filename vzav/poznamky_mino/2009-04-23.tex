@@ -1,0 +1,29 @@
+\documentclass{article}
+\usepackage{slovak}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\begin{document}
+\section{Kolmogorovská zložitosť}
+$s_1,\ldots, s_m$ sú veľké súbory. $P_1, \ldots P_t$ -- kompresné programy. Na
+$s_i$ použi $P_j$, ak $|P_j(s_i)| = \min \{ |P_l(s_i)|: 1\leq l \leq t\}$.
+
+\par $B = \{0, 1\}$, $N$ -- prirodzené číslo, $|z|$ -- dĺžka reťazca $z \in
+B^*$. Nech $A_1, A_2, A_3, \ldots$ je efektívne očíslovanie všetkých programov
+(napr. v C++, alebo T-stroje), t.j. z čísla $i$ vieme algoritmicky zostrojiť
+program $A_i$ a platí to aj obrátene, a nech programy $A_i$ sú také, že $A_i"
+B^* \implies B^* \forall i$.
+
+\par Problém: Aké minimálne množstvo informácie stačí na algoritmickú
+konštrukciu daného objektu (reťazca) x?
+
+\paragraph{Príklad} Ak $x$ je rozvoj $\pi$ na $n$ miest, stačí poznať $n$ a algoritmus
+generujúci $\pi$ na ľubovoľný počet miest.
+
+\paragraph{Riešenie} Nájdi najkratšiu dvojicu $(m,p)$ takú, že $A_m(p) = x (m\in
+N, p \in B^*)$. Nech $m \in n$, $p \in B^*$, Kód dvojice $(m,p)$ je reťazec
+$<m,p> = 1$
+
+\par pokračovanie v skriptách...
+
+\end{document} 

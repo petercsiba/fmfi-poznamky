@@ -1,0 +1,158 @@
+\documentclass{article}
+\usepackage{slovak}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\begin{document}
+
+\paragraph{Veta (o pamäťovej hierarchii):} Nech $\log n \le S_1(n) = o(S_2(n))$,
+kde $S_2(n)$ je páskovo konštruovateľná. Potom $DSPACE(S_1(n)) <
+DSPACE(S_2(n))$.
+
+\paragraph{Dôkaz:} \emph{Prefixový kód} Turingovho stroja $M$ je reťazec tvaru
+$11\cdots1<M>$. Nech $M'$ je deterministický Turingov stroj, ktorý:
+\begin{enumerate}
+	\item Na vstupe $w$ ($\mid w 
+		\mid = n$) označí na pracovných páskach pamäť rozsahu $S_2(n)$.
+		Ak by mal $M'$ použiť v ďalšom pamäť $ > S_2(n)$, potom výpočet
+		zastaví a neakceptuje vstup.
+	\item Ak vstup $w$ nie je prefixový kód žiadneho Turingovho stroja,
+		potom $M'$ neakceptuje $w$.
+	\item $w$ je prefixový kód nejakého Turingovho stroja $M$. Potom $M'$
+		(rešpektujúc 1.) simuluje $2^{S_2(n)}$ krokov stroja $M$ na $w$
+		a $M'$ akceptuje $w$ práve vtedy, keď $M$ neakceptuje $w$ počas
+		$2^{S_2(n)}$.
+\end{enumerate}
+
+\par $M$ -- ľubovoľný deterministický Turingov stroj s páskovou zložitosťou
+$S_1(n)$.
+
+\paragraph{Dokážeme:} $M$ neakceptuje $L(M) \in DSPACE(S_2(n))$, teda
+$L(M') \notin DSPACE(S_1(n))$ $\Rightarrow$ $DSPACE(S_1(n)) \subsetneq
+DSPACE(S_2(n))$.
+\par Nech má $M$ $k$ páskových symbolov a $q$ stavov. Pre dostatočne dlhý vstup
+$w$ ( $\mid w\mid = n$) platí: \\
+	$M$ akceptuje $w$ práve $\iff$ $M$ akceptuje $w$ počas $\leq
+	\left(q(n+2)t^{S_1(n)}(S_1(n)+1\right)^k$ $\leq 2^{S_2(n)}$ krokov (lebo $\log n
+	\leq S_1(n) = o(S_2(n))$)
+
+	\par Pre dostatočne dlhý prefixový kód stroja $M$ platí vlastnosť
+	\ref{itm:1a} pre $m =
+	\mid w \mid$:
+	\begin{enumerate}
+		\item \label{itm:1a} $M'$ je schopný -- neprekročiac $S_2(n)$ --
+			simulovať $2^{S_2(n)}$ krokov výpočtu stroja $M$ na $w$ (lebo
+			$S_1(n) = o(S_2(n))$).
+			$(iii)$ a \ref{itm:1a} $M'$ akceptuje $w$ $\iff$ $M$ neakceptuje
+			$w$ počas $2^S_2(n)$ $\iff$ $M$ neakceptuje $w$, t.j. $M$
+			neakceptuje $L(M')$.
+	\end{enumerate}
+
+\paragraph{Definícia:} Funkcia $T(n)$ je \emph{časovo konštruovateľná}, ak
+existuje deterministický Turingov stroj, ktorý na každom vstup dĺžky $n$ vykoná
+práve $T(n)$ krokov.
+
+\paragraph{Veta (o časovej hierarchii):} Nech  $n \leq T_1(n) = o(T_2(n)/\log
+T_1(n))$, kde $T_2(n)$ je časovo konštruovateľná. Potom $DTIME(T_1(n))
+\subsetneq DTIME (T_2(n))$.
+
+\paragraph{Veta (Savitch):} Nech $S(n) \geq \log n$ je páskovo konštruovateľná.
+Potom $NSPACE(S(n)) \subseteq DSPACE(S^2(n))$.
+
+\paragraph{Dôkaz:} $M$ -- ľubovoľný nedeterministický Turingov stroj s pamäťovou
+zložitosťou $S(n)$ majúci $k$ pások, $q$ stavov, $t$ páskových symbolov. Na
+vstupe dĺžky $n$ sa $M$ môže dostať do najviac $q(n+2)\left(
+(S(n)+1)t^{S(n)}\right)^k \leq c^{S(n)}$ rôznych konfigurácií pre vhodnú
+konštantu $c$ (nazývame ich ohraničené konfigurácie). Potom ak $x \in L(M)$,
+potom existuje akceptačný výpočet stroja $M$ na $x$ majúci %$\leq c^{S(\mid x \mid)}$ 
+krokov (prečo je to tak? -- otázka na skúške).
+
+\par $M$ sa dostane z konfigurácie $c_1$ do konfigurácie $c_2$ počas
+$\leq i$ krokov $\iff$ $M$ sa dostane z $c_1$ do nejakej $c_3$ počas najviac $\leq
+\lfloor i/2 \rfloor$ a z $c_3$ do $c_2$ počas $\leq \lceil i/2
+\rceil$ krokov.
+
+\par Algoritmus na simulovanie stroja $M$:
+\begin{verbatim}
+begin
+  nech x je vstup dĺžky n a nech c_0 je príslušná počiatočná konfigurácia stroja
+  $M$ pre každú S(n)-ohraničenú akceptačnú konfiguráciu C_f vykonaj:
+  if TEST(c_0, C_f, c^{S(n)} then accept
+end
+
+procedure TEST(c_1,c_2,i); {TEST zistí, či M prejde z c_1 do c_2 počas \leq i
+krokov}
+if c_1 = c_2 alebo $M$ prejde z c_1 do c_2 v jednom kroku then return true
+if i>1 then
+begin
+  pre každú S(n)-ohraničenú c_3 vykonaj
+    if TEST(c_1,c_3,\lceil i/2 \rceil) and TEST (c_3,c_2, \lfloor i/2
+    \rfloor) then return true
+  end
+  return false
+end
+\end{verbatim}
+
+\par Uvedený algoritmus možno implementovať na deterministickom Turingovom
+stroji $M'$, ktorý:
+\begin{itemize}
+	\item jednu z pások používa ako zásobník
+	\item pri každom volaní procedúry $TEST$ pridá do zásobníka 1 blok
+		obsahujúci: $c_1$, $c_2$, $z$, $c_3$, $TEST(c_1, c_3, \lceil i/2
+		\rceil)$, $TEST(c_1, c_3, \lfloor i/2 \rfloor)$ a adresa návratu
+		pre volanie procedúry $TEST$ (t.j. pre volanie medzi $if$ a
+		$and$ alebo $and$ a $then$.
+	\item po vykonaní jedného volania procedúry $TEST$ odstráni príslušný
+		blok zo zásobníka.
+\end{itemize}
+Rozsah bloku je teda $O(S(n))$, lebo $i \leq c^S(n)$.
+\par Hĺbka rekurzie (počet blokov v zásobníku je najviac $1+\log_2 c^{S(n)} =
+O(S(n))$. lebo tretí parameter procedúry $TEST$ je zmenšený zhruba na polovicu
+pri každom volaní.
+
+\par Z predchádzajúcich úvah vyplýva, že $M'$ je stroj s pamäťovou zložitosťou
+$O(S^2(n))$. $M'$ možno prerobiť (kompresia pásky) na deterministický Turingov
+stroj s páskovou zložitosťou $S^2(n)$ akceptujúci rovnaký jazyk.
+
+\paragraph{Veta:}
+\begin{enumerate}
+	\item \label{itm:2a} $DTIME(T(n)) \subseteq NTIME(T(n)) \subseteq
+		DSPACE(T(n))$ pre všetky časovo konštruovateľné $T(n)$.
+	\item $DSPACE(S(n)) \subseteq NSPACE(S(n)) \subseteq \bigcup_{c>0}
+		DTIME(c^{\log n + S(n)})$ pre všetky páskovo konštruovateľné
+		$S(n)$.
+\end{enumerate}
+
+\paragraph{Dôkaz:}
+
+\subparagraph {Pre $NTIME(T(n)) \subseteq DSPACE(T(n))$:}. Vyberieme ľubovoľný nedeterministický
+Turingov stroj $M$ s časovou zložitosťou $T(n)$ majúci najviac $d$ možností pre
+ďalší krok. $M'$ je deterministický storj s pamäťovou zložitosťou $T(n)$, ktorý
+na vstupe $x$ na jednej z pások postupne generuje všetky možné reťazce dĺžky
+najviac $T(\mid x \mid)$ nad abecedou $\{ a_1, \cdots, a_d \}$. Tieto reťazce
+reprezentujú možné nedeterministické výpočty stroja $M$ na $x$. $M'$ ich
+simuluje a $M'$ akceptuje $x$ $\iff$ $M$ akceptoval $x$ v niektorom výpočte. Z
+toho vyplýva, že $L(M) = L(M')$. 
+
+\subparagraph{Pre $NSPACE(S(n)) \subseteq \bigcup_c DTIME(c^{\log n + S(n)})$}. 
+Nech $M$ je ľubovoľný nedeterministický Turingov stroj s pamäťovou
+zložitosťou $S(n)$, majme $q$ stavov, $t$ páskových symbolov, $k$ pások. $x$ --
+vstup pre $M$, $\mid x\mid = n$.
+$$
+\begin{array}{lll}
+	G & = &(V,E) \mbox{ -- orientovaný graf} \\
+	V & = & \{c \mid c \mbox{ je konfigurácia stroja $M$ max}; \\
+	\mid V \mid & \leq & (n+2)( (S(n)+1)t^{S(n)} ) \leq d^{\log n + S(n)} \\
+	E & = & \{ (c,c') \mid \mbox{$M$ prejde v 1 kroku z konfigurácie $c$ do
+	$c'$ } \}\\
+	x & \in & L(M) \iff \mbox{v $G$ existuje cesta z počiatočnej
+	konfigurácie do niektorej akceptačnej konfigurácie}
+\end{array}
+$$
+
+To, či v $G$ taká cesta existuje, možno zistiť deterministickým Turingovým
+strojom pomocou vhodne implmementovaného (napr. Dijkstrovho) algoritmu v čase
+najviac $\mid V \mid \leq (d^{\log n + S(n)}) = c^{\log n + S(n)}$ pre vhodné
+$m$ a $c=d^m$.
+\end{document} 

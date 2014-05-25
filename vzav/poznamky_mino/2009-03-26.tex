@@ -1,0 +1,129 @@
+\documentclass{article}
+\usepackage{slovak}
+\usepackage[utf8]{inputenc}
+\begin{document}
+\section{Aprixomovateľnosť $NP$-optimalizačných problémov}
+\paragraph{Definícia} Nech$A$ je $NP$-optimalizačný problém s cieľom min (max),
+reláciou $R \subseteq \Sigma^*\times \Sigma^*$ a hodnotovou funkciou $m$. 
+\par
+Nech 
+$$
+\begin{array}{lll}
+m^*(x) &=& min \{ m(x,y) | (x,y) \in R\} \mbox{pre cieľ min},  \\
+m^*(x) &=& max \{ m(x,y) \ (x,y) \in R\} \mbox{pre cieľ max},  \\
+\end{array}
+$$
+Hovoríme, že problém jč $\alpha$-aproximovateľný pre $\alpha>1$, ak existuje
+deterministický polymoniálny algoritmus $M$, ktorý pretransformuje vstup $x$ na
+vástyp $y$ (t.j $M(x)=y$), pričom $(x,y)\in R$ a 
+
+$$
+\begin{array}{lll}
+\alpha m^*(x) &\geq& m(x, M(x)), \mbox{(pre skoro všetky x) pre cieľ min} \\
+m^*(x)        &\leq& \alpha m(x, M(x)), \mbox{(pre skoro všetky $x$) pre cieľ
+max} \\
+\end{array}
+$$
+
+\paragraph{Definícia} Problém $A$ je \emph{dobre aproximovateľný}, ak je
+$\alpha$-aproximovateľný pre každé $\alpha>1$ ($\alpha \rightarrow 1$).
+
+\paragraph{Definícia} Problém $A$ je \emph{neaproximovateľný}, ak nie je
+$\alpha$-aproximovateľný pre žiadne $\alpha>1$ (ľubovoľne veľké $\alpha$).
+
+\subsection{$NP$-optimalizačný problém 0-1 knapsack}
+\par Optimalizačné parametre: 
+\begin{itemize}
+	\item cieľ = max
+	\item $$R=\{(x,y) | x=d(v_1)\#\cdots\#d(v_n)\#d(w_1)\#\cdots\#d(w_n)\#d(W)\}$$
+	\item $$R=\{(x,y) | y=d(S), S \subseteq \{1,\ldots, n\}, \sum_{i\in S}
+	w_i \leq W\}$$
+\end{itemize}
+$v_i$ -- ceny, $w_i$ -- váhy, $W$ -- mohutnosť batoha, ($w_i \leq W \forall i$),
+$d(U)$ -- binárny/dekadický zápis čícla/množiny $U$, $m(x,y) = \sum{i\in S} v_i$
+
+\subsection{Rozhodovací problém 0-1 knapsack} $L=\{x\#d(K) \ \exists S
+\subseteq\{1,\ldots, n\}, \sum_{i\in S} w_i \leq W, \sum_{i\in S} v_i \geq K\}$
+\paragraph{Veta} $L$ je $NP$-úplný.
+
+\subsection{Konštrukčný problém 0-1 knapsack}
+Pre vstup $v_1,\ldots, v_n, w_1, \ldots, w_n, W$ (formálne $x$) nájdi výstup $S
+\subseteq\{ 1, \ldots, n\}$ (formálne $y$), t.j. $(x,y) \in R$ a $m(x,y) =
+\sum_{i\in S} v_i = \max_{S' \subseteq \{1, \ldots, n\}} \{\sum_{i\in S} v_i |
+\sum_{i\in S} w_i \leq W\}$.
+
+\subsection{Algoritmus pre konštrukciu problému 0-1 knapsack}
+(algoritmus nájde optimálny výber $S$ t.j. $\sum_{i\in S} v_i =
+\max_{S'\subseteq\{1,\ldots,n\}} v_i | \sum_{i\in S'} w_i \leq W\}$ a $\sum_{i\in
+S} w_i \leq W\})$
+
+\begin{enumerate}
+	\item Vyplň tabuľku $W(0..n, 0..nV)$, kde $V = \max\{v_1,\ldots, v_n\} =
+	v_l$, použi $W(i+1,v)=\min \left\{W(i,v), W(i,v-v_{i+1}+w_{i+1}\right\}$, začni  s
+	$W(i,v) \leftarrow \infty, v$, ale $W(0,0) \leftarrow 0$.
+	\paragraph{Poznámka} platí $W(i,v) = \min_{S' \subseteq \{1,\ldots, i\}}
+	\left\{ \sum_{j\in S'} w_j | \sum_{j\in S'} v_j = v\right\}$
+
+	\item $ u \leftarrow \max \left\{v|W(n,v) \leq W \right\}$, $u$ je cena
+	najlepšieho výberu. (pozn. $u = \max_{S' \subseteq \{1, \ldots, n\}} \left\{ \sum_{i \in S'} v_i |
+	\sum_{i \in S'} w_i \leq  W\right\})$
+	$$S \leftarrow \emptyset$$
+	\begin{verbatim}
+		for i<- n-1 to 0 do
+		  if W(i,n) > W(i,u-v_{i+1} then S=S+{i+1} a u=u-v_{i+1}
+	\end{verbatim}
+\end{enumerate}
+
+\par Časová zložitosť: $O(n^2V)$ -- nie nutne polynomiálne, napr.
+$n=\Theta\left(\sqrt{|x|}\right)$, $|d(v_i)| = |d(w_i)| = |d(W)| =
+\Theta\left(\sqrt{|x|}\right)$, $V=2^{\Theta\left(\sqrt{|x|}\right)}$ a časová
+zložitosť je $O(|x|\cdot 2^{\Theta(\sqrt{|x|})})$ -- nie je polynomiálna ku
+$|x|$.
+
+
+\section{Aproximačný algoritmus pre konštrukciu problému 0-1 knapsack}
+(pre ľubovoľné $\alpha$, $2\geq\alpha>1$, algoritmus nájde výber $S'$, t.j.:
+$\sum_{i\in S} v_i \leq \alpha\sum_{i\in S'} v_i$ a $\sum_{i \in S'} w_i \leq
+W$.
+
+\begin{enumerate}
+	\item $d \leftarrow \left\lfloor \frac{(\alpha-1)V}{n+1}\right\rfloor$;
+	pre $d=0$, t.j. pre $(\alpha-1)V < n+1$ použi presný algoritmus s
+	časovou zložitosťou $O(n^2V)=O(\frac{n^3}{\alpha-1})$
+
+	\item Nájde optimálny výber $S'$ pomocou presného algoritmu pre
+	konštrukčný problém 0-1 knapsack pre vstup $v_1', v_2', \ldots v_n',
+	w_1, \ldots w_n, W$, kde $v_i' = \left\lfloor\frac{v_i}{d}\right\rfloor
+	\forall i$.
+\end{enumerate}
+\par
+Časová zložitosť: $O(n^2V')$, $V'=max \{v_1', v_2', \ldots v_n'\} = v_l' =
+\left\lfloor\frac{v_l}{d}\right\rfloor = \left\lfloor \frac{V}{d} \right\rfloor
+\leq \frac{V}{d}$. $O(n^2V) = O(n^2V/d) = O(\frac{n^3}{\alpha-1})$ -- polynóm,
+lebo $\frac{(\alpha-1)V}{n+1} \leq d+1$.
+
+\paragraph{Nepresnosť aproximoačného algoritmu} Platí: $\sum_{i\in S'} v_i \geq
+(\mbox{lebo} v_i \geq dv_i') d \sum_{i\in S'} v_i' \geq d (\mbox{lebo} opt. S')
+\sum_{i\in S} v_i'\geq (\mbox{lebo} 1+v_i' \geq v_i/d) \sum_{i\in S} (v_i-d)
+\geq (\mbox{lebo } |S|\leq n) \sum_{i \in S} v_i - nd (*)$
+
+\par Platí: $\frac{nd}{\alpha-1} \leq (\mbox{lebo } \alpha\leq
+\frac{(\alpha-1)V}{n+1}) V-\frac{\alpha}{\alpha-1} \leq (\mbox{lebo } 1
+< \alpha \leq 2 \leq V - d = v_l - d \leq (\mbox{lebo } \frac{v_l}{d} \leq
+(\mbox{lebo } \left\lfloor\frac{v_l}{d}\right\rfloor+1) \leq
+d\left\lfloor\frac{v_l}{d}\right\rfloor \leq (\mbox{lebo } opt. S') d\sum_{i \in
+S} v_i' \leq (\mbox{lebo } dv_i' \leq v_i) \sum_{i \in S'} v_i (**)$.
+
+\par Z (*) a (**) dostaneme, čo bolo treba dokázať:
+$\sum_{i\in S} V_i \leq (\mbox{lebo } *) \leq nd + \sum_{i\in S'} \leq
+(\mbox{lebo } **) (\alpha-1)\sum_{i\in S'} v_i + \sum_{i \in S'}v_i =
+\alpha\sum_{i\in S'}v_i$ -- cena aproximovaného riešenia.
+
+\paragraph{Veta} 0-1 knapsack je dobre aproximovateľný $NP$-optimalizačný
+problém, ale jeho rozhodovací problém je $NP$-úplný, a teda naptrí do $P$, ak
+$P \neq NP$.
+
+\paragraph{Veta} Ak $P \neq NP$, potom $NP$-optimalizačný problém obchodného
+cestujúceho je neaproximovateľný.
+
+\end{document}

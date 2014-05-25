@@ -1,0 +1,146 @@
+\documentclass{article}
+\usepackage{slovak}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb}
+\begin{document}
+\paragraph{Dôsledôk:} $DSPACE(\log n)\subseteq NSPACE(\log n) \subseteq P
+\subseteq NP = PSPACE \subseteq EXP \subseteq NEXT$ --
+druhá inklúzia vyplýva z predchádzajúceho tvrdenia (b), tretia z (a), rovnosť zo
+Savitchovej vety, predposledná inklúzia opäť z (b).
+
+\paragraph{Poznámka:} Nie je známe, či
+\begin{itemize}
+	\item $DSPACE(\log n) \subsetneq NP$
+($P=^?NP$). 
+	\item $P \subsetneq PSPACE$. ($P=^?NP$).
+	\item $NP \subsetneq NEXP$. 
+\end{itemize}
+
+Je známe, že:
+\begin{itemize}
+	\item $NSPACE(\log n) \subsetneq PSPACE$ (Savitch a
+pamäťová hierarchia). 
+	\item $P \subsetneq EXP$ (časová hierarchia).
+\end{itemize}
+
+\section{Translačná lema}
+\paragraph{Tvrdenie:} Ak $NSPACE(n^4) \subseteq NSPACE(n^3)$, potom
+$NSPACE(n^{20}) \subseteq NSPACE(n^{15})$.
+\paragraph{Dôkaz:} Nech $L_1 \in NSPACE(n^{20})$, teda existuje
+nedeterministický Turingov stroj $M_1$ akceptujúci $L_1$ s pamäťou $n^{20}$.
+$$
+	L_2 = \{ x\#^i \mid x \in L_1 \land |x|^5\}
+$$
+
+Nech $M_2$ je nedeterministický Turingov stroj, ktorý na vstupe  $x\#^i$ najprv
+overí, či $|x\#^i| = |x|^5$. Ak áno, potom sa na vstupe $x\#^i$ správa rovnako,
+ako $M_1$ na $x$.
+
+\par $M_2$ akceptuje $L_2$ s pamäťou $n$, lebo $|x\#^i|^4 = (|x|^5)^4 = x^{20}$ a
+$M_1$ akceptuje $L_1$ s pamäťou $n^{20}$. $L_2 \in NSPACE(n^4)$. Z predpokladu
+tvrdenia vyplýva $L_2 \in NSPACE(n^3)$, teda existuje nedeterministický Turingov
+stroj $M_3$ akceptujúci $L_2$ s pamäťou $n^3$. 
+
+\par Nech $M_4$ je nedeterministický Turingov stroj, ktorý má na vstupe $x$.
+Najprv zostrojí (na niektorej pracovnej páske) reťazec $x\#^i$, $|x\#^i| = |x|^5$.
+Potom sa na "vstupe" $x\#^i$ správa rovnako, ako $M_3$ na $x\#^i$. $M_4$ akceptuje
+$L_1$ s pamäťou $n^{15}$, lebo $|x|^{15} - (|x|^5)^3 = |x\#^i|^3$ a  $L_1 \in
+NSPACE(n^{15})$.
+
+\paragraph{Lema (translačná):} Nech $S_1(n)$, $S_2(n)$, $f(n)$ sú páskovo
+konštruovateľné, $S_2(n) \geq n$, $f(n) \geq n$. Potom $NSPACE(S_1(n)) \subseteq
+NSPACE(S_2(n)) \Rightarrow NSPACE(S_1(f(n))) \subseteq NSPACE(S_2(f(n)))$.
+
+\paragraph{Tvrdenie:} $NSPACE(n^3) \subsetneq NSPACE(n^4)$.
+\paragraph{Dôkaz:} Nech by $NSPACE(n^4) \subseteq NSPACE(n^3)$. Aplikáciou
+translačnej lemy pre $f(n)=n^3$, $f(n)=n^4$, $f(n)=n^5$ a $S_1(n)=n^4$,
+$S_2(n)=n^3$ postupne dostaneme:
+$$ 
+\left.
+\begin{array}{lll}
+	NSPACE(n^{12}) & \subseteq & NSPACE(n^9) \\
+	NSPACE(n^{16}) & \subseteq & NSPACE(n^{12}) \\
+	NSPACE(n^{20}) & \subseteq & NSPACE(n^{15}) \\
+\end{array} 
+\right\}
+NSPACE(n^{20}) \subseteq NSPACE(n^9).
+$$
+
+Zo Savitchovej vety a vety o pamäťovej hierarchii platí
+$$
+\left.
+\begin{array}{lll}
+	NSPACE(n^9) &\subseteq& DSPACE(n^{18}) \\
+	DSPACE(n^{18}& \subsetneq& DSPACE(n^{20}) \\
+\end{array}
+\right\} NSPACE(n^{20}) \subsetneq DSPACE(n^{20}) \subseteq NSPACE(n^{20})
+$$, čo je spor.
+
+\paragraph{Veta:} Ak $\varepsilon > 0$ a $r \geq 0$, potom $NSPACE(n^r)
+\subsetneq NSPACE(n^{r+\varepsilon})$.
+
+\section{Vety o medzere a o zrýchľovaní}
+\paragraph{Tvrdenie:} Existuje rekuzrívna funkcia $S(n) \geq n$, teda
+$DSPACE(S(n))=DSPACE(2^{S(n)})$.
+\paragraph{Dôkaz:}Nech $m \in N$, $M$ je ľubovoľný deterministický Turingov
+stroj, $x$ je ľubovoľný vstup, $s$ je maximálna veľkosť použitej pamäte počas
+výpočtu $M$ na $x$; $s \in N \cup \{\infty\}$.
+
+$$
+TEST(m,M,x) = \left\{ \begin{array}{ll}
+1 & \mbox{ak}~s \in <m+1,2^m> \\
+0 & \mbox{ak}~s \notin <m+1,2^m> \\
+\end{array}
+\right.
+$$
+
+\subparagraph{Otázka:} Existuje algorigmus počítajúci $TEST \forall m,M,x$ ?
+\subparagraph{Odpoveď:} Áno.
+\paragraph{Dôvod:} Označme $t$ počet rôznych konfigurácií, do ktorých sa môže
+dostať $M$ na $x$ použijúc najviac pamäť $2^m$. Simulujme $M$ na $x$ počas $t+1$
+krokov, pričom existujú 3 prípady:
+\begin{enumerate}
+	\item $M$ sa zastavil na $x$ do času $t$, teda vieme určiť $s$ a teda aj
+	$TEST(m,M,x)$. V čase $t+1$ má stroj $M$ použitú pamäť najviac $2^m$.
+	\item V čase $t+1$ má $M$ použitú pamäť $\leq 2^m$, potom platí to isté,
+	ako v predchádzajúcom prípade.
+	\item V čase $t+1$ má $M$ použitú pamäť $> 2^m$, a teda $TEST(m,M,x)=0$,
+	lebo $s>2^M$ (aj keď nepoznáme $s$).
+\end{enumerate}
+Nech $M_1, M_2, ...$ je ľubovoľná efektívne očíslovaná postupnosť všetkých
+Turingovych strojov (t.j. z čísla $i$ vieme algoritmicky zostrojiť $M_i$.).
+\paragraph{Algoritmus pre $S(n)$}: Nech $s_1 < s_2 < ... < s_p$ sú všetky
+veľkosti použitej pamäte v čase zastavenia sa niektorého stroja $M_i$, $i \leq
+n$ na niektorom $x \in \{0, 1\}^n$.
+\paragraph{Cieľ:} Určiť $S(n)$ tak, aby platilo $S_i \notin <S(n)+1, 2^S(n)>$
+pre $i=1, 2, \ldots, p$. Hľadáme dosť veľký interval, do ktorého nepadne žiadne
+$s_i$.
+\par
+Pre $m \leftarrow n, n+1, \ldots$, ak $TEST(m,M,x) = 0 \forall M_j (j \leq n)
+\land x \in \{0, 1\}^n$, potom $S(n) = m$. (také $m$ existuje, lebo pre každú
+dvojicu $(M_j,x)$ (ktorých je $n2^n$, teda konečne veľa) platí $TEST(m,M,x)=1$
+len pre konečne veľa $m$ (teda $m < s \leq 2^m$), ale algoritmus skúša nekonečne
+veľa $m\geq n$).
+
+\par Nech $L \in DSPACE(2^{S(n)})$, potom existuje $M_k$ akceptujúci $L$ s
+pamäťou najviac $2^S(n)$. Nech $n \geq k$, $x \in \{ 0, 1 \}^n$. $M_k$ je
+deterministický, a teda $M_k$ zastaví na $x$ s použitou pamäťou $S_j \leq
+2^{S(n))}$, $1 \leq j \leq p$. Potom $S_j \leq S(n)$, teda $M_k$ sa zastaví na
+každom $x$ dĺžky $k$ s pamäťou $\leq S(n)$, teda $L \in DSPACE(S(n))$.
+
+\paragraph{Veta (Gap theorem):} Pre každú rekurzívnu funkciu $g(n) \geq n$
+existuje rekurzívna funkcia $S(n) \geq n$ taká, že
+$DSPACE(S(n))=DSPACE(g(S(n)))$.
+
+\paragraph{Veta (Speed up theorem):} Pre každú rekurzívnu funkciu $f(n) \geq
+n^2$ existuje rekurzívny jazyk $L$ taký, že pre ľubovoľný deterministický
+Turingov stroj $M$ akceptujúci $L$ v čase $T(n)$ existuje deterministický
+Turingov stroj $M'$ akceptujúci $L$ v čase $T'(n)$ tak, že platí
+$$
+	\mathcal{F}(T'(n)) \leq T(n)
+$$
+skoro pre všetky $n$.
+\paragraph{Poznámka:} Napríklad pre $f(n)=2^n$ platí: $2^{T'(n)} <T(n)$, teda
+$T'(n) \leq \log T(n)$.
+\end{document}
