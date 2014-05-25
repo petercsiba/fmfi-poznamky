@@ -1,0 +1,20 @@
+Ochutnávka pravdepodobnostných algoritmov - pravdepodobnostné konečné automaty, testovanie násobenia matíc, hľadanie minimálneho rezu
+Analýza pravdepodobnostných algoritmov - Markov, Čebyšev, Chernoff (aj s dôkazmi; v Chernoffovi stačí dokázať to najsilnejšie tvrdenie), vyššie momenty netreba
+Triedenie a vyhľadávanie - s.v.p. analýza quicksortu (dôkaz); treap, skiplist - vedieť, ako fungujú a myšlienky dôkazov
+Hľadanie mediánu - algoritmus a jeho analýza
+Hešovanie - univerzálne rodiny hešovacích funkcií (def.), perfektné hešovanie, lineárne sondovanie (aj s dôkazom očak. zložitosti)
+Testovanie prvočíselnosti - Fermatov test (dôkaz Fermatovej vety, dôkaz, že ne-Carmichaelove zložené čísla majú veľa svedkov) a Miller-Rabinov test (ako funguje, že zložené čísla majú viac odmocnín z 1; dôkaz, že svedkov je veľa netreba)
+Konvexné obaly (a veľa iného) - randomizovaný inkrementálny algoritmus pre konvexný obal v 2D a spätná analýza; pre viacrozmerný KO a súvis s Delaunayho trianguláciou, Voronoiovym diagramom stačí myšlienku, dôkaz netreba
+Lineárne programovanie - Seidelov algoritmus (aj s dôkazom zložitosti), MSW a Clarksonove algoritmy vedieť ako fungujú, dôkaz netreba
+Hľadanie minimálneho rezu - jednoduchý kontrahovací algoritmus a jeho zrýchlenia; sparsifikátory len myšlienku, vedieť čo to je, na čo to je...
+Hľadanie najlacnejšej kostry - lineárny samplovací algoritmus pre hľadanie najlacnejšej kostry
+Perfektné párovania - perfektné párovania, Tutteova veta (aj dôkaz), testovanie rovnosti polynómov, Schwartz-Zippelova lema (aj dôkaz), izolačná lema (aj dôkaz)
+Hľadanie najkratších ciest - Seidelov algoritmus a hľadanie svedkov Booleovského násobenia matíc
+Náhodné prechádzky - def. Markovove reťazce, prechodové matice a stacionárne distribúcie; hlavná veta MR (bez dôkazu); súvis s vlastnými číslami, súvis s elektrinou (efektívny odpor a "pendlovací čas", horný a dolný odhad pre čas pokrytia - aj s dôkazmi)
+Problém splniteľnosti - Schöningov algoritmus na riešenie 3-SATu (aj s dôkazom zložitosti)
+Markov Chain Monte Carlo (MCMC) - samplovanie pomocou náhodných prechádzok (náhodné grafy s predpísanými stupňami, náhodné riešenia knapsacku), reverzibilné MR a Metropolisov-Hastingsov algoritmus (ako vyrobiť MR s danou stacionárnou distribúciou); bayesovská inferencia a MrBayes (myšlienka)
+Náhodnosť a zložitosť - pravdepodobnostné triedy zložitosti (ZPP, RP, coRP, BPP, PP), Adlemanova veta (BPP a boolovské obvody), Sipser-Gacsova veta (BPP a polynomiálna hierarchia)
+Arturove Merlinove hry - triedy MA a AM, protokol pre grafový neizomorfizmus so súkromnou a verejnou mincou (t.j. GNI je v IP[2] aj v AM), protokoly v MA a AM sa dajú upraviť tak, aby mali perfektnú úplnosť; zosilnenie Sipser-Gacsovej vety: MA ⊆ Σ2P; MA ⊆ AM ⊆ Π2P
+Interaktívne dôkazy - #P ⊆ IP ⊆ PSPACE; myšlienka IP = PSPACE
+Pravdepodobnostne overiteľné dôkazy - NP = PCP[n3, 1] (dôkaz)
+Derandomizácia - derandomizácia pomocou pseudonáhodných generátorov (kap. 20.1. z Aroru); Nisan-Wigdersonov generátor (ako funguje, čo sú dizajny; dôkaz netreba)
