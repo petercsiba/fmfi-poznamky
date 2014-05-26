@@ -13,7 +13,7 @@
 
 \title{Poznámky z Úvodu do databázových systémov - materiál na štátnice}
 \date{17.06.2012}
-\author{Peter Csiba, petherz@gmail.com, \url{https://github.com/Petrzlen/fmfi-poznamky}} 
+\author{Peter Csiba, petherz@gmail.com, \url{https://github.com/Petrzlen/fmfi-poznamky}}
 
 \begin{document}
 \maketitle
@@ -23,7 +23,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{Úvod}   
+\section*{Úvod}
 
 Text je poznámkami k oficiálnym \href{http://new.dcs.fmph.uniba.sk/index.php/Studium/Bakalarske/StatneSkusky}{štátnicovým otázkam} a boli spísané počas učenia sa na ne.
 Poznámky sa nesnažia ísť do hĺbky (na to je H.Garcia-Molina, Ullman a Wikipédia).
@@ -33,7 +33,7 @@ Poznámky sú organizované podľa štátnicových otázok, snažia sa minimaliz
 Autor považuje všetky otázky za rovnako dôležité a odporúča v prípade slabšieho pochopenia samostatne vypracovať niektoré staré \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/index.html}{písomky}.
 
 Autor absolvoval základný test predmetu Úvodu do databázových systémov s hodnotením A, a má základné skúsenosti s administráciou a návrhom databáz. Napriek tomu autor \underline{neručí za kvalitu a úplnosť textu} a čitateľov \underline{aj} preto autor \underline{prudko odporúča pozrieť si aj iné zdroje}. Uvedieme citát\footnote{Dr. Tomas Plachetka, Uvod do databazovych systemov 2011/2012 Zima} ''Tieto slajdy sú sprievodcom pri prednáške, nie sú myslené ako náhrada
-prednášky či nebodaj knihy. K príprave na skúšku nestačí len prečítať slajdy'', niečo také sú aj tieto poznámky.  
+prednášky či nebodaj knihy. K príprave na skúšku nestačí len prečítať slajdy'', niečo také sú aj tieto poznámky.
 
 Nakoniec poznamenajme, že autor sa snažil písať pravdu a len pravdu, keďže jeho odpoveď na záverečných skúškach vychádza z tototo materiálu.
 Ak čitateľ chce prispieť ku kvalite textu, nech autorovi napíše a ten mu udelí prístup do repozitára.
@@ -47,8 +47,8 @@ P.S. Autor zistil, že názvoslovie pijan, ľúbi, krčma, alkohol použil už n
 \begin{itemize}
 \item Zobrazenie vybranej časti reality v počítačí.
 \item Uchovávanie informácií v konzistentnom stave a ich pridávanie.
-\item Poskytovanie informácií (dotazy, reporty - periodické správy). 
-\item Ochrana informácií pred zničením a neoprávneným prístupom. 
+\item Poskytovanie informácií (dotazy, reporty - periodické správy).
+\item Ochrana informácií pred zničením a neoprávneným prístupom.
 \end{itemize}
 
 \paragraph{Charakteristiky DBMS (Database Management System).}
@@ -66,7 +66,7 @@ P.S. Autor zistil, že názvoslovie pijan, ľúbi, krčma, alkohol použil už n
 \paragraph{Porovnanie dotazov v dátových modeloch.}
 Vo všeobecnosti sa snažíme zbaviť všeobecných kvatifikátorov pomocou pravidla $\forall P \rightarrow \neg \exists \neg P$.
 
-Máme tabuľky: 
+Máme tabuľky:
 \begin{itemize}
 \item studenti(Student, Skupina)
 \item rozvrh\_skupiny(Skupina, Miestnost, Cas)
@@ -75,7 +75,7 @@ Máme tabuľky:
 
 \begin{itemize}
 \item \emph{Hovorovo.} Treba nájsť (všetky) štvorice [Student, Miestnost, Cas, Ucitel]
-také, že ten učiteľ učí toho študenta v tej miestnosti a tom čase. 
+také, že ten učiteľ učí toho študenta v tej miestnosti a tom čase.
 \item \emph{Predikátový kalkul.}
 
 \{[Student, Miestnost, Cas, Ucitel]: $\exists$ Skupina (Student, Skupina) $\wedge$ rozvrh\_skupiny(Skupina, Miestnost, Cas) $\wedge$ rozvrh\_ucitelia(Ucitel, Skupina)\}
@@ -91,7 +91,7 @@ rozvrh_studenti(Student, Miestnost, Cas, Ucitel) <--
   rozvrh_ucitelia(Učitel, Skupina).
 
 ? rozvrh_studenti(S, M, C, U)
-\end{verbatim} 
+\end{verbatim}
 
 \item \emph{SQL.}
 \begin{verbatim}
@@ -105,15 +105,15 @@ WHERE S.skupina=RK.skupina AND S.skupina=RU.skupina
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %TODO vynechava stranu, (asi) lebo article a section* a section
-\section{Dátové modely} 
+\section{Dátové modely}
 \href{http://en.wikipedia.org/wiki/Database_model}{Pozri Wikipédiu.}
 
 \paragraph{Používané dátové modely.}
 \begin{itemize}
-\item Entitno-relačný. Pozri \ref{entity_relationship}. 
-\item Relačný. Pozri \ref{relacny_kalkul} a \ref{relacna_algebra}. 
-\item Navigačný (XML). Stromová štruktúra, dotazovací jazyk XPath a XQuery. 
-\item Objektový. Niečo ako objekty v programovaní. Objekty okrem zapuzdrenia dát špecifikujú prístup k nim a k ich vzťahom, je možné s nimi programaticky narábať. Napríklad DOM (Document Object Model). 
+\item Entitno-relačný. Pozri \ref{entity_relationship}.
+\item Relačný. Pozri \ref{relacny_kalkul} a \ref{relacna_algebra}.
+\item Navigačný (XML). Stromová štruktúra, dotazovací jazyk XPath a XQuery.
+\item Objektový. Niečo ako objekty v programovaní. Objekty okrem zapuzdrenia dát špecifikujú prístup k nim a k ich vzťahom, je možné s nimi programaticky narábať. Napríklad DOM (Document Object Model).
 \end{itemize}
 
 
@@ -122,91 +122,91 @@ WHERE S.skupina=RK.skupina AND S.skupina=RU.skupina
 
 \paragraph{Úrovne.}
 \begin{itemize}
-\item Konceptuálna úroveň (všeobecná databázová schéma). 
+\item Konceptuálna úroveň (všeobecná databázová schéma).
 \item Interná úroveň (špecifikácia polí, kľúčov, indexov, ...).
 \item Fyzická úroveň. Algoritmy a dátové štruktúry, využtie diskového priestoru. Pozri \ref{fyzicka_organizacia}.
 \end{itemize}
 
 \begin{center}
 \includegraphics[scale=0.75]{db_ansi_sparc.jpg}
-\end{center} 
+\end{center}
 
 \paragraph{Vlastnosti.}
 \begin{itemize}
-\item Nezávislý pohľad užívateľov. Každý môže použiť svoj dotazovací jazyk. 
-\item Užívateľ nevidí fyzickú organizáciu dát. Tá sa môže zmeniť, bez toho, aby to užívateľ postrehol. 
+\item Nezávislý pohľad užívateľov. Každý môže použiť svoj dotazovací jazyk.
+\item Užívateľ nevidí fyzickú organizáciu dát. Tá sa môže zmeniť, bez toho, aby to užívateľ postrehol.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Entitno-relačný model}
 \label{entity_relationship}
 
-Máme entity (tabuľky, polia, ...) a vzťahy medzi nimi. 
+Máme entity (tabuľky, polia, ...) a vzťahy medzi nimi.
 \paragraph{Typy vzťahov.}
 \begin{itemize}
-\item One-to-one (1-1). Napríklad hlava a telo. 
-\item One-to-many (1-n). Napríklad vozidlo a kolesá. 
+\item One-to-one (1-1). Napríklad hlava a telo.
+\item One-to-many (1-n). Napríklad vozidlo a kolesá.
 \item Many-to-many (n-m). Napríklad kupujúci a produkt (táto dvojica nemusí byť unikátna).
 \end{itemize}
 
 \begin{center}
 \includegraphics[scale=0.5]{db_entity_relationship.png}
-\end{center} 
+\end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Relačný model, relačná algebra}
-Pozri \ref{relacny_kalkul} a \ref{relacna_algebra}. 
+Pozri \ref{relacny_kalkul} a \ref{relacna_algebra}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Negácia a rekurzia v relačnej algebre}
-Pozri \ref{relacna_algebra}. 
+Pozri \ref{relacna_algebra}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis relačnej algebry s inými dotazovacími jazykmi}
 Pozri \ref{relacna_algebra_suvis}.
-    
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Relačný kalkul} 
+\section{Relačný kalkul}
 \label{relacny_kalkul}
 
-Deklaruje výroky, ktoré ohraničujú výsledok dotazu. 
+Deklaruje výroky, ktoré ohraničujú výsledok dotazu.
 \paragraph{Použité pojmy.}
-Je odporúčané vedieť matematickú logiku. 
+Je odporúčané vedieť matematickú logiku.
 
 \begin{itemize}
-\item $n$-árna relácia (konečná, nekonečná). Usporiadané $n$-tice. Karteziánsky súčin. 
-\item Atribúty - zložky $n$-tíc. Domény (typy atribútov) - množiny karteziánskeho súčinu. 
-\item Predikát $P$ prislúchajúci relácii $R$- zobrazenie $R_P : R \mapsto$ \{true, false\}, pričom $R_P(A) = true \leftrightarrow A \in R$, kde $A$ je usporiadaná $n$-tica. V praxi medzi tým nerozlišujeme. 
+\item $n$-árna relácia (konečná, nekonečná). Usporiadané $n$-tice. Karteziánsky súčin.
+\item Atribúty - zložky $n$-tíc. Domény (typy atribútov) - množiny karteziánskeho súčinu.
+\item Predikát $P$ prislúchajúci relácii $R$- zobrazenie $R_P : R \mapsto$ \{true, false\}, pričom $R_P(A) = true \leftrightarrow A \in R$, kde $A$ je usporiadaná $n$-tica. V praxi medzi tým nerozlišujeme.
 \end{itemize}
 
 \paragraph{Dotaz.}
 Dotazy v relačnom kalkule sú logické formuly predikátovej logiky prvého rádu.
-Formula by nemala mať voľné premenné. Výsledkom sú prvky relácie, ktoré spĺňajú formulu. 
+Formula by nemala mať voľné premenné. Výsledkom sú prvky relácie, ktoré spĺňajú formulu.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Predikátová interpretácia relačnej algebry}
-??? Asi ide o prepis symbolov relačnej algebry do predikátovej logiky. 
-%TODO 
+??? Asi ide o prepis symbolov relačnej algebry do predikátovej logiky.
+%TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Negácia, doménovo nezávislé a bezpečné formuly}
 
 \paragraph{Príklad dotazov.}
 \begin{enumerate}
-\item prvocisla1: $\{Z : (\forall X) (\forall Y) (krat(X,Y,Z) \rightarrow X = 1 \wedge Y = 1)\}$.
+\item prvocisla1: $\{Z : (\forall X) (\forall Y) (krat(X,Y,Z) \rightarrow X = 1 \vee Y = 1)\}$.
 \item zlozene\_cisla: $\{Z : (\exists X) (\exists Y) (krat(X,Y,Z) \wedge X \neq 1 \wedge Y \neq 1)\}$.
 \item prvocisla2: $\{Z : (\exists X) (\exists Y) (krat(X,Y,Z) \wedge Z \notin zlozene\_cisla) \}$.
 \item prvocisla3: $\{Z : Z \notin zlozene\_cisla\}$.
 \end{enumerate}
-Tretiu formulu (reláciu, resp. množinu) sme získali dvojitou negáciou prvej a pravidlom $P \rightarrow Q \Leftrightarrow \neg P \vee Q$ (medzikrok je druhá formula). 
+Tretiu formulu (reláciu, resp. množinu) sme získali dvojitou negáciou prvej a pravidlom $P \rightarrow Q \Leftrightarrow \neg P \vee Q$ (medzikrok je druhá formula).
 
 Formuly pre prvocisla1 a prvocisla3 sú \emph{nebezpečné}, keďže ich výsledom je napríklad aj ''petrzlen''.
-V prvom prípade je implikácia pravdivá (lebo ľavá strana je nepravdivá) a v druhom prípade je to zjavné, keďže ''petrzlen'' nie je zložené číslo. 
-Správna je len formula prvocisla2. 
+V prvom prípade je implikácia pravdivá (lebo ľavá strana je nepravdivá) a v druhom prípade je to zjavné, keďže ''petrzlen'' nie je zložené číslo.
+Správna je len formula prvocisla2.
 
 \emph{Množina faktov} (nazývaná aj \emph{extenzionálna databáza (EDB)}) je \underline{konečná} množina, na ktorej je predikát v dotaze pravdivý (to zrejme neplatí pre prvocisla1 a prvocisla3, ale platí pre prvocisla2 a zlozene\_cisla).
-Neformálne, \emph{bezpečný dotaz} je taký, v ktorom sa každá premenná vyskytuje v aspoň jednom EDB v pozitívnom kontexte. Tj. chceme, aby sa premenná \underline{ne}vyskytovala v negovanej množine faktov (výroku). Napríklad v prvocisla3 je $Z$ v negatívnom kontexte.  
+Neformálne, \emph{bezpečný dotaz} je taký, v ktorom sa každá premenná vyskytuje v aspoň jednom EDB v pozitívnom kontexte. Tj. chceme, aby sa premenná \underline{ne}vyskytovala v negovanej množine faktov (výroku). Napríklad v prvocisla3 je $Z$ v negatívnom kontexte.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Relačný kalkul (doménový)}
@@ -218,14 +218,14 @@ Pripomeňme, že \emph{domény} sú typy atribútov - množiny karteziánskeho s
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis relačného kalkulu s inými dotazovacími jazykmi}
 Základná intuícia. Celkom dobre sa doň prekladá z hovorového a jendoducho sa z neho konštruuje datalog, resp. relačná algebra.
-V praxi nie je použiteľný, keďže ide o teoretický model (s potenciálne nekonečnými reláciami). 
-    
-%TODO 
+V praxi nie je použiteľný, keďže ide o teoretický model (s potenciálne nekonečnými reláciami).
+
+%TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Datalog} 
-\href{http://en.wikipedia.org/wiki/Datalog}{Datalog} je dotazovací jazyk s pravidlami určený pre deduktívne databázy, ktorý je syntakticky podmnožinou Prologu. Je založený na predikátovej logike prvého rádu (neumožňuje kvantifikovať množiny) a \underline{umožňuje rekurziu}. 
+\section{Datalog}
+\href{http://en.wikipedia.org/wiki/Datalog}{Datalog} je dotazovací jazyk s pravidlami určený pre deduktívne databázy, ktorý je syntakticky podmnožinou Prologu. Je založený na predikátovej logike prvého rádu (neumožňuje kvantifikovať množiny) a \underline{umožňuje rekurziu}.
 
 Odporúčame si pozrieť slidy Plachetku pre ďalšie príklady dotazov.
 Ideálne si niektoré úlohy treba vyskúšať v Datalógovom interpreteri (tak sa to učí najlepšie).
@@ -235,8 +235,8 @@ Ideálne si niektoré úlohy treba vyskúšať v Datalógovom interpreteri (tak 
 
 \paragraph{Syntax.}
 Program pozostáva z množiny pravidiel - \emph{implikácií} - \emph{predikátov}, ktoré majú \emph{hlavu} a \emph{telo}\footnote{
-Nie pätu. Poznámka autora. 
-} (ľavá a pravá strana implikácie, resp. \emph{premisa} a \emph{dôsledok}). 
+Nie pätu. Poznámka autora.
+} (ľavá a pravá strana implikácie, resp. \emph{premisa} a \emph{dôsledok}).
 Napríklad:
 \begin{verbatim}
 1. krat(1, 1, 1) <-- TRUE.
@@ -251,29 +251,29 @@ Napríklad:
 5. prvocislo(Z) <--
   krat(_, _, Z),
   not zlozene_cislo(Z)
-\end{verbatim} 
+\end{verbatim}
 Predikáty 1 a 2 a aj predikáty 4 a 5 sú sémanticky ekvivalentné. Premenné
 na ľavej strane sú kvantifikované $\forall$ a premenné na pravej strane
 $\exists$. Čiarka medzi atómami má význam AND. Bodka označuje koniec
-predikátu. \emph{Podcieľmi} nazývame atómy tela oddelené čiarkami, napríklad 
-  \verb|{krat(_, _, Z)}| a \verb|not zlozene_cislo(Z)| sú podcieľmi \verb|prvocislo(Z)|. 
+predikátu. \emph{Podcieľmi} nazývame atómy tela oddelené čiarkami, napríklad
+  \verb|{krat(_, _, Z)}| a \verb|not zlozene_cislo(Z)| sú podcieľmi \verb|prvocislo(Z)|.
 V 5 používame \emph{anonymné premenné} ''\_''. Ich sémentika je rovnaká, ako keby sa použila ľubovoľná nepoužitá premenná. Poznmenajme, že v tele pravidla sú premenné implicitne kvantifikované $\exists$.
-  
+
 Alebo (disjunkcia) sa vyjadruje:
 \begin{verbatim}
 colour(F) <-- F = black
 colour(F) <-- F = white
-\end{verbatim} 
-  
+\end{verbatim}
+
 \paragraph{Ďalšie syntaktické pravidlá.}
 
 \begin{itemize}
-\item Argumentmi (hláv) predikátov môžu byť len jednoduché atribúty. Nemôžeme \verb|zlozene_cislo(f(f(Z,5)) <-- |. 
-\item (Tvrdí Wiki, nie Plachetka). Každá premenná v hlave predikátu sa musí vyskytovať aj v nie negovanom podcieli predikátu (súvisí s bezpečnosťou). 
+\item Argumentmi (hláv) predikátov môžu byť len jednoduché atribúty. Nemôžeme \verb|zlozene_cislo(f(f(Z,5)) <-- |.
+\item (Tvrdí Wiki, nie Plachetka). Každá premenná v hlave predikátu sa musí vyskytovať aj v nie negovanom podcieli predikátu (súvisí s bezpečnosťou).
 \end{itemize}
 
 \paragraph{Sémantika.}
-Je založená na relačnom kalkule (a matematickej logike). 
+Je založená na relačnom kalkule (a matematickej logike).
 Niečo sa spomenulo vyššie, doplníme v ďalšej sekcii.
 
 \paragraph{Agregácia (subtotal).}
@@ -282,22 +282,22 @@ objednava_od_hp(K, V) <--
 objednavky(K, V), dodava(hp, V, _, _).
 answer(K, P) <--
 subtotal(objednava_od_hp(K, V), [K], [P = count(V)]).
-\end{verbatim} 
+\end{verbatim}
 
-Príkaz \verb|subtotal| má tri parametre. Prvým je predikát, druhým je \emph{grupovací atribút} a tretím \emph{agregovací atribút}. Viac v \ref{rel_alg_agg}. 
+Príkaz \verb|subtotal| má tri parametre. Prvým je predikát, druhým je \emph{grupovací atribút} a tretím \emph{agregovací atribút}. Viac v \ref{rel_alg_agg}.
 
-Podobne sa dá definovať subtotal aj pre relačný kalkulus. 
+Podobne sa dá definovať subtotal aj pre relačný kalkulus.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis s relačným kalkulom}
 
-Napríklad 
+Napríklad
 \begin{verbatim}
 3. zlozene_cislo(Z) <--
   krat(X, Y, Z),
   not X = 1,
   not Y = 1.
-\end{verbatim} 
+\end{verbatim}
 je sémanticky ekvivalentným programom k $$
 zlozene\_cisla: \{Z : (\exists X) (\exists Y) (krat(X,Y,Z) \wedge X \neq 1 \wedge Y \neq 1)\}.
 $$
@@ -307,16 +307,16 @@ Existuje algoritmický predklad medzi týmito dvoma modelmi.
 Algoritmus, ktorý prepisuje relačný kalkul do Datalogu pozostáva z nasledujúcich krokov (treba ich vedieť \underline{použiť}):
 
 \begin{enumerate}
-\item Premenovanie premenných, lokalizácia kvantifikátorov. Vlastne veta o variantoch z matematickej logiky. 
+\item Premenovanie premenných, lokalizácia kvantifikátorov. Vlastne veta o variantoch z matematickej logiky.
 
 \item Eliminácia všeobecných kvantifikátorov a implikácií. Použijeme pravidlá $(\forall x)A(x) \leftrightarrow \neg (\exists x) \neg A(x)$ a $(A \rightarrow B) \leftrightarrow (\neg A \vee B)$.
 
-\item Definícia pomocných predikátov. Chceme sa vyhnúť sekvencii $\neg (\exists X) povodny\_predikat(X)$. Definujeme preto pomocné predikáty: 
+\item Definícia pomocných predikátov. Chceme sa vyhnúť sekvencii $\neg (\exists X) povodny\_predikat(X)$. Definujeme preto pomocné predikáty:
 $$
 \begin{array}{l}
 \neg novy\_predikat \\
 novy\_predikat \leftarrow (\exists X) povodny\_predikat(X).\\
-\end{array} 
+\end{array}
 $$
 
 \item Bezpečnosť pomocných predikátov. Pridáme k premenným ich domény:
@@ -332,12 +332,12 @@ novy_predikat <-- povodny_predikat(X).
 
 \end{enumerate}
 
-Poznamenajme, že podobne existuje algoritmus, ktorý prepisuje datalogové dotazy do SQL (tiež treba vedieť použiť). 
+Poznamenajme, že podobne existuje algoritmus, ktorý prepisuje datalogové dotazy do SQL (tiež treba vedieť použiť).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Výpočet dotazu na Datalogový program}
 
-Datalog počíta \emph{minimálny model} programu (minimálne relácie, pre ktoré je daný program splnený). Inými slovami, Datalog vracia najmenšiu množinu, pre ktorú sú splnené všetky potrebné predikáty, na ktorých závisí dôsledok (dotaz). Tj. neuvažuje také výsledky, pre ktoré sú predpoklady nesplnené. Napríklad program: 
+Datalog počíta \emph{minimálny model} programu (minimálne relácie, pre ktoré je daný program splnený). Inými slovami, Datalog vracia najmenšiu množinu, pre ktorú sú splnené všetky potrebné predikáty, na ktorých závisí dôsledok (dotaz). Tj. neuvažuje také výsledky, pre ktoré sú predpoklady nesplnené. Napríklad program:
 \begin{verbatim}
 colour(black).
 colour(white).
@@ -359,45 +359,45 @@ shaves(barber, X) <-- man(X), not shaves(X, X).
 \end{verbatim}
 
 Paradox nenastáva, keďže pravidlo je definované ako implikácia. Výsledok nemôže byť FALSE,
-lebo by predpoklad bol splnený. Ak je výsledok TRUE, tak \verb|man(X), not shaves(X, X) --> shaves(barber, X)| platí. 
+lebo by predpoklad bol splnený. Ak je výsledok TRUE, tak \verb|man(X), not shaves(X, X) --> shaves(barber, X)| platí.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Bezpečnosť Datalogových programov}
 
-\emph{Bezpečný predikát} je taký, ktorého všetky premenné vyskytujúce sa v hlave, sú viazané v EDB. 
+\emph{Bezpečný predikát} je taký, ktorého všetky premenné vyskytujúce sa v hlave, sú viazané v EDB.
 
-\emph{Bezpečný program} má všetky svoje predikáty bezpečené. 
+\emph{Bezpečný program} má všetky svoje predikáty bezpečené.
 
 (Zopakujeme) Minimálny model existuje pre každý bezpečný program (ktorý sa definuje prakticky rovnako, ako v relačnom kalkule).
- 
+
 Všeobecne platí, že anonymné premenné v negovaných EDB podcieľoch
 nespôsobujú problém s bezpečnosťou.
- 
-Pán Šturc definuje slabšie podmienky. 
-    
+
+Pán Šturc definuje slabšie podmienky.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Relačná algebra} 
+\section{Relačná algebra}
 \label{relacna_algebra}
 
-Hovorí AKO sa má niečo vypočítať. Operuje len nad konečnými množinami (aby neboli problémy s negáciami). Formalizuje SQL. Viac na \href{http://en.wikipedia.org/wiki/Relational_algebra}{Wikipédii} - náhodný poznatok odtiaľ: Reflexívno-tranzitívny uzáver sa nedá relačnou algebrou vyjadriť. 
- 
-V tejto sekcii budeme implicitne veľkými písmenami značiť $m$-tice atribútov nad $n$-reláciami $r$ ako $X = (X_1, X_2, \ldots, X_m)$ (nemusí $n=m$). 
+Hovorí AKO sa má niečo vypočítať. Operuje len nad konečnými množinami (aby neboli problémy s negáciami). Formalizuje SQL. Viac na \href{http://en.wikipedia.org/wiki/Relational_algebra}{Wikipédii} - náhodný poznatok odtiaľ: Reflexívno-tranzitívny uzáver sa nedá relačnou algebrou vyjadriť.
+
+V tejto sekcii budeme implicitne veľkými písmenami značiť $m$-tice atribútov nad $n$-reláciami $r$ ako $X = (X_1, X_2, \ldots, X_m)$ (nemusí $n=m$).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Operátory relačnej algebry}
 
 \paragraph{Operátory.}
 \begin{itemize}
-\item Projekcia $\Pi$. Nech $r$ má atribúty $Y$, potom $\Pi_X(r)$ vznikne kopírovaním riadkov $r$, pričom sa skopírujú len tie atribúty, ktoré sú v $X$. Treba eliminovať potenciálne duplicity. 
-\item Selekcia $\sigma$. Nech $c$ je podmienka a $X$ atribúty $r$, potom $\sigma_{c(X)} = \{X:r(X) \wedge c(X)\}$. 
+\item Projekcia $\Pi$. Nech $r$ má atribúty $Y$, potom $\Pi_X(r)$ vznikne kopírovaním riadkov $r$, pričom sa skopírujú len tie atribúty, ktoré sú v $X$. Treba eliminovať potenciálne duplicity.
+\item Selekcia $\sigma$. Nech $c$ je podmienka a $X$ atribúty $r$, potom $\sigma_{c(X)} = \{X:r(X) \wedge c(X)\}$.
 \item Kartézsky súčin $\times$. Relácie $r_1$ a $r_2$, atribúty $X$, $Y$ pričom $X \cap Y = \emptyset$, potom $r_1 \times r_2 = \{[X,Y]:r_1(X) \wedge r_2(Y)\}$.
 \item Join (theta-join). Podmienka $c$, relácie $r_1$ a $r_2$, atribúty $X$, $Y$ pričom $X \cap Y = \emptyset$, potom $r_1 \Join_{c(X,Y)} r_2 = \{[X,Y]:r_1(X) \wedge r_2(X) \wedge c(X,Y)\}$.
 \item Premenovanie $P_{r_2(Y)}(r1)$ atribútov relácie.
 \item Natural join $\Join$. Nech $r_1$ je typu\footnote{Všetky atribúty $r_1$ je zjednotenie $X$ a $Z$} $r_1(X, Z)$ a $r_2$ je typu $r_2(Y, Z)$, pričom $Z$ sú spoločné
 atribúty $r_1$ a $r_2$. Potom $r_1 \Join r_2 = \{[X,Y,Z]:r_1(X,Z) \wedge r_2(Y,Z)\}$, pričom
 spoločné atribúty (atribúty s rovnakým menom) sú testované na
-rovnosť a sú kopírované iba raz. Natural join sa dá vyjadriť projekciou a theta-joinom. 
+rovnosť a sú kopírované iba raz. Natural join sa dá vyjadriť projekciou a theta-joinom.
 \item Tradičné množinové $\cap, \cup, \ldots $ .
 \item Eliminácia duplikátov $r_2 = \Delta(r_1)$.
 \end{itemize}
@@ -405,7 +405,7 @@ rovnosť a sú kopírované iba raz. Natural join sa dá vyjadriť projekciou a 
 \paragraph{Optimalizácia výpočtu.}
 Použitie operátorov sa zvykne zapisovať v strome, kde operátory sú vrcholy a argumenty (relácie) hrany.
 Pre jeden výraz môže existovať viacero výpočtovo ekvivalentných stromov.
-Zopár pravidiel na konštrukciu optimálneho: 
+Zopár pravidiel na konštrukciu optimálneho:
 \begin{itemize}
 \item Selekciu urob čo najskôr.
 \item Vyhýbaj sa kartézskym súčinom, nahraď ich joinom. Ak
@@ -413,17 +413,17 @@ nasleduje selekcia, pridaj ju do joinovacej podmienky.
 \item Postupnosť unárnych operácií (selekcie a projekcie) spoj do
 jednej operácie a zviaž s nasledujúcou operáciou.
 \item Výsledok opakovaného podvýrazu ulož, ak je veľkosť tabuľky
-malá, tak ju materializuj. 
+malá, tak ju materializuj.
 \item Nájdi optimálne poradie joinov technikou dynamického
-programovania. Poradí pre N tabuliek je zhruba $2^N$ (binárne stromy). 
+programovania. Poradí pre N tabuliek je zhruba $2^N$ (binárne stromy).
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Multimnožinová interpretácia relácií}
 
-Plachetka: "Relačná algebra počíta nad multimnožinami". Na Wikipédii som to nenašiel explicitne spomenuté a takisto sme operátory definovali pre množiny. V každom prípade je možné jednoduchým spôsobom rozšíriť definície na \emph{multimnožiny}\footnote{Rovnaký prvok sa môže vyskytnúť viackrát}. Kto nevie, \href{http://en.wikipedia.org/wiki/Multiset}{Wikipédia}. 
+Plachetka: "Relačná algebra počíta nad multimnožinami". Na Wikipédii som to nenašiel explicitne spomenuté a takisto sme operátory definovali pre množiny. V každom prípade je možné jednoduchým spôsobom rozšíriť definície na \emph{multimnožiny}\footnote{Rovnaký prvok sa môže vyskytnúť viackrát}. Kto nevie, \href{http://en.wikipedia.org/wiki/Multiset}{Wikipédia}.
 
-Niektoré základné vlastnosti operácií sa nezachovávajú, ako napríklad $S \cup S = S$. 
+Niektoré základné vlastnosti operácií sa nezachovávajú, ako napríklad $S \cup S = S$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Grupovanie a agregácia}
@@ -431,7 +431,7 @@ Niektoré základné vlastnosti operácií sa nezachovávajú, ako napríklad $S
 (Skopírovaný slide.)
 
 \paragraph{Atribúty.}
-O každom atribúte pre operátor agregácie platí $x \in X$ platí buď 
+O každom atribúte pre operátor agregácie platí $x \in X$ platí buď
 \begin{itemize}
 \item $x$ je atribútom $r_1$ (v tom prípade atribútu $X$ hovoríme
         \emph{grupovací atribút}), alebo
@@ -450,8 +450,8 @@ skupín majú rovnaké hodnoty grupovacích atribútov
 \end{enumerate}
 Výsledkom je tabuľka, v ktorej každej skupine prináleží jeden
 riadok.
- 
-Implementuje sa projekciou (multimnožinovou) a vyhodením duplikátov. 
+
+Implementuje sa projekciou (multimnožinovou) a vyhodením duplikátov.
 
 SQL:
 \begin{tabular}{lc}
@@ -462,15 +462,15 @@ GROUP BY $<G\_attr>$ & 3 \\
 HAVING $<h\_cond>$ & 4 \\
 \end{tabular}
 
-Relačná algebra: 
+Relačná algebra:
 $$\Pi_{S_attr}(\sigma_{h_cond}(\Gamma_{G_attr, agg(Attr)}(\sigma_{w_cond}(r_1 \times r_2 \times \ldots \times r_n))))$$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Rekurzia, výpočet pevného bodu}
 
-Podľa Wiki základná relačná algebra nevie rekurziu (to je celkom zrejmé). 
-Plachetkov slide: 
+Podľa Wiki základná relačná algebra nevie rekurziu (to je celkom zrejmé).
+Plachetkov slide:
 
 Operátor \emph{minimal fixpoint} (tranzitívny uzáver) $\Phi(<vyraz>)$ iteruje výraz, kým sa relácie použité vo výraze
 menia (t.j. kým sa mení obsah aspoň 1 relácie výrazu)
@@ -485,7 +485,7 @@ ancestor &:= ancestor $\cup \Pi_{X,A}$(ancestor $\Join$ parent) \\
 sa zapíše ako\\
 ancestor := $\Phi$($\cup \Pi_{X,A}$(ancestor $\Join$ parent)) \\
 
-Výpočet pevného bodu patrí do predmetu Základy teórie programovania (blok B1). 
+Výpočet pevného bodu patrí do predmetu Základy teórie programovania (blok B1).
 Naivný algortimus: \\
 \verb|answer = {};| \\
 \verb|do| \\
@@ -496,22 +496,22 @@ Naivný algortimus: \\
 \verb|answer = iteration_step(|$\Phi_n$\verb|);| \\
 \verb|} while answer changed; /* anywhere inside this loop */| \\
 
-Oveľa viac v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_5.pdf}{slidoch z roku 2011}. Spíšem, ak mi zostane čas. 
+Oveľa viac v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_5.pdf}{slidoch z roku 2011}. Spíšem, ak mi zostane čas.
 
-%TODO str.197-220 
+%TODO str.197-220
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis relačnej algebry s inými dotazovacími jazykmi}
 \label{relacna_algebra_suvis}
 
-SQL bolo inšpirované relačnou algebrou. 
-    
+SQL bolo inšpirované relačnou algebrou.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Jazyk SQL (Structured Query Language)} 
-\emph{SQL} je jazykom pre prístup k relačným databázou navrhnutým na základe relačnej algebry a relačného kalkulu. 
-Predpokladáme, že väčšina pozná (alebo si aspoň myslí, že pozná). Takže len stručne. 
-Kto nevie, tak \href{http://en.wikipedia.org/wiki/SQL}{Wikipedia}. 
+\section{Jazyk SQL (Structured Query Language)}
+\emph{SQL} je jazykom pre prístup k relačným databázou navrhnutým na základe relačnej algebry a relačného kalkulu.
+Predpokladáme, že väčšina pozná (alebo si aspoň myslí, že pozná). Takže len stručne.
+Kto nevie, tak \href{http://en.wikipedia.org/wiki/SQL}{Wikipedia}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Programovanie v SQL (DDL, DML)}
@@ -519,66 +519,66 @@ Kto nevie, tak \href{http://en.wikipedia.org/wiki/SQL}{Wikipedia}.
 SQL je typový jazyk.
 
 Poznamenajme, že SQL používa trojhodnotovú logiku: \{TRUE, FALSE, NULL\}
-a tabuľky nie sú množinami, ale zoznamami (rovnaká $n$-tica - riadok - sa môže vyskytovať viackrát). Obe sú v spore s relačnou algebrou. 
+a tabuľky nie sú množinami, ale zoznamami (rovnaká $n$-tica - riadok - sa môže vyskytovať viackrát). Obe sú v spore s relačnou algebrou.
 
-Ďalej poznamenajme, že tabuľka nemusí byť materializovaná, môže byť dočasná alebo trvalá. 
+Ďalej poznamenajme, že tabuľka nemusí byť materializovaná, môže byť dočasná alebo trvalá.
 
 \paragraph{DDL (Data Definition Language).}
-Vytvára (mení, maže) štruktúru dát, relácie, indexy, užívateľov (a prístupové práva), triggery, ... . 
+Vytvára (mení, maže) štruktúru dát, relácie, indexy, užívateľov (a prístupové práva), triggery, ... .
 
-DDL a DML sú podmnožinami jazyka SQL. 
+DDL a DML sú podmnožinami jazyka SQL.
 
 \begin{itemize}
 \item CREATE. Najčastejšie CREATE TABLE.
-\item ALTER. 
+\item ALTER.
 \item RENAME.
-\item DROP. Navždy vymazať. 
-\item TRUNCATE. Vyprázdniť. 
+\item DROP. Navždy vymazať.
+\item TRUNCATE. Vyprázdniť.
 \end{itemize}
 
 \paragraph{DML (Data Manipulation Language).}
-Slúži na prístup, pridávanie, zmenu a zmazanie dát. 
+Slúži na prístup, pridávanie, zmenu a zmazanie dát.
 
 \begin{itemize}
-\item SELECT. 
-\item INSERT. 
+\item SELECT.
+\item INSERT.
 \item UPDATE.
-\item DELETE. Navždy vymazať. 
-\item MERGE. Vyprázdniť. 
+\item DELETE. Navždy vymazať.
+\item MERGE.
 \end{itemize}
 
 \paragraph{Kľúčové slová pre SELECT.}
 \begin{itemize}
-\item FROM. Z tabuľky.  
-\item WHERE. Kde podmienka. 
-\item \verb|[FULL, LEFT, RIGHT] [INNER, OUTER] JOIN|. Spájanie viacerých tabuliek podľa podmienky. Odporúčame si pozrieť \href{http://www.codinghorror.com/blog/2007/10/a-visual-explanation-of-sql-joins.html}{grafické vysvetlenie}. Najbežnejší je LEFT INNER JOIN (resp. len JOIN). [FULL, LEFT, RIGHT] hovorí, z pohľadu ktorej JOINujeme a OUTER (default je INNER) hovorí, že zahŕňame aj riadok, ktorý nemá pár. 
-\item CROSS. Kartézsky súčin. 
+\item FROM. Z tabuľky.
+\item WHERE. Kde podmienka.
+\item \verb|[FULL, LEFT, RIGHT] [INNER, OUTER] JOIN|. Spájanie viacerých tabuliek podľa podmienky. Odporúčame si pozrieť \href{http://www.codinghorror.com/blog/2007/10/a-visual-explanation-of-sql-joins.html}{grafické vysvetlenie}. Najbežnejší je LEFT INNER JOIN (resp. len JOIN). [FULL, LEFT, RIGHT] hovorí, z pohľadu ktorej JOINujeme a OUTER (default je INNER) hovorí, že zahŕňame aj riadok, ktorý nemá pár.
+\item CROSS. Kartézsky súčin.
 \item UNION. Množinové zjednotenie dvoch tabuliek. UNION ALL je spojenie.
-\item INTERSECT. Množinový prienik dvoch tabuliek. 
-\item DISTINCT. Množinové správanie.    
-\item EXISTS. Či SELECT vracia prázdny výsledok. 
-\item ANY. Ľubovoľný vyhovujúci prvok z tabuľky. Použitie sa dá obísť, ide skôr o skratku. 
+\item INTERSECT. Množinový prienik dvoch tabuliek.
+\item DISTINCT. Množinové správanie.
+\item EXISTS. Či SELECT vracia prázdny výsledok.
+\item ANY. Ľubovoľný vyhovujúci prvok z tabuľky. Použitie sa dá obísť, ide skôr o skratku.
 \item LIMIT. Obmedzenie počtu výstupných riadkov.
 \item ORDER BY. Usporiadanie výstupu.
 \end{itemize}
 
 \paragraph{Agregácia.}
 \begin{itemize}
-\item GROUP BY. Agregácia.  
+\item GROUP BY. Agregácia.
 \item COUNT.
 \item SUM.
-\item AVG. 
+\item AVG.
 \end{itemize}
 
 \paragraph{NULL.}
-Poznamenajme, že hodnota NULL sa môže chovať kontraintuitívne. 
-Napríklad: 
+Poznamenajme, že hodnota NULL sa môže chovať kontraintuitívne.
+Napríklad:
 \begin{verbatim}
 SELECT r.C
 FROM r
 WHERE A < 1 OR A >= 1
-\end{verbatim} 
-nevráti riadky, kde $A=0$. 
+\end{verbatim}
+nevráti riadky, kde $A=0$.
 
 \paragraph{Index.}
 Uľahčujú vyhľadávanie, väčšinou sú implementované binárnymi vyhľadávacími stromami.
@@ -587,11 +587,11 @@ Tj. namiesto vyhľadávania v čase $O(n)$ máme $O(\log n)$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Negácia a rekurzia v SQL}
 
-O negácii to isté ako o negácii v Datalogu. 
+O negácii to isté ako o negácii v Datalogu.
 
-Rekurzia v SQL je možná, napr. pomocou WITH, ktorý definuje dočasnú tabuľku. Rekurzia nastáva, keď sa odvolávame na tabuľku, ktorú práve definujeme. Koho viac zaujíma, môže si pozrieť \href{http://sqlanywhere.blogspot.sk/2012/04/example-recursive-union.html}{praktický príklad}. 
+Rekurzia v SQL je možná, napr. pomocou WITH, ktorý definuje dočasnú tabuľku. Rekurzia nastáva, keď sa odvolávame na tabuľku, ktorú práve definujeme. Koho viac zaujíma, môže si pozrieť \href{http://sqlanywhere.blogspot.sk/2012/04/example-recursive-union.html}{praktický príklad}.
 
-Konstra rekurzívneho programu pre UNION ALL: 
+Kostra rekurzívneho programu pre UNION ALL:
 \begin{verbatim}
 01. <typical_recursive_union> ::= WITH RECURSIVE <local_view_name>
 02. "(" <alias_name_list> ")"
@@ -601,38 +601,38 @@ Konstra rekurzívneho programu pre UNION ALL:
 06. <outer_query_specification>
 07. [ <order_by_clause> ]
 08. [ <for_clause> ]
-\end{verbatim} 
+\end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Súvis SQL s inými dotazovacími jazykmi}
 
-Bol postavený na relačnej algebre (pozri \ref{relacna_algebra}) a relačnom kalkule \ref{relacny_kalkul}. Existujú priamočiare algortimické transformácie s Datalogom a relačnou algebrou (operátorový strom). 
- 
+Bol postavený na relačnej algebre (pozri \ref{relacna_algebra}) a relačnom kalkule \ref{relacny_kalkul}. Existujú priamočiare algortimické transformácie s Datalogom a relačnou algebrou (operátorový strom).
+
 \paragraph{Konverzia z Datalogu.}
 Existuje jednoduchý algortimus na preklad Datalogu do SQL,
-využíva konštrukcie na vytváranie dočasných tabuliek: 
+využíva konštrukcie na vytváranie dočasných tabuliek:
 \begin{verbatim}
 WITH r AS (SELECT ...),
 SELECT ...
-\end{verbatim} 
+\end{verbatim}
 alebo
 \begin{verbatim}
 CREATE TEMPORARY TABLE r AS (SELECT ...);
 SELECT ...
 \end{verbatim}
-alebo permanentnú, možno nie materializovanú: 
+alebo permanentnú, možno nie materializovanú:
 \begin{verbatim}
 CREATE VIEW r AS (SELECT ...);
 SELECT ...
 \end{verbatim}
 
-Hlavne CREATE VIEW si odporúčame pozrieť. 
+Hlavne CREATE VIEW si odporúčame pozrieť.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Teória navrhovania relačných báz dát} 
+\section{Teória navrhovania relačných báz dát}
 
-V tejto sekcii predpokladáme, že všetky spomínané datábázy sú relačné. 
+V tejto sekcii predpokladáme, že všetky spomínané datábázy sú relačné.
 
 \paragraph{Niektoré používané techniky.}
 \begin{itemize}
@@ -640,33 +640,33 @@ V tejto sekcii predpokladáme, že všetky spomínané datábázy sú relačné.
 \begin{center}
 \includegraphics[scale=0.5]{db_sad.jpg}
 \end{center}
-\item DFD (Data-Flow Diagrams). Znázorňuje, ako dáta prúdia cez systém, vstupy, výstupy. 
+\item DFD (Data-Flow Diagrams). Znázorňuje, ako dáta prúdia cez systém, vstupy, výstupy.
 \begin{center}
 \includegraphics[scale=0.75]{db_dfd.png}
 \end{center}
-\item UML (Unified Modeling Language). S tým sa musel stretnúť každý, napríklad pri Design Patternoch. 
+\item UML (Unified Modeling Language). S tým sa musel stretnúť každý, napríklad pri Design Patternoch.
 \begin{center}
 \includegraphics[scale=0.5]{db_uml.png}
 \end{center}
-\item ER (Enitity Relationship). S tými sme sa už stretli, sú najvhodnejšie pre relačné databázy (ako už názov napovedá). Nevýhodou je, že nezachytávajú ako sa entity menia. 
+\item ER (Enitity Relationship). S tými sme sa už stretli, sú najvhodnejšie pre relačné databázy (ako už názov napovedá). Nevýhodou je, že nezachytávajú ako sa entity menia.
 \begin{center}
 \includegraphics[scale=0.5]{db_entity_relationship.png}
 \end{center}
 \end{itemize}
 
-Existujú softwarové nástroje, ktoré výrazne uľahčujú ich tvorbu, resp. vedia konvertovať textovú schému na takéto diagramy (je ich dosť). 
+Existujú softwarové nástroje, ktoré výrazne uľahčujú ich tvorbu, resp. vedia konvertovať textovú schému na takéto diagramy (je ich dosť).
 
 \paragraph{Kroky návrhu.}
 \begin{itemize}
-\item \emph{Koncepčný návrh}. Vytvorí sa diagram pre databázu a jej relácie. Zaujímajú nás entity a už menej ich atribúty a vôbec ich typy. 
+\item \emph{Koncepčný návrh}. Vytvorí sa diagram pre databázu a jej relácie. Zaujímajú nás entity a už menej ich atribúty a vôbec ich typy.
 \item \emph{Logický návrh}. Typy atribútov, bezpečnostný model,
 optimalizácia (normalizácia, ...), kľúče. Preklad do SQL (ako normu pre
 relačné DB) môžeme považovať za takýto krok. Treba vedieť syntax
 \verb|CREATE TABLE| a
 \href{http://dev.mysql.com/doc/refman/5.5/en/innodb-foreign-key-constraints.html}{hlavne}
 {\tt FOREIGN KEY (id) REFERENCES (table)} a ktomu prislúchajúci {\tt ON
-DELETE [CASCADE, SET NULL, RESTRICT=NO ACTION]}, ktoré hovoria čo sa má spraviť, keď sa vymaže FOREIGN KEY. 
-\item \emph{Fyzický návrh}. Mapovanie návrhu na konkrétny DBMS (DB Management System). 
+DELETE [CASCADE, SET NULL, RESTRICT=NO ACTION]}, ktoré hovoria čo sa má spraviť, keď sa vymaže FOREIGN KEY.
+\item \emph{Fyzický návrh}. Mapovanie návrhu na konkrétny DBMS (DB Management System).
 \end{itemize}
 
 Výsledkom sú vytvorené tabuľky, kľúče, indexy, constrainty, užívateľské kontá,
@@ -674,60 +674,60 @@ procedúry vkladania / vynechávania dát, pohľady (VIEWs), prístupové práva
 
 \paragraph{Pravidlá dobrého návrhu.}
 \begin{itemize}
-\item \emph{Vyhýbať sa redundancii}. Ak sa dá niečo vypočítať, tak si to nepamätáme (jedine kvôli optimalizácii). Hlavným dôvodom je potenciálna nekonzistentnosť dát.  
+\item \emph{Vyhýbať sa redundancii}. Ak sa dá niečo vypočítať, tak si to nepamätáme (jedine kvôli optimalizácii). Hlavným dôvodom je potenciálna nekonzistentnosť dát.
 \item \emph{Vyhýbať sa slabým entity setom}. To sú také, ktoré nevedia odpovedať na všetky (zmysluplné) otázky. Štandardne \emph{fan trap} - zlé poradie vzťahov entít v reťazi  a \emph{chasm trap} - chýbajúca závislosť (v trojici).
-\item \emph{Nepoužívať entity set, ktorý sa dá nahradiť atribútom}. 
+\item \emph{Nepoužívať entity set, ktorý sa dá nahradiť atribútom}.
 \end{itemize}
 
 Prudko odporúčame pozrieť si
-\href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_6.pdf}{slidy Plachetku} pre názorné grafické ukážky chýb. 
+\href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_6.pdf}{slidy Plachetku} pre názorné grafické ukážky chýb.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Funkčné závislosti}
 
 \paragraph{Úvod a označenia.}
-Chceme odstrániť redundanciu a z nej plynúcu potenciálnu nekonzistentnosť. 
+Chceme odstrániť redundanciu a z nej plynúcu potenciálnu nekonzistentnosť.
 
-Ďalej budeme $X_i$ označovať \emph{inštanciu} množiny atribútov $X$ relácie $r$. 
+Ďalej budeme $X_i$ označovať \emph{inštanciu} množiny atribútov $X$ relácie $r$.
 Inštanciou rozumieme riadok (prvok relácie) s projekciou na $X$.
 Ďalej, predikátom $r(X_i,Y_j, \ldots, Z_k)$ označujeme pre inštancie $(X_i,Y_j, \ldots, Z_k)$, či existuje spojená inštancia $(X_i,Y_j, \ldots, Z_k)$ v $r$.
-Spojenou inštanciou\footnote{Definovali sme si len pre dočasné potreby, nevieme, či sa používa aj v odbornej literatúre.} 
-rozumieme inštanciu $S$, ktorá má všetky atribúty relácie $r$. V prípade, že pre nejaké $X \cap Y \neq \emptyset$, tak inštancie $X_i$ a $Y_j$ musia mať na atribútoch $X \cap Y$ rovnaké hodnoty.  
-Teraz sme vysvetľovali niečo, čo je takmer zrejmé, formalizmom, ktorý môže na prvé čitanie zmiasť. 
+Spojenou inštanciou\footnote{Definovali sme si len pre dočasné potreby, nevieme, či sa používa aj v odbornej literatúre.}
+rozumieme inštanciu $S$, ktorá má všetky atribúty relácie $r$. V prípade, že pre nejaké $X \cap Y \neq \emptyset$, tak inštancie $X_i$ a $Y_j$ musia mať na atribútoch $X \cap Y$ rovnaké hodnoty.
+Teraz sme vysvetľovali niečo, čo je takmer zrejmé, formalizmom, ktorý môže na prvé čitanie zmiasť.
 
 \paragraph{Definícia.}
-\emph{Funkčná závislosť} $X \rightarrow Y$ práve vtedy keď 
-$$(\forall X_1)(\forall Y_1,Y_2)(\forall Z_1) (r(X_1, Y_1, Z_1) \wedge r(X_1, Y_2, Z_1) \Rightarrow (Y_1 = Y_2)).$$
+\emph{Funkčná závislosť} $X \rightarrow Y$ práve vtedy keď
+$$\forall X \forall Y_1 \forall Z_1 \forall Y_2 \forall Z_2 (r(X, Y_1, Z_1) \wedge r(X, Y_2, Z_2) \Rightarrow (Y_1 = Y_2)).$$
 
 Odteraz ''$\Rightarrow$'' implikácia a ''$\rightarrow$'' funkčná závislosť.
-Definujme makro $XY \equiv X \cup Y$. 
+Definujme makro $XY \equiv X \cup Y$.
 
 %%%%%%%%%%%%%%%%%%%%
-\paragraph{Armstrongove axiómy.} 
+\paragraph{Armstrongove axiómy.}
 \begin{itemize}
 \item Reflexívnosť. $X \supseteq Y \Rightarrow X \rightarrow Y$.
 \item Rozšírenie (augmentation). $(\forall Z)(X \rightarrow Y \Rightarrow (XZ \rightarrow YZ))$.
 \item Tranzitívnosť. $(X \rightarrow Y \wedge Y \rightarrow Z) \Rightarrow (X \rightarrow Z)$.
 \end{itemize}
- 
-Mali by ste vedieť dokázať (potom to ale nie sú axiómy, ale teorémy). 
- 
-Armstrongové axiómy sú úplne: 
+
+Mali by ste vedieť dokázať (potom to ale nie sú axiómy, ale teorémy).
+
+Armstrongové axiómy sú úplne:
 Funkčná závislosť $X \rightarrow Y$ sa dá odvodiť z $F$ pomocou
 Armstrongovych axióm práve vtedy, keď $X \rightarrow Y$ je logickým
 dôsledkom\footnote{Učiteľ Matematickej logiky by sa nad týmto výrokom pozastavil. Logický dôsledok chápeme asi ako intuitívny pojem.} $F$.
 
- 
+
 %%%%%%%%%%%%%%%%%%%%
 \paragraph{Niektoré ďalšie vlastnosti.}
- 
+
 \begin{itemize}
 \item Union rule. $(X \rightarrow Y \wedge X \rightarrow Z) \Rightarrow (X \rightarrow YZ)$.
 \item Pseudotranzivita. $(X \rightarrow Y \wedge WY \rightarrow Z) \Rightarrow (WX \rightarrow WZ)$.
 \end{itemize}
 
 Mali by ste vedieť dokázať z Armstrongovych.
-Všimneme si, že keď $r$ nemá funkčné závislosti, tak $r$ nemá redundantné dáta.  
+Všimneme si, že keď $r$ nemá funkčné závislosti, tak $r$ nemá redundantné dáta.
 
 %%%%%%%%%%%%%%%%%%%%
 \paragraph{Uzáver množiny atribútov.}
@@ -736,8 +736,8 @@ Všimneme si, že keď $r$ nemá funkčné závislosti, tak $r$ nemá redundantn
 Nech $X$ je množina atribútov a $F$ množina funkčných
 závislostí. Potom \emph{uzáverom množiny atribútov} $X$ vzhľadom na $F$
 rozumieme množinu $X^+$ všetkých atribútov $Y$ takých, že $X \rightarrow Y$ je
-(logickým) dôsledkom funkčných závislostí $F$. 
- 
+(logickým) dôsledkom funkčných závislostí $F$.
+
 \begin{verbatim}
 X+ : = X;
 repeat
@@ -748,7 +748,7 @@ while niečo sa pridalo do X+;
 
 Optimalizácia: každá závislosť sa použije práve raz, po použití ju
 možno vynechať. (Teda uzáver sa počíta v lineárnom čase\footnote{
-Na $F$ sme použili všetky Armstrongove axiómy (urobili sme niečo ako reflexívno tranzitívny uzáver). 
+Na $F$ sme použili všetky Armstrongove axiómy (urobili sme niečo ako reflexívno tranzitívny uzáver).
 }.)
 
 %%%%%%%%%%%%%%%%%%%%
@@ -760,27 +760,27 @@ ktoré sú dôsledkom funkčných závislostí z $F$ (t.j. ktoré sa dajú
 odvodiť z $F$ použitím Armstrongovych axióm). Množinu $F^+$ budeme
 nazývať \emph{uzáverom množiny funkčných závislostí} $F$.
 
-Je dosť rozsiahla, chceme uvažovať len vhodnú podmnožinu. 
-\emph{Maximálna funkčná závislosť} - nemôže vynechať atribút z ľavej strany ani pridať atribút k pravej strane tak, aby sme neporušili jej platnosť. 
+Je dosť rozsiahla, chceme uvažovať len vhodnú podmnožinu.
+\emph{Maximálna funkčná závislosť} - nemôže vynechať atribút z ľavej strany ani pridať atribút k pravej strane tak, aby sme neporušili jej platnosť.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Pokrytie a minimálne pokrytie množiny funkčných závislostí}
-Množina funkčných závislostí $G$ \emph{pokrýva} množinu funkčných závislostí $F$ práve vtedy keď $G^+ \supseteq F^+$. 
-Stačí testovať, či vieme odvodiť každú funkčnú závislosť z F pomocou G (polynomiálne).     
+Množina funkčných závislostí $G$ \emph{pokrýva} množinu funkčných závislostí $F$ práve vtedy keď $G^+ \supseteq F^+$.
+Stačí testovať, či vieme odvodiť každú funkčnú závislosť z F pomocou G (polynomiálne).
 
-\emph{Kanonická funkčná závislosť} - je maximálna a na pravej strane má práve jeden atribút.     
+\emph{Kanonická funkčná závislosť} - je maximálna a na pravej strane má práve jeden atribút.
 
-\emph{Minimálne pokrytie množiny funkčných závislostí} - je pokrytie pozostávajúce len z kanonických funkčných závislostí. 
+\emph{Minimálne pokrytie množiny funkčných závislostí} - je pokrytie pozostávajúce len z kanonických funkčných závislostí.
 
 \paragraph{Polynomiálny algoritmus na výpočet minimálneho pokrytia.}
 \begin{enumerate}
 \item Nahraď $X \rightarrow Y$ množinou \{$X \rightarrow A$, $A \in Y$, $A$ je jednoduchý (jednotkový) atribút\}
 \item Vynechaj všetky redundantné (odvoditeľné) atribúty na ľavých stranách
-$X \rightarrow A$ (každý atribút treba testovať práve raz). 
+$X \rightarrow A$ (každý atribút treba testovať práve raz).
 \item Vynechaj všetky redundantné (odvoditeľné z ostatných) závislosti $X \rightarrow A$ (opakuj tento
 krok s redukovanou množinou funkčných závislostí, kým
 žiadna závislosť nie je redundantná, každú závislosť treba
-testovať práve raz). Viac v slidoch. 
+testovať práve raz). Viac v slidoch.
 
 \end{enumerate}
 
@@ -790,11 +790,11 @@ testovať práve raz). Viac v slidoch.
 \emph{Kľúč} je (neformálne) minimálna množina atribútov, ktorá
 jednoznačne identifikuje entitu. Kľúčov môže byť viac. \emph{Primárny
 kľúč} je niektorý z kľúčov a označuje sa počiarknutím atribútov,
-ktoré ho tvoria. Primárny kľúč by mal byť minimálny možný, odporúča sa použiť zástupcu \emph{surrogate key} (napr. AUTO INCREMENT v SQL). 
+ktoré ho tvoria. Primárny kľúč by mal byť minimálny možný, odporúča sa použiť zástupcu \emph{surrogate key} (napr. AUTO INCREMENT v SQL).
 
 Formálne je \emph{nadkľúč} množina atribútov $K$ taká, že $K \rightarrow U$, kde $U$ sú všetky atribúty relácie $r$. \emph{Kľúčom} nazývame \underline{minimálny} (v zmysle množinovej inklúzie) nadkľúč $r$ (môže ich teda byť viacej).
 
-Algoritmus na nájdenie kľúčov existuje len exponenciálny (určite ste ho vedeli na teste). Plachetka odporúča úplné preberanie kľúčov zhora (najdlhších), po najkratšie. Výpočet sa reprezentuje binárnym stromom, kde sa v každom vrchole množina atribútov vetví podľa toho, či  daný atribút zahrnieme, alebo nezahrnieme do potenciálneho kľúča (a podčiarkujeme si pritom atribúty, ktoré určite chceme zahrnúť). 
+Algoritmus na nájdenie kľúčov existuje len exponenciálny (určite ste ho vedeli na teste). Plachetka odporúča úplné preberanie kľúčov zhora (najdlhších), po najkratšie. Výpočet sa reprezentuje binárnym stromom, kde sa v každom vrchole množina atribútov vetví podľa toho, či  daný atribút zahrnieme, alebo nezahrnieme do potenciálneho kľúča (a podčiarkujeme si pritom atribúty, ktoré určite chceme zahrnúť).
 
 Alternatívny algoritmus navrhnutý pánmi Lucchesi a~Osborn \footnote{1978:
 Candidate keys for relations} funguje iteratívne:
@@ -825,20 +825,20 @@ rozdiel medzi A-čkom z~prvého termínu a~nutnosťou opakovať skúšku.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Normálne formy} 
+\section{Normálne formy}
 
 Tabuľky, ktoré nie sú v normálnych formách, môžu napríklad viesť k stratám závislostí pri vymazávaní alebo nekonzistentným dátam pri zmenách (viac v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_8.pdf}{slidoch}).
 
 \paragraph{Relačná schéma.}
-\emph{Relačná schéma} je množina atribútov $U$ a množina funkčných závislostí $F$, ktoré platia v relácií $r$. Tj, rozdeľujeme tabuľky na viacero tabuliek. 
+\emph{Relačná schéma} je množina atribútov $U$ a množina funkčných závislostí $F$, ktoré platia v relácií $r$. Tj, rozdeľujeme tabuľky na viacero tabuliek.
 
-\emph{Dekompozícia relačnej schémy} sú relácie $r_i$ a funkčné závislosti $F_i$, pričom $r_i$ vznikli projekciou $r$ (a vymazaním duplikátov), $\Cup_i r_i = U$ a $F^+ \supseteq F_i$ (nepridali sa nové závislosti).
+\emph{Dekompozícia relačnej schémy} sú relácie $r_i$ a funkčné závislosti $F_i$, pričom $r_i$ vznikli projekciou $r$ (a vymazaním duplikátov), $\cup_i r_i = U$ a $F^+ \supseteq F_i$ (nepridali sa nové závislosti).
 
-\emph{Bezstratová dekompozícia} práve vtedy, keď $r = \Pi_{r_1}(r) \Join \cdots \Join \Pi_{r_n}(r)$. Všetky funkčné závislosti sa museli zachovať, inak by sa relácia $r$ neobnovila. Poznamenajme, že $r_i$ sme definovali ako relácie a v $\Pi_{r_1}(r) $ ich používame ako množiny atribútov. 
+\emph{Bezstratová dekompozícia} práve vtedy, keď $r = \Pi_{r_1}(r) \Join \cdots \Join \Pi_{r_n}(r)$. Všetky funkčné závislosti sa museli zachovať, inak by sa relácia $r$ neobnovila. Poznamenajme, že $r_i$ sme definovali ako relácie a v $\Pi_{r_1}(r) $ ich používame ako množiny atribútov.
 
-\paragraph{Prvá normálna forma (1NF).} (Historický problém) Atribúty definujeme nad doménami s atomickými hodnotami (nie napr. \verb|enum|). V skutočnosti sa definuje trocha \href{http://en.wikipedia.org/wiki/First_normal_form}{inak} - pridávajú sa množinové vlastnosti riadkov a stĺpcov. 
+\paragraph{Prvá normálna forma (1NF).} (Historický problém) Atribúty definujeme nad doménami s atomickými hodnotami (nie napr. \verb|enum|). V skutočnosti sa definuje trocha \href{http://en.wikipedia.org/wiki/First_normal_form}{inak} - pridávajú sa množinové vlastnosti riadkov a stĺpcov.
 
-\paragraph{Druhá normálna forma (2NF).} (Historický problém) Žiadny atribút v $r_i$ nezávisí iba na časti kľúča $r_i$ a každá z $r_i$ je v 1NF. Tj., ak je kľúč (=minimálny nadkľúč) v tvare $ABC$, tak v tabuľke neexistujú funkčné závislosti, ktorých ľavé strany sú $A,B,C,AB,BC$ alebo $AC$. 
+\paragraph{Druhá normálna forma (2NF).} (Historický problém) Žiadny atribút v $r_i$ nezávisí iba na časti kľúča $r_i$ a každá z $r_i$ je v 1NF. Tj., ak je kľúč (=minimálny nadkľúč) v tvare $ABC$, tak v tabuľke neexistujú funkčné závislosti, ktorých ľavé strany sú $A,B,C,AB,BC$ alebo $AC$.
 
 \begin{center}
 \begin{tabular}{l|l|l}
@@ -859,35 +859,35 @@ Jediným kľúčom tabuľky je $(Employee, Skill)$, ale tabuľka nie je v 2NF, l
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{3NF, BCNF}
 
-\paragraph{Tretia normálna forma (3NF).} (Plachetka) Relačná schéma $(r,F)$ je v 3NF práve vtedy, keď je v 2NF a pre každú (platnú) funkčnú závislosť $X \rightarrow Y$ platí, že buď $X$ je nadkľúč v $r$, alebo $Y$ je časťou nejakého kľúča v $r$. 
+\paragraph{Tretia normálna forma (3NF).} (Plachetka) Relačná schéma $(r,F)$ je v 3NF práve vtedy, keď je v 2NF a pre každú (platnú) funkčnú závislosť $X \rightarrow Y$ platí, že buď $X$ je nadkľúč v $r$, alebo $Y$ je časťou nejakého kľúča v $r$.
 (\href{http://en.wikipedia.org/wiki/Third_normal_form}{Wikipédia}, silnejšia podmienka) Relačná schéma $(r,F)$ je v 3NF práve vtedy, keď je v 2NF a pre každú (platnú) pre každý atribút $U_i$ platí, že sa buď vyskytuje v ľavej strane nejakého kľúča $r$, alebo je odvoditeľný z každého nadkľúča $r$.
 
-Testovanie 3NF je NP ťažké, ale jej konštrukcia je polynomiálna. 
+Testovanie 3NF je NP ťažké, ale jej konštrukcia je polynomiálna.
 
-Ak to správne chápem, tak pri dekompozícii na $r_i$ musí podmienka 3NF platiť pre každú $r_i$ a nie pre celú $r$ (intuícia hovorí, že pri uvažovaní celej $r$ by to bola blbosť). 
-Plachetka na ďalších slidoch potvrdzuje. 
+Ak to správne chápem, tak pri dekompozícii na $r_i$ musí podmienka 3NF platiť pre každú $r_i$ a nie pre celú $r$ (intuícia hovorí, že pri uvažovaní celej $r$ by to bola blbosť).
+Plachetka na ďalších slidoch potvrdzuje.
 
-\paragraph{Boyce-Coddova normálna forma (BCNF).} (Plachetka) Je v 2NF a pre každú platnú funkčnú závislosť $X \rightarrow Y$ platí, že $X$ je nadkľúč (\href{http://en.wikipedia.org/wiki/Boyce\%E2\%80\%93Codd_normal_form}{Wikipédia dodáva}, že $\neg (X \supseteq Y)$. 
+\paragraph{Boyce-Coddova normálna forma (BCNF).} (Plachetka) Je v 2NF a pre každú platnú funkčnú závislosť $X \rightarrow Y$ platí, že $X$ je nadkľúč (\href{http://en.wikipedia.org/wiki/Boyce\%E2\%80\%93Codd_normal_form}{Wikipédia dodáva}, že $\neg (X \supseteq Y)$.
 
-Platí, že BCNF je prísnejšie ako 3NF (a zvykne sa preto označovať aj 3.5NF). 
-Konštrukcia bezstratovej dekompozície do BCNF je NP ťažká, takisto ako overenie jej existencie. 
+Platí, že BCNF je prísnejšie ako 3NF (a zvykne sa preto označovať aj 3.5NF).
+Konštrukcia bezstratovej dekompozície do BCNF je NP ťažká, takisto ako overenie jej existencie.
 
 \paragraph{Príklad 3NF a nie BCNF.}
 Ak máme reláciu $ABC$ a funkčné závislosti $AB \rightarrow C$ a $C \rightarrow B$,
-tak je v 3NF ($AB$ je kľúč) ale nie v BCNF, lebo $C$ nie je kľúč v $r$. Rozloženie na $(AC)$ a $(BC)$ (podľa naivného algoritmu) pomôže (bezstratovosť: $AC$ je kľúč). 
+tak je v 3NF ($AB$ je kľúč) ale nie v BCNF, lebo $C$ nie je kľúč v $r$. Rozloženie na $(AC)$ a $(BC)$ (podľa naivného algoritmu) pomôže (bezstratovosť: $AC$ je kľúč).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Algoritmy pre dekompozíciu do normálnych foriem}
 
-\paragraph{Naivný 3NF.} Nájdi nevyhovujúcu funkčnú závislosť (exponenciálne), minimalizuj ju na $X \rightarrow Y$ a rozlož príslušnú reláciu na relácie $r-Y$ a $XY$. 
+\paragraph{Naivný 3NF.} Nájdi nevyhovujúcu funkčnú závislosť (exponenciálne), minimalizuj ju na $X \rightarrow Y$ a rozlož príslušnú reláciu na relácie $r-Y$ a $XY$.
 
 \paragraph{Polynomiálny 3NF.} Nájdi minimálne pokrytie funkčnými závislosťami (polynomiálne). Pre každú $X \rightarrow Y$ z nich vytvor reláciu $XY$. Ak táto dekompozícia je stratová, pridaj reláciu pre ľubovoľný kľúč (bezstratovosť je ekvivalentná s existenciou takej tabuľky).
 
-\paragraph{Naivný BCNF.} Nájdi nevyhovujúcu funkčnú závislosť (exponenciálne), minimalizuj ju na $X \rightarrow Y$ a rozlož príslušnú reláciu na relácie $r-Y$ a $XY$. 
+\paragraph{Naivný BCNF.} Nájdi nevyhovujúcu funkčnú závislosť (exponenciálne), minimalizuj ju na $X \rightarrow Y$ a rozlož príslušnú reláciu na relácie $r-Y$ a $XY$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Bezstratovosť dekompozície}
-(Názor autora, nesúhlasí s algoritmom v slidoch). 
+(Názor autora, nesúhlasí s algoritmom v slidoch).
 
 \paragraph{Algoritmus.}
 Relačná schéma $(r,F)$ s atribútmi $U_1,\ldots,U_n$ a s dekompozíciou $(r_1, F_1),\ldots,(r_m, F_m)$.
@@ -900,57 +900,57 @@ Relačná schéma $(r,F)$ s atribútmi $U_1,\ldots,U_n$ a s dekompozíciou $(r_1
      $(\forall U_j \in Y)S[i,j]=1$.\\
 \end{tabular}
 
-Ak ľubovoľný riadok pozostáva zo samých jednotiek, tak je bezstratová. Všimnime si, že riadky sú medzi sebou nezávislé a reprezentujú atribúty, ktoré sa dajú odvodiť z atribútov relácií $r_i$. 
-Inak povedané, dekompozícia je bezstratová, ak existuje relácia, z ktorej atrbútov sa dá odvodiť funkčnými závislosťami ostatné atribúty v $U$. 
+Ak ľubovoľný riadok pozostáva zo samých jednotiek, tak je bezstratová. Všimnime si, že riadky sú medzi sebou nezávislé a reprezentujú atribúty, ktoré sa dajú odvodiť z atribútov relácií $r_i$.
+Inak povedané, dekompozícia je bezstratová, ak existuje relácia, z ktorej atrbútov sa dá odvodiť funkčnými závislosťami ostatné atribúty v $U$.
 
 \paragraph{Diskusia.}
-    
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Transakcie} 
 
-Predpokladáme centralizované databázy. Transakcií môže bežať naraz viac (a to je problém, ktorý chceme riešiť).  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Transakcie}
+
+Predpokladáme centralizované databázy. Transakcií môže bežať naraz viac (a to je problém, ktorý chceme riešiť).
 
 \paragraph{Operácie.}
 \begin{itemize}
 \item START.
-\item READ / WRITE.
-\item INSERT / DELETE.
-\item COMMIT. Úspech transakcie. 
-\item ABORT. Zrušenie transakcie, napríklad v prípade výpadku (alebo zlého schedulingu).  
+\item READ / WRITE (INSERT, UPDATE, DELETE).
+\item QUERY.
+\item COMMIT. Úspech transakcie.
+\item ABORT. Zrušenie transakcie, napríklad v prípade výpadku (alebo zlého schedulingu).
 \end{itemize}
 
-Skracujeme na \{Prvé písmeno operácie\}\{Číslo transakcie\}(argument). Napríklad $r1(A)$ znamená, že transakcia 1 číta pole $A$. 
+Skracujeme na \{Prvé písmeno operácie\}\{Číslo transakcie\}(argument). Napríklad $r1(A)$ znamená, že transakcia 1 číta pole $A$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Požiadavky na transakčný systém (ACID)}
 
 \begin{itemize}
-\item {\bf A}tomicity. Všetko alebo nič. Buď transakcia prebehne, alebo nijakým spôsobom neovplyvní stav systému. 
-\item {\bf C}onsistency. Transakcia je operáciou z konzistentného stavu do konzistentného stavu (uzavretosť operácie). 
-\item {\bf I}solation. Vysledok transakcií je ekvivalentný s takým výsledkom, ktorý by sa dosiahol sériovým (postupným) vykonaním transakcií. 
-\item {\bf D}urability. Po príkaze COMMIT je transakcia platná navždy. 
+\item {\bf A}tomicity. Všetko alebo nič. Buď transakcia prebehne, alebo nijakým spôsobom neovplyvní stav systému.
+\item {\bf C}onsistency. Transakcia je operáciou z konzistentného stavu do konzistentného stavu (uzavretosť operácie).
+\item {\bf I}solation. Vysledok transakcií je ekvivalentný s takým výsledkom, ktorý by sa dosiahol sériovým (postupným) vykonaním transakcií.
+\item {\bf D}urability. Po príkaze COMMIT je transakcia platná navždy.
 \end{itemize}
 
-Tieto vlastnosti musia byť zachované za každých okolností, aj v prípade náhleho výpadku databázy alebo klienta. 
+Tieto vlastnosti musia byť zachované za každých okolností, aj v prípade náhleho výpadku databázy alebo klienta.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Architektúra transakčného systému}
 
-Popisujeme len abstraktný model. 
+Popisujeme len abstraktný model.
 
 \begin{itemize}
-\item Transaction manager. Bufferuje. 
-\item Scheduler. Vytvára rozvrhy - poradia transakcií a ich jendotlivých príkazov. 
+\item Transaction manager. Bufferuje.
+\item Scheduler. Vytvára rozvrhy - poradia transakcií a ich jendotlivých príkazov.
 \item Recovery manager. Pamätá si log file, je schopný vykonať spätné zmeny (v prípade ABORTu napr.).
-\item Cache manager. Stará sa o to, aby časť disku bola v operačnej pamäti.  
+\item Cache manager. Stará sa o to, aby časť disku bola v operačnej pamäti.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Rozvrhy}
 
-\emph{Rozvrh} je postupnosť operácií transakcií, ktorá obsahuje operácie jednotlivých transakcií ako svoje podpostupnosti (ktoré sa neprekrývajú a rozvrh nič iné neobsahuje). 
-\emph{Aktívna transakcia}, ak je medzi START a COMMIT / ABORT. 
+\emph{Rozvrh} je postupnosť operácií transakcií, ktorá obsahuje operácie jednotlivých transakcií ako svoje podpostupnosti (ktoré sa neprekrývajú a rozvrh nič iné neobsahuje).
+\emph{Aktívna transakcia}, ak je medzi START a COMMIT / ABORT.
 
 \paragraph{Príklad zlého rozvrhu.}
 \begin{center}
@@ -973,28 +973,28 @@ T1 & T2 \\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Triedy sériovateľnosti a obnoviteľnosti}
 
-\emph{Konfliktné operácie} sú dve operácie, ktoré patria dvom rôznym transakciám a aspoň jedna z nich je WRITE. 
+\emph{Konfliktné operácie} sú dve operácie, ktoré patria dvom rôznym transakciám a aspoň jedna z nich je WRITE.
 
-\emph{Históriou} rozvrhu označujeme postupnosť operácií. 
+\emph{Históriou} rozvrhu označujeme postupnosť operácií.
 
-\emph{Konflikt-ekvivalentné} sú dve histórie, keď majú rovnaké operácie a poradie konfliktných operácií je rovnaké v oboch históriách. 
+\emph{Konflikt-ekvivalentné} sú dve histórie, keď majú rovnaké operácie a poradie konfliktných operácií je rovnaké v oboch históriách.
 
 Transakcia $T2$ \emph{číta} $X$ od transakcie $T1$ práve vtedy, keď existuje $w1(X)$ pred $r2(X)$,
-takéto operácie nazveme \emph{nepekné}. 
+takéto operácie nazveme \emph{nepekné}.
 
-\emph{View-ekvivalentné} sú dve histórie $H1$ a $H2$, ak 
+\emph{View-ekvivalentné} sú dve histórie $H1$ a $H2$, ak
 \begin{itemize}
 \item pre každú nepeknú dvojicu v $H1$ existuje rovnaká nepekná dvojica v $H2$ a
-\item a pre každý dátový objekt $X$ je posledný WRITE v rovnakých transakciách\footnote{Podmienka je nutná pre rozvrhy, ktoré majú viacero WRITEov na konci - také samozrejme nie sú serializovateľné}. 
+\item a pre každý dátový objekt $X$ je posledný WRITE v rovnakých transakciách\footnote{Podmienka je nutná pre rozvrhy, ktoré majú viacero WRITEov na konci - také samozrejme nie sú serializovateľné}.
 \end{itemize}
-Intuitívne sú dva rozvrhy view-ekvivalentné práve vtedy, keď majú rovnaký výsledok. 
+Intuitívne sú dva rozvrhy view-ekvivalentné práve vtedy, keď majú rovnaký výsledok.
 
 \paragraph{Triedy sériovateľnosti.}
 \begin{itemize}
 \item \emph{Sériové}. Žiadne dve transakcie sa neprekrývajú. Absolútne bezpečené, ibaže neefektívne (rýchle transakcie môžu čakať na jednu dlhú).
-\item \emph{Sériovateľné (Konflikt sériovateľné)}. Ak je konflikt-ekvivalentný nejakému sériovému rozvrhu. 
-\item \emph{View-sériovateľné}. Ak každý jeho prefix\footnote{Ak niekto vie, prečo \underline{každý} jeho prefix, a nie len celý rozvrh, tak mi prosím napíšte email.} je view-ekvivalentný nejakému sériovému rozvrhu. Rôzne poradie potenciálnych WRITEov nám nevadí (premyslite si). 
-\item \emph{Striktný rozvrh}. Ak rozvrh neobsahuje dirty read ani dirty write (čítanie a prepisovanie necommitovaných WRITEov). 
+\item \emph{Sériovateľné (Konflikt sériovateľné)}. Ak je (jeho projekcia na commitované transakcie\footnote{len pre commitované transakcie dáva systém nejaké garancie}) konflikt-ekvivalentný nejakému sériovému rozvrhu.
+\item \emph{View-sériovateľné}. Ak každý jeho (commitovaná projekcia) prefix\footnote{Ak niekto vie, prečo \underline{každý} jeho prefix, a nie len celý rozvrh, tak mi prosím napíšte email.} je view-ekvivalentný nejakému sériovému rozvrhu. Rôzne poradie potenciálnych WRITEov nám nevadí (premyslite si).
+\item \emph{Striktný rozvrh}. Ak rozvrh neobsahuje dirty read ani dirty write (čítanie a prepisovanie necommitovaných WRITEov).
 \end{itemize}
 
 Je zrejmé, že sériové $\subsetneq$ konflikt sériovateľné $\subsetneq$ view-sériovateľné.
@@ -1004,10 +1004,10 @@ Viac v nasledujúcej sekcii \ref{test_seriovatelnosti}.
 \begin{center}
 \includegraphics[scale=0.5]{db_triedy_seriovatelnosti.png}
 \end{center}
-    
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Implementácia sériovateľnosti a obnoviteľnosti v transakčných systémoch} 
+\section{Implementácia sériovateľnosti a obnoviteľnosti v transakčných systémoch}
 Táto sekcia má svoje nedostatky.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1015,40 +1015,40 @@ Táto sekcia má svoje nedostatky.
 \label{test_seriovatelnosti}
 
 \emph{Precedenčný graf} rozvrhu je orientovaný graf na vrcholoch prislúchajúcich transakciám,
-pričom hrana z $T_i$ do $T_j$ existuje práve vtedy, keď $O_i$ a $O_j$ sú konfliktné operácie a $O_i$ je v rozvrhu pred $O_j$.  
-Podobným spôsobom vieme na základe relácie \emph{číta} z view-sériovateľnosti definovať precedenčný graf pre view-sériovateľné rozvrhy. 
+pričom hrana z $T_i$ do $T_j$ existuje práve vtedy, keď $O_i$ a $O_j$ sú konfliktné operácie a $O_i$ je v rozvrhu pred $O_j$.
+Podobným spôsobom vieme na základe relácie \emph{číta} z view-sériovateľnosti definovať precedenčný graf pre view-sériovateľné rozvrhy.
 
-\paragraph{Veta.} Rozvrh je (konflikt) sériovateľný práve vtedy, keď jeho precedenčný graf je acyklický. Každé jeho topologické (čiastočné) usporiadanie (vrcholov=transakcií) je s ním konflikt-ekvivaletné.  
+\paragraph{Veta.} Rozvrh je (konflikt) sériovateľný práve vtedy, keď jeho precedenčný graf je acyklický. Každé jeho topologické (čiastočné) usporiadanie (vrcholov=transakcií) je s ním konflikt-ekvivaletné.
 
 Ale test view-sériovateľnosti je NP-ťažký problém\footnote{
-Rozmýšľam, prečo nestačí použiť rovnakú metódu precedenčného grafu. 
-}. 
+Rozmýšľam, prečo nestačí použiť rovnakú metódu precedenčného grafu.
+}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Algoritmy izolácie, zámky, časové pečiatky, validácia}
 
-Áno, vieme generovať sériovateľné rozvrhy. Snažíme sa \emph{izolovať} konflikty. 
+Áno, vieme generovať sériovateľné rozvrhy. Snažíme sa \emph{izolovať} konflikty.
 
 \paragraph{Zamykanie.}
-Môžeme zamykať polia, riadky, tabuľky alebo celý diskový blok. Dva typy lockov: 
+Môžeme zamykať polia, riadky, tabuľky alebo celý diskový blok. Dva typy lockov:
 \begin{itemize}
-\item Read lock. Transakcia, ktorá ho vlastní, má právo čítať. Viacero transakcií môže mať read locky na rovnaké dáta. 
-\item Write lock (Exkluzívny lock). Ak má transakcia write lock, tak žiadna iná transakcia nemôže mať žiadny iný lock na rovnaké dáta. 
+\item Read lock. Transakcia, ktorá ho vlastní, má právo čítať. Viacero transakcií môže mať read locky na rovnaké dáta.
+\item Write lock (Exkluzívny lock). Ak má transakcia write lock, tak žiadna iná transakcia nemôže mať žiadny iný lock na rovnaké dáta.
 \end{itemize}
 
-A dve základné pravidlá \emph{dvojfázového zamykania}: 
+A dve základné pravidlá \emph{dvojfázového zamykania}:
 \begin{itemize}
-\item Transakcia po unlocku už nemôže žiaden lock. Takže na začiatku si vypýta potrebné locky a na konci ich uvoľní. 
-\item Transakcia musí vlastniť potrebný zámok na vykonanie príslušných operácií. 
+\item Transakcia po unlocku už nemôže žiaden lock. Takže na začiatku si vypýta potrebné locky a na konci ich uvoľní.
+\item Transakcia musí vlastniť potrebný zámok na vykonanie príslušných operácií.
 \end{itemize}
 
-Scheduler kontroluje dodržanie týchto pravidiel, inak dáva priestor aktívnym transakciám prakticky akokoľvek. 
-(Veta) Každý rozvrh vykonaný podľa lockov je konflikt-sériovateľný (dôkaz je jednoduchý - naopak to neplatí, napr $r1(X), r2(X), r1(X), w2(X)$). 
+Scheduler kontroluje dodržanie týchto pravidiel, inak dáva priestor aktívnym transakciám prakticky akokoľvek.
+(Veta) Každý rozvrh vykonaný podľa lockov je konflikt-sériovateľný (dôkaz je jednoduchý - naopak to neplatí, napr $r1(X), r2(X), r1(X), w2(X)$).
 
 \paragraph{Časové pečiatky.}
-Idea je, kto prv príde, ten prv vykonáva. 
-Každej transakcií je priradený čas začiatku $TS_i$ a každý dátový objekt $X$ má dve časové pečiatky, na čítanie $TR_X$ a zápis $TW_X$ (inicializujú sa na nulu). Ak $T_i$ vykoná operáciu, do príslušnej časovej pečiatky zapíše $TS_i$. Dodržujú sa pritom dve pravidlá: 
+Idea je, kto prv príde, ten prv vykonáva.
+Každej transakcií je priradený čas začiatku $TS_i$ a každý dátový objekt $X$ má dve časové pečiatky, na čítanie $TR_X$ a zápis $TW_X$ (inicializujú sa na nulu). Ak $T_i$ vykoná operáciu, do príslušnej časovej pečiatky zapíše $TS_i$. Dodržujú sa pritom dve pravidlá:
 \begin{itemize}
 \item Transakcia $T_i$ nesmie čítať ak $TW_X > TS_i$.
 \item Transakcia $T_i$ nesmie písať ak $TR_X > TS_i \vee TW_X > TS_i$.
@@ -1059,11 +1059,11 @@ Každej transakcií je priradený čas začiatku $TS_i$ a každý dátový objek
 \end{center}
 
 \paragraph{Validácia (optimizmus).}
-Každá transakcia si píše lokálne. Ak príde na COMMIT, tak sa skontroluje, či je doterajší rozvrh sériovateľný. Ak nie, tak ABORT na transakciu a všetky kolidujúce (reflexívno tranzitívny uzáver). 
+Každá transakcia si píše lokálne. Ak príde na COMMIT, tak sa skontroluje, či je doterajší rozvrh sériovateľný. Ak nie, tak ABORT na transakciu a všetky kolidujúce (reflexívno tranzitívny uzáver).
 
 \paragraph{Multiversion concurrency control (MVCC) (optimizmus).}
 Ku každému objektu si pamätáme viacere verzií podľa časov modifikácie.
-Podobne ako v algoritme časových pečiatok, aj tu definujeme $TS_i$ - čas začiatku transakcie, $TR_X$ a $TW_X$ ako čas začatia transakcie, ktorá $X$ čítala resp. písala. Obvyklé dve pravidlá: 
+Podobne ako v algoritme časových pečiatok, aj tu definujeme $TS_i$ - čas začiatku transakcie, $TR_X$ a $TW_X$ ako čas začatia transakcie, ktorá $X$ čítala resp. písala. Obvyklé dve pravidlá:
 
 \begin{itemize}
 \item Ak transakcia $T_i$ číta z $X$, tak dostane hodnotu v najstaršom čase pre ktorý $TW_X < TS_i$ a nastaví $TR_X = max(TR_X, TS_i)$.
@@ -1071,7 +1071,7 @@ Podobne ako v algoritme časových pečiatok, aj tu definujeme $TS_i$ - čas za�
 \end{itemize}
 
 \paragraph{Strict 2PL.}
-Rozširuje dvojfázové zamykanie o pravidlo, že zámky sa uvoľňujú spolu s commitom. Takéto rozvrhy sú konflikt-sériovateľné a striktné. 
+Rozširuje dvojfázové zamykanie o pravidlo, že zámky sa uvoľňujú spolu s commitom. Takéto rozvrhy sú konflikt-sériovateľné a striktné.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1079,13 +1079,13 @@ Rozširuje dvojfázové zamykanie o pravidlo, že zámky sa uvoľňujú spolu s 
 Napríklad: $wl1(X), w1(X), rl2(Y), rl2(X), wl1(Y)$.
 
 \emph{Wait-for} graf - orientovaný graf nad reláciou $T_i$ čaká na $T_j$ (kvôli locku).
-Ak obsahuje cyklus, tak v deadlocku sú práve tie transakcie, ktoré sú na danom cykle. 
+Ak obsahuje cyklus, tak v deadlocku sú práve tie transakcie, ktoré sú na danom cykle.
 
 \paragraph{Riešenia.}
 
 \begin{itemize}
-\item Optimistická stratégia. Raz za čas skontrolujeme Wait-for graf. Ak cyklus, tak rozbijeme abortom. 
-\item Pesimistická stratégia. Vopred detekujeme potenciálny deadlock a rozbíjame abortom.  
+\item Optimistická stratégia. Raz za čas skontrolujeme Wait-for graf. Ak cyklus, tak rozbijeme abortom.
+\item Pesimistická stratégia. Vopred detekujeme potenciálny deadlock a rozbíjame abortom.
 \item Wait-die stratégia. Transakcie sa usporiadajú podľa času začiatku.
       Ak staršia žiada o lock mladšiu, tak čaká na signál; ak žiada
       mladšia transakcia lock držaný staršou, mladšia je abortovaná.
@@ -1096,11 +1096,11 @@ Ak obsahuje cyklus, tak v deadlocku sú práve tie transakcie, ktoré sú na dan
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Algoritmy obnovy, log-file, checkpointing, backup}
-    
-Problém sériovateľného rozvrhu $r1(A), w1(A), r2(A), w2(C), c2, c1$ a výpadok pri $c2$.
-Potrebujeme preto obnovu a to potrebujeme LOG operácií (treba pritom dávať pozor na cache - nemôže sa zapisovať na disk aj cache zároveň). 
 
-\emph{Backup (DUMP)} - zálohuje databázu na iné médium (počas toho neprebiehaújú žiadne transakcie). 
+Problém sériovateľného rozvrhu $r1(A), w1(A), r2(A), w2(C), c2, c1$ a výpadok pri $c2$.
+Potrebujeme preto obnovu a to potrebujeme LOG operácií (treba pritom dávať pozor na cache - nemôže sa zapisovať na disk aj cache zároveň).
+
+\emph{Backup (DUMP)} - zálohuje databázu na iné médium (počas toho neprebiehaújú žiadne transakcie).
 
 \begin{itemize}
 \item Okamžitý zápis dát. Najprv do logu a hneď potom na disk. Občas sa
@@ -1114,43 +1114,43 @@ Potrebujeme preto obnovu a to potrebujeme LOG operácií (treba pritom dávať p
 
 \paragraph{Logovanie.}
 Stačí nám zapisovať iba WRITE operácie, so starou aj novou hodnotou (aby sme vedeli overiť, či sa naozaj vykonala).
-Raz za čas môže prebehnúť CHECKPOINTING (atomická procedúra, myslí sa na aktívne transakcie) - overenie, že sa po istý riadok LOG file-u vykonali všetky operácie.  
+Raz za čas môže prebehnúť CHECKPOINTING (atomická procedúra, myslí sa na aktívne transakcie) - overenie, že sa po istý riadok LOG file-u vykonali všetky operácie.
 
 \paragraph{Obnova.}
 Čítaním log file-u sa vytvára UNDO a REDO list.
 
 \begin{itemize}
-\item UNDO vráti neCOMMITované transakcie (v opačnom poradí). Stav po UNDO je rovnaký, ako keby sa operácie nevykonali.  
-\item REDO vykoná naspäť UNDO operácie a navráti pôvodný stav. 
+\item UNDO vráti neCOMMITované transakcie (v opačnom poradí). Stav po UNDO je rovnaký, ako keby sa operácie nevykonali.
+\item REDO vykoná naspäť UNDO operácie a navráti pôvodný stav.
 \end{itemize}
 
 \paragraph{Abort.}
-Rozvrh je \emph{obnoviteľný} práve vtedy, keď pre každú commmitovanú transakciu T2, ktorá čítala necommitovanú hodnotu zapísanú T1 (\emph{dirty read}), commituje T1 skôr ako T2. 
+Rozvrh je \emph{obnoviteľný} práve vtedy, keď pre každú commmitovanú transakciu T2, ktorá čítala necommitovanú hodnotu zapísanú T1 (\emph{dirty read}), commituje T1 skôr ako T2.
 
-Príklady: 
+Príklady:
 \begin{itemize}
-\item Neobnoviteľný: $w1(X), r2(X), w2(X), c2, c1$.  
-\item Obnoviteľný: $w1(X), r2(X), w2(X), c1, c2$. Vzniká riziko kaskádového abortu. 
+\item Neobnoviteľný: $w1(X), r2(X), w2(X), c2, c1$.
+\item Obnoviteľný: $w1(X), r2(X), w2(X), c1, c2$. Vzniká riziko kaskádového abortu.
 \end{itemize}
 
 \emph{Kaskádový abort}. Keď abort jednej transakcie vynúti abort inej transakcie (kvôli dirty read).
-\emph{Avoids cascading aborts (ACA)} práve vtedy, keď rozvrh neobsahuje žiadny dirty read. 
-    
+\emph{Avoids cascading aborts (ACA)} práve vtedy, keď rozvrh neobsahuje žiadny dirty read.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Fyzická organizácia} 
+\section{Fyzická organizácia}
 \label{fyzicka_organizacia}
 
 Prerekvizity: Operačné systémy - organizácia a prístup k dátam.
 Cieľom je minimalizovať počet diskovýh operácií (sú rádovo 100krát pomalšie ako RAM)
-a byť schopný pracovať aj s tabuľkami väčšími ako veľkosť operačnej pamäte. 
+a byť schopný pracovať aj s tabuľkami väčšími ako veľkosť operačnej pamäte.
 
 \begin{center}
 \includegraphics[scale=0.5]{db_fyzicky_model.png}
 \end{center}
 
-Na popis, ako funguje query, slúži príkaz \verb|EXPLAIN|. Dá sa pomocou neho značne zefektívniť beh dotazu. 
+Na popis, ako funguje query, slúži príkaz \verb|EXPLAIN|. Dá sa pomocou neho značne zefektívniť beh dotazu.
 
 \paragraph{Označenie.}
 \begin{itemize}
@@ -1162,74 +1162,74 @@ Na popis, ako funguje query, slúži príkaz \verb|EXPLAIN|. Dá sa pomocou neho
 \paragraph{Medzivýsledky.}
 \begin{itemize}
 \item Materializácia - môže zaberať veľký priestor.
-\item Iterátory - namiesto materializácie sa vytvára iterátor, ktorý prechádza tabuľkou. Majú tri funkcie: 
+\item Iterátory - namiesto materializácie sa vytvára iterátor, ktorý prechádza tabuľkou. Majú tri funkcie:
 \begin{itemize}
 \item open(R).
 \item next(R).
-\item close(R). 
+\item close(R).
 \end{itemize}
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Dvojúrovňový model pamäti a organizácie dát}
 
-Operačná pamäť (RAM) a disk. Snažíme sa redukovať počet diskových čítaní. Pričom vieme, že zaberie rovnako času čítanie jedného celého bloku (sektoru) ako jeho ľubovoľnej časti. 
-Poznamenajme, že rýchlosť operačnej pamäte je rádovo stonásobne vyššia a jej nevýhodou je, že sa do nej nemusia zmestiť celé tabuľky. 
+Operačná pamäť (RAM) a disk. Snažíme sa redukovať počet diskových čítaní. Pričom vieme, že zaberie rovnako času čítanie jedného celého bloku (sektoru) ako jeho ľubovoľnej časti.
+Poznamenajme, že rýchlosť operačnej pamäte je rádovo stonásobne vyššia a jej nevýhodou je, že sa do nej nemusia zmestiť celé tabuľky.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Indexové stromy, hashovanie}
 
 Jednou možnosťou je mať tabuľku vždy utriedenú. Oveľa jednoduchšie a praktickejšie je mať externý index v nezávislom súbore - ISAM (Index Sequential Access Method).
-Kľúče, podľa ktorých sa usporiadava, nemusia nijako súvisieť s tými z funkčných závislosti (aj keď PRIMARY INDEX by mal byť kľúčom relácie). 
+Kľúče, podľa ktorých sa usporiadava, nemusia nijako súvisieť s tými z funkčných závislosti (aj keď PRIMARY INDEX by mal byť kľúčom relácie).
 
 \paragraph{Sekvenčné indexy.}
 \begin{itemize}
 \item Dense. Referencia na každý riadok tabuľky.
-\item Sparse. Referencia len na bloky tabuliek (ktoré sú ďalej usporiadané). Optimalizáciou je v poslednom bloku si pamätať referenciu na nasledujúci (continuous). Názorné príklady v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_10.pdf}{slide}-och. 
-\item Multilevel. Index indexu. Najvnútornejší je vždy dense. 
+\item Sparse. Referencia len na bloky tabuliek (ktoré sú ďalej usporiadané). Optimalizáciou je v poslednom bloku si pamätať referenciu na nasledujúci (continuous). Názorné príklady v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_10.pdf}{slide}-och.
+\item Multilevel. Index indexu. Najvnútornejší je vždy dense.
 \end{itemize}
 
-Výhodou je rýchle sekvenčné prehľadávanie. V prípade hustého indexu vieme rozhodnúť o existencii záznamu bez čítania celého záznamu. 
-Nevýhodou je drahé vkladanie a hlavne vyhľadávanie. 
+Výhodou je rýchle sekvenčné prehľadávanie. V prípade hustého indexu vieme rozhodnúť o existencii záznamu bez čítania celého záznamu.
+Nevýhodou je drahé vkladanie a hlavne vyhľadávanie.
 
 \paragraph{B stromy.}
-\emph{B(M) stromy} sú podobné, ako binárne vyhľadávacie stromy, len sa v každom vnútornom (nelistovom) vrchole vetvia maximálne $m$ krát a minimálne $\lfloor m/2 \rfloor$ krát. Ak sa vrchol vetví $k$ krát, tak sa v ňom pamätá $k-1$ záznamov, ktorými sa oddeľujú hodnoty v podstromoch. Napríklad 2-3 strom (štátnicová otázka) je B(3) stromom. 
- 
+\emph{B(M) stromy} sú podobné, ako binárne vyhľadávacie stromy, len sa v každom vnútornom (nelistovom) vrchole vetvia maximálne $m$ krát a minimálne $\lfloor m/2 \rfloor$ krát. Ak sa vrchol vetví $k$ krát, tak sa v ňom pamätá $k-1$ záznamov, ktorými sa oddeľujú hodnoty v podstromoch. Napríklad 2-3 strom (štátnicová otázka) je B(3) stromom.
+
 \begin{center}
 \includegraphics[scale=0.5]{db_bm_tree.png}
 \end{center}
 
 \paragraph{$B^+$ stromy.}
-Majú vo vnútorných uzloch (nie listoch) len kľúče - index (resp. ich hodnoty). Dátové záznamy sú iba v listoch. 
-Vkladanie a vyberanie je celkom intuitívne (treba rozobrať viacero prípadov, aby sa zachovala podmienka $\lfloor m/2 \rfloor \leq k \leq m$, kde $k$ je stupeň vrchola). Prakticky nastáva buď triviálny prípad, alebo sa to rieši rekurzívne. Názorné príklady v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_10.pdf}{slide}-och. 
+Majú vo vnútorných uzloch (nie listoch) len kľúče - index (resp. ich hodnoty). Dátové záznamy sú iba v listoch.
+Vkladanie a vyberanie je celkom intuitívne (treba rozobrať viacero prípadov, aby sa zachovala podmienka $\lfloor m/2 \rfloor \leq k \leq m$, kde $k$ je stupeň vrchola). Prakticky nastáva buď triviálny prípad, alebo sa to rieši rekurzívne. Názorné príklady v \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/db2011_10.pdf}{slide}-och.
 
 \begin{itemize}
 \item Výhody. Kvôli veľkému vetveniu vyžaduje relatívne málo diskových
-      operácií. Vhodné na prehľadávanie, vkladanie aj mazanie (väčsinou triviálny prípad). 
-\item Nevýhody. Pamäťový overhead. Netriviálna implementácia. 
+      operácií. Vhodné na prehľadávanie, vkladanie aj mazanie (väčsinou triviálny prípad).
+\item Nevýhody. Pamäťový overhead. Netriviálna implementácia.
 \end{itemize}
 
 \paragraph{Hashovanie.}
 Princíp hashovania by mal byť čitateľovi zrejmý. Hľadáme \emph{ideálnu hashovaciu funkciu},
-ktorá nám hashe rozdelí na rovnomerné buckety a nebude prichádzať k preplneniu žiadneho z nich. 
-Jednotlivé buckety chceme mať v rovnakých diskových blokoch (aj preto spájané zoznamy prislúchajúce k rovnakému hashu rozdeľujeme na bloky). 
+ktorá nám hashe rozdelí na rovnomerné buckety a nebude prichádzať k preplneniu žiadneho z nich.
+Jednotlivé buckety chceme mať v rovnakých diskových blokoch (aj preto spájané zoznamy prislúchajúce k rovnakému hashu rozdeľujeme na bloky).
 
-Magické konštanty pre \emph{load factor} $\frac{vyuzitych\_blokov}{vsetkych\_blokov}$ sú 50\% a 80\%. 
+Magické konštanty pre \emph{load factor} $\frac{vyuzitych\_blokov}{vsetkych\_blokov}$ sú 50\% a 80\%.
 
 \begin{itemize}
 \item Priama adresácia. Máme pole s riadkami tabuľky.
-\item Neriama adresácia. Máme pole, v ktorých sú referencie na riadky tabuľky. 
+\item Neriama adresácia. Máme pole, v ktorých sú referencie na riadky tabuľky.
 \end{itemize}
 
-\paragraph{Rozšíriteľné hashovanie.} 
-Používame iba prvých $i$ bitov hashu, ak nastane preplnenie poľa, tak zvýšime $i$ (adresný priestor sa teda zdvojnásobí). 
+\paragraph{Rozšíriteľné hashovanie.}
+Používame iba prvých $i$ bitov hashu, ak nastane preplnenie poľa, tak zvýšime $i$ (adresný priestor sa teda zdvojnásobí).
 
 \paragraph{Lineárne hashovanie.}
 Používame hashovaciu funkciu $h_{p,q}(K)=K mod (2^q \cdot p)$. Pamätáme si pointer $n$ na blok, počet blokov $M$ a počet prvkov $N$.
-%V prípade preplnenie bloku ukladáme do $h_N(K) + n$, kde $n < N$. 
+%V prípade preplnenie bloku ukladáme do $h_N(K) + n$, kde $n < N$.
 Ak sa presiahne load factor, tak sa pridá nový blok, rozdelením bloku $n$ a zvýšením $q++$ pre tento blok, posunutím pointra $n++$ a zvýšením počtu blokov $M++$ (ak $M=2^x$, tak $n=0$).
 Na bloky $0 \leq k < n$ a $2^q \cdot p$ používame teda $h_{p,q+1}$ a na ostatné $h_{p,1}$.
-\underline{Veľmi pomôže} \href{http://www.youtube.com/watch?v=Yw1ts57uL7c}{video}. Vyhľadávanie bloku: 
+\underline{Veľmi pomôže} \href{http://www.youtube.com/watch?v=Yw1ts57uL7c}{video}. Vyhľadávanie bloku:
 \begin{verbatim}
 n=N;
 k=K mod N; /* hashovacia funkcia */
@@ -1238,13 +1238,13 @@ while ((k>p) and (not A[k]))
 n = n / 2; /* celočíselné delenie */
 k = k – n;
 }
-\end{verbatim} 
+\end{verbatim}
 
 \paragraph{Porovnanie s B stromami.}
 
 \begin{itemize}
 \item Výhody. Teoreticky lineárny čas, celková jednoduchosť.
-\item Nevýhody. B stromy lepšie vracajú intervaly výsledkov. 
+\item Nevýhody. B stromy lepšie vracajú intervaly výsledkov.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1257,18 +1257,18 @@ k = k – n;
 
 \paragraph{Mergesort.}
 Chceme utriediť pole dĺžky $N$ a do operačnej pamäti sa nám zmestí $3B$ prvkov.
-V prvej iterácii načítame bloky dĺžky $B$, utriedime v operačnej pamäti a zapíšeme na disk. 
-Keď potom mergeujeme dva, vstupné bloky dĺžok $D$, tak načítame z oboch $B$ a mergeujeme do tretieho - výstupného (v operačnej pamäti máme $3B$). Ak sa vyprázdni vstupný, tak načítame ďalších $B$ prvkov. Ak sa naplní výstupný, zapíšeme na disk a vyprázdnime. 
+V prvej iterácii načítame bloky dĺžky $B$, utriedime v operačnej pamäti a zapíšeme na disk.
+Keď potom mergeujeme dva, vstupné bloky dĺžok $D$, tak načítame z oboch $B$ a mergeujeme do tretieho - výstupného (v operačnej pamäti máme $3B$). Ak sa vyprázdni vstupný, tak načítame ďalších $B$ prvkov. Ak sa naplní výstupný, zapíšeme na disk a vyprázdnime.
 
-Zložitosť vie vypočítať každý z vzhľadom na cenu diskovej operácie a počtu krokov. 
+Zložitosť vie vypočítať každý z vzhľadom na cenu diskovej operácie a počtu krokov.
 
 \paragraph{Join.}
 Podobne ako mergesort. Ak sa do operačnej pamäti zmestí $M$ diskových blokov,
-tak $M-2$ vyhradíme na menšiu z relácií, 1 na druhú reláciu a jeden na výstup. 
+tak $M-2$ vyhradíme na menšiu z relácií, 1 na druhú reláciu a jeden na výstup.
 
 \paragraph{Merge Join (equijoin).}
 Predpokladáme utriedené joinovacie relácie a joinovaciu podmienku pre rovnosť.
-Potom vieme join vypočítať podobným spôsobom ako mergesort, akurát sa potrebujeme zbaviť duplikátov. 
+Potom vieme join vypočítať podobným spôsobom ako mergesort, akurát sa potrebujeme zbaviť duplikátov.
 
 \paragraph{Index scan.}
 Čítanie viacerých za sebou idúcich záznamov.
@@ -1277,15 +1277,15 @@ Nájdi prvý vyhovujúci záznam, ďalšie stačí hľadať v nasledujúcich blo
 \verb|b| je počet blokov obsahujúcich vyhovujúce záznamy.
 
 \paragraph{Hash join.}
-Máme dva hash-indexy nad reláciami. Chceme ich joinovať s rovnosťou. Joinovacia podmienka bude splnená len pre rovnaké hashe, stačí nám čítať príslušné buckety (bloky) a ich prípadné buckety. 
+Máme dva hash-indexy nad reláciami. Chceme ich joinovať s rovnosťou. Joinovacia podmienka bude splnená len pre rovnaké hashe, stačí nám čítať príslušné buckety (bloky) a ich prípadné buckety.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \section*{Referencie a odporúčaná literatúra}
-\begin{itemize}                                
-\item \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/index.html}{Úvodu do databázových systémov - Plachetka}.        
-\item \href{http://www.dcs.fmph.uniba.sk/~sturc/databazy/uvod/}{Úvodu do databázových systémov - Šturc} - v niečom detailnejší.        
+\begin{itemize}
+\item \href{http://www.dcs.fmph.uniba.sk/~plachetk/TEACHING/DB2011/index.html}{Úvodu do databázových systémov - Plachetka}.
+\item \href{http://www.dcs.fmph.uniba.sk/~sturc/databazy/uvod/}{Úvodu do databázových systémov - Šturc} - v niečom detailnejší.
 \item \href{http://infolab.stanford.edu/~widom/cs145/}{Úvodu do databázových systémov - Stanford University} - základ podobný.
 
 
