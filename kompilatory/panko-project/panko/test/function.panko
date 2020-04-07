@@ -1,0 +1,87 @@
+MOTAC INT pridaj INT a INT b
+  VYPAPAJ + a b
+    
+MOTAC INT znasob INT a INT b
+  PAN INT result 0
+  POCHIPUJ i a
+    NAMOTAJ result + result b
+  VYPAPAJ result
+    
+MOTAC INT panko INT a INT b INT c INT d 
+  PAN INT result 0
+  AGE? EQUAL a 42
+    NAMOTAJ result 1
+  AGE? EQUAL b 42
+    NAMOTAJ result 2
+  AGE? EQUAL c 42
+    NAMOTAJ result 3
+  AGE? EQUAL d 42
+    NAMOTAJ result 4
+  VYPAPAJ result 
+  
+MOTAC INT factorial INT n
+  PAN INT result 1
+  AGE? SMALLER 0 n 
+  {
+    PAN INT last ZMOTAJ factorial - n 1
+    NAMOTAJ result * last n 
+  }
+  VYPAPAJ result
+  
+MOTAC INT fib INT n 
+  PAN INT result 1
+  AGE? SMALLER 1 n 
+  {
+    PAN INT last1 ZMOTAJ fib - n 1
+    PAN INT last2 ZMOTAJ fib - n 2
+    NAMOTAJ result + last1 last2
+  }
+  VYPAPAJ result 
+  
+MOTAC INT useparams INT a INT b 
+  NAMOTAJ a - b 5
+  NAMOTAJ b - b 5
+  VYPAPAJ - a b
+  
+PAN INT global 500600
+MOTAC INT local INT global
+  VYPAPAJ global
+
+VYMOTAJ ZMOTAJ pridaj 42 47
+  
+VYMOTAJ ZMOTAJ znasob 42 47
+  
+VYMOTAJ ZMOTAJ panko 0 0 0 0 
+VYMOTAJ ZMOTAJ panko 42 0 0 0 
+VYMOTAJ ZMOTAJ panko 0 42 0 0 
+VYMOTAJ ZMOTAJ panko 0 0 42 0 
+VYMOTAJ ZMOTAJ panko 0 0 0 42
+  
+VYMOTAJ ZMOTAJ factorial 0
+VYMOTAJ ZMOTAJ factorial 1
+VYMOTAJ ZMOTAJ factorial 2
+VYMOTAJ ZMOTAJ factorial 3
+VYMOTAJ ZMOTAJ factorial 4
+VYMOTAJ ZMOTAJ factorial 5
+VYMOTAJ ZMOTAJ factorial 6
+VYMOTAJ ZMOTAJ factorial 7
+VYMOTAJ ZMOTAJ factorial 8
+VYMOTAJ ZMOTAJ factorial 9
+VYMOTAJ ZMOTAJ factorial 10
+  
+VYMOTAJ ZMOTAJ fib 0
+VYMOTAJ ZMOTAJ fib 1
+VYMOTAJ ZMOTAJ fib 2
+VYMOTAJ ZMOTAJ fib 3
+VYMOTAJ ZMOTAJ fib 4
+VYMOTAJ ZMOTAJ fib 5
+VYMOTAJ ZMOTAJ fib 6
+VYMOTAJ ZMOTAJ fib 7
+VYMOTAJ ZMOTAJ fib 8
+VYMOTAJ ZMOTAJ fib 9
+  
+VYMOTAJ ZMOTAJ local 42
+VYMOTAJ global 
+
+VYMOTAJ ZMOTAJ useparams 42 47 
+

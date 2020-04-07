@@ -1,0 +1,3 @@
+primes test/prvocisla.panko
+graph test/connected_graph.panko
+sort test/sort.panko

@@ -1,0 +1,4 @@
+89
+Warning: Non-existing variable 'a' - address to new i32(0) returned (visitVariableAddress)
+Warning: Non-existing variable 'b' - address to new i32(0) returned (visitVariableAddress)
+

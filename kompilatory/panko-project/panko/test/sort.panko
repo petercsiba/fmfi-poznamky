@@ -1,0 +1,61 @@
+VMOTAJ INT n 
+WCBOOK n INT arr 
+POCHIPUJ i n
+  VMOTAJ INT ROLKA i arr 
+
+MOTAC INT swap INT a INT b
+  PAN INT c ROLKA a arr
+  NAMOTAJ ROLKA a arr ROLKA b arr
+  NAMOTAJ ROLKA b arr c  
+  VYPAPAJ 0 
+
+MOTAC INT siftdown INT start INT end 
+  PAN INT root start 
+  PAN INT break 1
+  
+  MACKAJ AND break SMALLER * 2 root end 
+  {
+    PAN INT child + 1 * 2 root
+    AGE? AND SMALLER child end SMALLER ROLKA child arr ROLKA + 1 child arr
+      NAMOTAJ child + 1 child
+    AGE? SMALLER ROLKA root arr ROLKA child arr
+    {
+      ZMOTAJ swap root child
+      NAMOTAJ root child
+    }
+    PIVO
+      NAMOTAJ break 0 
+  }
+  
+  VYPAPAJ 0
+         
+MOTAC INT heapify INT count 
+  PAN INT start / - count 2 2
+  
+  MACKAJ SMALLER - 0 1 start 
+  {
+    ZMOTAJ siftdown start - count 1
+    NAMOTAJ start - start 1
+  }
+  VYPAPAJ 0 
+  
+MOTAC INT heapsort INT count 
+  ZMOTAJ heapify count
+  
+  PAN INT end - count 1
+  MACKAJ SMALLER 0 end 
+  {
+    ZMOTAJ swap end 0
+    NAMOTAJ end - end 1 
+    ZMOTAJ siftdown 0 end 
+  }
+  
+  VYPAPAJ 0 
+  
+MEGA MOTAC INT sort
+  ZMOTAJ heapsort n
+
+  POCHIPUJ i n 
+    VYMOTAJ ROLKA i arr
+
+  VYPAPAJ 0

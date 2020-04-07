@@ -1,0 +1,11 @@
+MOTAC INT factorial INT n
+  PAN INT result 1
+  AGE? SMALLER 0 n 
+  {
+    PAN INT last ZMOTAJ factorial - n 1
+    NAMOTAJ result * last n 
+  }
+  VYPAPAJ result
+
+
+VYMOTAJ ZMOTAJ factorial 10

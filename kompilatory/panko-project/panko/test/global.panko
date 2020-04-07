@@ -1,0 +1,9 @@
+VMOTAJ INT a
+VMOTAJ INT b
+
+MOTAC INT local
+  VYMOTAJ + a b
+VYPAPAJ 0 
+
+ZMOTAJ local
+

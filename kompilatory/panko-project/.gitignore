@@ -1,0 +1,17 @@
+*~
+cvicenia*
+generovanie_kodu*
+prednasky*
+c++*
+panko/.classpath
+panko/.project
+panko/compiler.out
+panko/llvm
+panko/bin
+panko/src/pankoBaseListener.java
+panko/src/pankoBaseVisitor.java
+panko/src/pankoLexer.java
+panko/src/pankoListener.java
+panko/src/pankoParser.java
+panko/src/pankoVisitor.java
+

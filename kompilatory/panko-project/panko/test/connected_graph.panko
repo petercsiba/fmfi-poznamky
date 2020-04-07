@@ -1,0 +1,71 @@
+VMOTAJ INT n 
+WCBOOK n INT size
+WCBOOK n INT parent
+POCHIPUJ i n 
+  NAMOTAJ ROLKA i parent i
+POCHIPUJ i n 
+  NAMOTAJ ROLKA i size 1
+
+MOTAC INT find INT a 
+  PAN INT origa a
+  
+  MACKAJ NOT EQUAL a ROLKA a parent
+    NAMOTAJ a ROLKA a parent
+  
+  MACKAJ NOT EQUAL origa ROLKA origa parent
+  {
+    PAN INT next ROLKA origa parent
+    NAMOTAJ ROLKA origa parent a 
+    NAMOTAJ origa next
+  }
+  
+  VYPAPAJ a 
+
+MOTAC INT union INT a INT b 
+  PAN INT fa ZMOTAJ find a 
+  PAN INT fb ZMOTAJ find b 
+  
+  AGE? NOT EQUAL fa fb
+    AGE? SMALLER ROLKA fa size ROLKA fb size
+    {
+      NAMOTAJ ROLKA fa parent fb
+      NAMOTAJ ROLKA fb size + ROLKA fa size ROLKA fb size
+    }
+    PIVO
+    {
+      NAMOTAJ ROLKA fb parent fa
+      NAMOTAJ ROLKA fa size + ROLKA fa size ROLKA fb size
+    }
+    
+  VYPAPAJ 0
+
+MEGA MOTAC INT connectedgraph
+  VMOTAJ INT m 
+  PAN INT a 0
+  PAN INT b 0 
+  
+  POCHIPUJ tojejedno m
+  {
+    VMOTAJ INT a
+    VMOTAJ INT b 
+    ZMOTAJ union a b 
+  }
+    
+  POCHIPUJ i n 
+    ZMOTAJ find i
+      
+  PAN INT cluster ROLKA 0 parent
+  PAN INT result FAJNE
+  
+  POCHIPUJ i n 
+    AGE? NOT EQUAL cluster ROLKA i parent 
+      NAMOTAJ result PIPKOS
+  
+  AGE? EQUAL result FAJNE 
+    VYMOTAJ "YES"
+  PIVO
+    VYMOTAJ "NO"
+    
+  PRE TEPLYCH parent  
+  PRE TEPLYCH size  
+  VYPAPAJ 0

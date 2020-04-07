@@ -1,0 +1,27 @@
+MEGA MOTAC INT prvocisla 
+  VMOTAJ INT pocet
+  NAMOTAJ pocet + pocet 1
+  WCBOOK pocet INT pole
+  
+  POCHIPUJ i pocet
+    NAMOTAJ ROLKA i pole 0
+    
+  NAMOTAJ ROLKA 0 pole 1
+  NAMOTAJ ROLKA 1 pole 1
+  
+  POCHIPUJ i pocet 
+    AGE? EQUAL ROLKA i pole PIPKOS
+    {
+      VYMOTAJ i
+      
+      PAN INT j 1 
+      
+      MACKAJ SMALLER * i j pocet
+      {
+        NAMOTAJ ROLKA * i j pole FAJNE
+        NAMOTAJ j + j 1     
+      } 
+    }
+        
+VYPAPAJ 0 
+    

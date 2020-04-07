@@ -1,0 +1,18 @@
+PAN INT n 10
+WCBOOK n INT nodes
+POCHIPUJ i n 
+  NAMOTAJ ROLKA i nodes i
+
+MEGA MOTAC INT connectedgraph
+  PAN INT cluster 0
+  PAN INT cluster PIPKOS
+  
+  POCHIPUJ i n 
+    AGE? NOT EQUAL cluster ROLKA i nodes 
+      NAMOTAJ result PIPKOS
+  
+  AGE? EQUAL result FAJNE 
+    VYMOTAJ "ANO"
+    
+  PRE TEPLYCH nodes  
+  VYPAPAJ 0
